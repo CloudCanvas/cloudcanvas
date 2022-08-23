@@ -1,0 +1,12 @@
+.add-resource-modal {
+  position: fixed;
+  z-index: 10000;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  background: rgb(66 99 235 / 40%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
