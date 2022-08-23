@@ -1,0 +1,54 @@
+#side-menu-container.expanded {
+  transition: width 0.2s;
+  transition-timing-function: ease-in;
+}
+
+.side-menu-org {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.organisation .organisation-status {
+  padding-left: 40px;
+}
+
+.account p {
+  color: #414d5c !important;
+}
+
+[aria-open="true"] span {
+  padding: 0px 4px;
+  transform: rotate(90deg);
+}
+
+.tile {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.tile.authorised {
+  background: #017f0b;
+}
+.tile.expired {
+  background: #5f6b7a;
+}
+.tile circle.filled {
+  color: transparent;
+}
+
+.tile .tile-content {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

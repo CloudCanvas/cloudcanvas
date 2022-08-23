@@ -1,0 +1,56 @@
+{
+  "name": "@cloudcanvas/components",
+  "version": "1.0.27",
+  "main": "lib/index.js",
+  "module": "lib/index.esm.js",
+  "types": "lib/index.d.ts",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.18.10",
+    "@cloudscape-design/components": "^3.0.15",
+    "@cloudscape-design/global-styles": "^1.0.1",
+    "@ladle/react": "^2.1.0",
+    "@rollup/plugin-commonjs": "^22.0.2",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "babel-loader": "^8.2.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "rollup": "^2.77.2",
+    "rollup-plugin-copy": "^3.4.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-scss": "^3.0.0",
+    "rollup-plugin-svg-import": "^1.6.0",
+    "rollup-plugin-typescript2": "^0.32.1",
+    "sass": "^1.54.3",
+    "typescript": "^4.7.4"
+  },
+  "scripts": {
+    "ladle": "ladle serve",
+    "build": "rollup -c --context window",
+    "compile": "rollup -c --context window"
+  },
+  "peerDependencies": {
+    "@cloudscape-design/components": "^3.0.15",
+    "@cloudscape-design/global-styles": "^1.0.1",
+    "react": "^16.8 || ^17 || ^18",
+    "react-dom": "^16.8 || ^17 || ^18"
+  },
+  "dependencies": {
+    "@cloudcanvas/aws-sso-sdk-wrapper": "*",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@xstate/react": "^3.0.1",
+    "aws-svg-icons": "^3.0.0-2021-07-30",
+    "bulma": "^0.9.4",
+    "cmdk": "^0.1.18",
+    "date-fns": "^2.29.1",
+    "react-icons": "^4.4.0",
+    "react-inspector": "^6.0.1",
+    "react-rnd": "^10.3.7",
+    "react-scripts": "5.0.1",
+    "web-vitals": "^2.1.4",
+    "xstate": "^4.33.0"
+  }
+}

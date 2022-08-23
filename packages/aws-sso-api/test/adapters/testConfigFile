@@ -1,0 +1,21 @@
+[profile orgOneAccountOne]
+sso_start_url = https://d-90677e2e6d.awsapps.com/start
+sso_region = us-east-1
+sso_account_id = 532747402531
+sso_role_name = AdministratorAccess
+region = eu-central-1
+
+[profile orgOneAccountTwo]
+sso_start_url = https://d-90677e2e6d.awsapps.com/start
+sso_region = us-east-1
+sso_account_id = 431781111075
+sso_role_name = AdministratorAccess
+region = us-east-2
+
+
+[profile orgTwoAccountOne]
+sso_start_url = https://d-97670d3191.awsapps.com/start#/
+sso_region = ap-southeast-2
+sso_account_id = 337387902522
+sso_role_name = AWSAdministratorAccess
+region = ap-southeast-2

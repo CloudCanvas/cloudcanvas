@@ -1,0 +1,33 @@
+{
+  "organisations": [
+    {
+      "ssoStartUrl": "https://d-90677e2e6d.awsapps.com/start",
+      "ssoRegion": "us-east-1",
+      "accounts": [
+        {
+          "accountId": "532747402531",
+          "defaultRegion": "us-east-1",
+          "roles": ["AdministratorAccess"]
+        },
+        {
+          "accountId": "431781111075",
+          "defaultRegion": "us-east-1",
+          "roles": ["AdministratorAccess"]
+        }
+      ],
+      "roles": ["AdministratorAccess"]
+    },
+    {
+      "ssoStartUrl": "https://d-97670d3191.awsapps.com/start#/",
+      "ssoRegion": "ap-southeast-2",
+      "accounts": [
+        {
+          "accountId": "337387902522",
+          "defaultRegion": "ap-southeast-2",
+          "roles": ["AWSAdministratorAccess"]
+        }
+      ],
+      "roles": ["AWSAdministratorAccess"]
+    }
+  ]
+}
