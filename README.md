@@ -1,16 +1,21 @@
-# Turborepo starter
+# CloudCanvas
 
-This is an official Yarn v1 starter turborepo.
+An interactive canvas to help you manage your cloud resources.
 
 ## What's inside?
 
-This turborepo uses [Yarn](https://classic.yarnpkg.com/lang/en/) as a package manager. It includes the following packages/apps:
+This monorepo uses [Yarn](https://classic.yarnpkg.com/lang/en/) as a package manager and turborepo to manage the mono.
+
+It includes the following packages/apps:
 
 ### Apps and Packages
 
 - `docs`: a [Next.js](https://nextjs.org) app
-- `web`: another [Next.js](https://nextjs.org) app
-- `ui`: a stub React component library shared by both `web` and `docs` applications
+- `electron`: the cloudcanvas electron app
+- `aws-sso-api`: a utility liibrary for interacting with AWS SSO OIIDCm refreshing SSO access and getting account access credentials.
+- `aws-sso-global-access-provider`: a utility liibrary for managing a users global view of AWS across organisations
+- `aws-sso-sdk-wrapper`: a utility liibrary to wrap the AWS SDK with functions to make it easy to invoke across accounts and organisations
+- `components`: a React component library used by the electron application
 - `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
 - `tsconfig`: `tsconfig.json`s used throughout the monorepo
 
@@ -24,17 +29,20 @@ This turborepo has some additional tools already setup for you:
 - [ESLint](https://eslint.org/) for code linting
 - [Prettier](https://prettier.io) for code formatting
 
-## Setup
+### Compile
 
-This repository is used in the `npx create-turbo` command, and selected when choosing which package manager you wish to use with your monorepo (Yarn).
+To compile all apps and packages during, run the following command:
+
+```
+yarn compile
+```
 
 ### Build
 
 To build all apps and packages, run the following command:
 
 ```
-cd my-turborepo
-yarn run build
+yarn build
 ```
 
 ### Develop
@@ -42,7 +50,6 @@ yarn run build
 To develop all apps and packages, run the following command:
 
 ```
-cd my-turborepo
 yarn run dev
 ```
 
