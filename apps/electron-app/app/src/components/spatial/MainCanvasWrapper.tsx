@@ -20,8 +20,6 @@ type MainProps = {
 export default observer((props: MainProps) => {
   const { component, layout } = useStores();
 
-  console.log("rerednering canvas wrapper");
-
   return (
     <div
       id="canvasContainer"
@@ -29,10 +27,7 @@ export default observer((props: MainProps) => {
         width: `${CANVAS_WIDTH}px`,
         height: `${CANVAS_HEIGHT}px`,
         background: "white",
-        border: "2px dashed black",
-        position: "absolute",
-      }}
-      onClick={() => {}}>
+      }}>
       <MainCanvas
         state={{}}
         dispatch={{
@@ -65,18 +60,5 @@ export default observer((props: MainProps) => {
         {props.children}
       </MainCanvas>
     </div>
-
-    // <div
-    //   id="container"
-    //   cm-template="loudAlert"
-    //   style={{
-    //     height: "100%",
-    //     width: "100%",
-    //     position: "absolute",
-    //     background: "#f6f4f4",
-    //   }}>
-
-    //   </div>
-    // </div>
   );
 });
