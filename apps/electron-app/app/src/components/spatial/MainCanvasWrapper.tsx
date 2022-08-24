@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useStores } from "../../store";
 import { MainCanvas } from "@cloudcanvas/components";
@@ -19,6 +19,16 @@ type MainProps = {
 };
 export default observer((props: MainProps) => {
   const { component, layout } = useStores();
+  const [location, setLocation] = useState<number[] | undefined>(undefined);
+
+  useEffect(() => {
+    // Only done once on load then the canvas manages the location
+    setLocation(layout.location || [CANVAS_CENTER.x, CANVAS_CENTER.y]);
+  }, []);
+
+  if (!location) {
+    return null;
+  }
 
   return (
     <div
@@ -29,7 +39,9 @@ export default observer((props: MainProps) => {
         background: "white",
       }}>
       <MainCanvas
-        state={{}}
+        state={{
+          location: location,
+        }}
         dispatch={{
           onCmdk: async (cmdkProps) => {
             const channel = new BroadcastChannel("app-data");
@@ -45,8 +57,6 @@ export default observer((props: MainProps) => {
             scale && layout.setScale(scale);
           },
           setLocation: async (location) => {
-            console.log("location");
-            console.log(location);
             layout.setLocation(location);
           },
           unselectAllComponents: async () => {

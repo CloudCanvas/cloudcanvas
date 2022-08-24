@@ -13,7 +13,10 @@ export const CANVAS_CENTER = {
 };
 
 export type MainCanvasProps = {
-  state: {};
+  state: {
+    location?: number[];
+    scale?: number[];
+  };
   dispatch: {
     onCmdk: (pops: { x: number; y: number }) => void;
     setScale: (scale: number) => void;
@@ -53,7 +56,8 @@ export default (props: MainCanvasProps) => {
         element: container!.children[0] as any as HTMLElement,
       });
 
-      // for (let i = 0; i < 2; i++) {
+      // Right now the scale needs to be recorded and passed into all child components
+      // for (let i = 0; i < 3; i++) {
       //   panSurface.current?.zoom({
       //     deltaScale: -1,
       //     x: CANVAS_CENTER.x + 1000,
@@ -63,10 +67,17 @@ export default (props: MainCanvasProps) => {
     }
 
     // instance.panBy({ originX: CANVAS_WIDTH / 2, originY: CANVAS_HEIGHT / 2 });
-    panSurface.current.panBy({
-      originX: -CANVAS_CENTER.x,
-      originY: -CANVAS_CENTER.y,
-    });
+    if (props.state.location) {
+      panSurface.current.panBy({
+        originX: -props.state.location[0],
+        originY: -props.state.location[1],
+      });
+    } else {
+      panSurface.current.panBy({
+        originX: -CANVAS_CENTER.x,
+        originY: -CANVAS_CENTER.y,
+      });
+    }
 
     container!.addEventListener("wheel", (event) => {
       event.preventDefault();

@@ -25,17 +25,9 @@ Looks like the saving of sessions after load is getting overwritten when the app
 
 Save last position and return on load - we need to actually pass this into the main canvas as it does an auto pan by to center at present - instead we need to load any presets then render and ensure we pass in the location
 
+Need to allow zoom on an element so has to be selected to scrolll DONE - Problem was design of add and remove and also recreating the function inside the useffect so it never got removed as ref was gone
+
 Get s3o lambda component done
-
-Need to allow zoom on an element so has to be selected to scrolll
-
-    - Right no we are stopping propogation for scroll events on the container
-    This ensures we can scroll the inner container without scrolling the canvas
-    Due the overscroll-behaviour this still bubbles up to scroll the parent.
-    We do not want to prevent zoom on a container though so we need to detect the ctrlKey being pressed.
-    We also do not want to prevent any horizonatl scrolling but these are being prevented and are not bubbling up
-    Doesn't seem to be bubbblking up anyway so we aree going to allow all scroll unless the component is selected
-
 Launch a terminal (disabled if not authenticated)
 Launch browser (disabled if not authenticat ed)
 Wizard on landing

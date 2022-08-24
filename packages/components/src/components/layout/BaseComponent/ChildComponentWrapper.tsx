@@ -7,7 +7,6 @@ type Props = {
 
 const listener = (event: WheelEvent) => {
   if (!event.ctrlKey) {
-    console.log("stopping prop");
     event.stopPropagation();
   }
 };

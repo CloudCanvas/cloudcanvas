@@ -1,5 +1,5 @@
 import React from "react";
-import MainCanvas, { MainCanvasProps } from "./MainCanvas";
+import MainCanvas, { CANVAS_CENTER, MainCanvasProps } from "./MainCanvas";
 import "bulma/css/bulma.css";
 import BaseComponent from "../../layout/BaseComponent/BaseComponent";
 import { dcp } from "../../layout/BaseComponent/BaseComponent.stories";
@@ -37,10 +37,7 @@ const Template =
   () => {
     let [selected, setSelected] = React.useState(dcp.state.component.selected);
     return (
-      <div
-        className="template-wrapper"
-        style={{ maxWidth: width, height: "100%" }}
-      >
+      <div style={{ position: "relative", width: 1000, height: 1000 }}>
         <MainCanvas {...args}>
           <BaseComponent
             {...{
@@ -69,6 +66,7 @@ const Template =
                       borderColor: "black",
                       ...centered,
                     }}
+                    key={i}
                   >
                     <h1>{i}</h1>
                   </div>
@@ -76,18 +74,6 @@ const Template =
               </div>
             )}
           ></BaseComponent>
-          {/* <div
-            style={{
-              width: 900,
-              height: 500,
-              position: "absolute",
-              left: 0,
-              right: 0,
-              transform: "translate(51000px, 50500px)",
-              background: "green",
-              overflow: "scroll",
-            }}
-          ></div> */}
         </MainCanvas>
       </div>
     );
@@ -95,3 +81,11 @@ const Template =
 // Reuse that template for creating different stories
 
 export const CanvasWithAnItem = Template(defaultProps);
+
+export const CanvasWithADifferentStartLocation = Template({
+  ...defaultProps,
+  state: {
+    ...defaultProps.state,
+    location: [CANVAS_CENTER.x - 400, CANVAS_CENTER.y - 100],
+  },
+});

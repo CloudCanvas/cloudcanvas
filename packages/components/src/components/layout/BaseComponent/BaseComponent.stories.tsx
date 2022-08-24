@@ -7,6 +7,7 @@ import {
   BaseStory,
 } from "../../../utils/storyUtils";
 import { AwsComponent } from "../../../domain/core";
+import { CANVAS_CENTER } from "../../spatial/MainCanvas";
 
 export default {
   title: "components/layout/BaseComponent",
@@ -30,7 +31,7 @@ export const dcp: BaseComponentProps<number[], number> = {
       ...baseComponent,
       layout: {
         ...baseComponent.layout,
-        location: [0, 0],
+        location: [CANVAS_CENTER.x, CANVAS_CENTER.y],
       },
     },
     authorisation: allGoodStatus.authorisation,
