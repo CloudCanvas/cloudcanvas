@@ -115,31 +115,19 @@ export const makeSsoAccessProvider = ({
           s.ssoStartUrl === cachedOrg.ssoStartUrl && !cachedOrg.logicallyDeleted
       );
 
+      const existingAccs = matchingOrg?.accounts || [];
+
       // The ones that are in matching org not in cachedOrg
       const missingRoles = (matchingOrg?.roles || []).filter(
         (r) => !cachedOrg.roles.some((x) => x === r)
       );
-      const missingAccs = (matchingOrg?.accounts || []).filter(
-        (r) => !cachedOrg.accounts.some((x) => x.name === r.name)
+      const missingAccs = existingAccs.filter(
+        (r) => !cachedOrg.accounts.some((x) => x.accountId === r.accountId)
       );
-
-      const newAccounts = [...cachedOrg.accounts, ...missingAccs];
-      const uniqueAccounts = newAccounts.reduce((sum, acc) => {
-        // If no entry for this accountId add it
-        if (!sum[acc.accountId]) {
-          sum[acc.accountId] = acc;
-          return sum;
-        } else if (acc.name) {
-          // If one exists already only add if there is a name for it
-          sum[acc.accountId] = acc;
-        }
-
-        return sum;
-      }, {} as { [key: string]: Account });
 
       return {
         ...cachedOrg,
-        accounts: Object.values(uniqueAccounts),
+        accounts: [...existingAccs, ...missingAccs],
         roles: [...cachedOrg.roles, ...missingRoles],
       } as Organisation;
     });

@@ -26,6 +26,9 @@ const defaultProps: SideMenuProps = {
     onRenameOrg: async (organisation) => {
       window.alert("onRenameOrg");
     },
+    onRefreshOrg: async (organisation) => {
+      window.alert("onRenameOrg");
+    },
     onDeleteOrg: async (organisation) => {
       window.alert("onDeleteOrg");
     },

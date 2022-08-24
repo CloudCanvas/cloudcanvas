@@ -1,38 +1,23 @@
 import React from "react";
-import BaseComponent, {
-  BaseComponentProps,
-  DataFetcher,
-} from "../components/layout/BaseComponent";
-import DynamoWatcher, {
-  DynamoWatcherComponent as DWC,
-} from "../components/aws/DynamoWatcher";
-import { DynamoRecord, DynamoWatcherModel } from "../components/aws/model";
-import { AwsComponent, DynamoWatcherComponent } from "../domain";
+import { BaseComponentProps, DataFetcher } from "../layout/BaseComponent";
+import DynamoWatcher from "../aws/DynamoWatcher";
+import { DynamoRecord, DynamoWatcherModel } from "../aws/model";
+import { DynamoWatcherComponentDef } from "../../domain";
+import BaseComponent from "../layout/BaseComponent/BaseComponent";
 
 export default () => {
   const [state, setState] = React.useState<
     BaseComponentProps<DynamoWatcherModel, DynamoWatcherModel>["state"]
   >({
-    component: {
-      def: DynamoWatcherComponent,
-      id: Math.random() + "",
-      playing: true,
-      title: "Sample table",
-      layout: {
-        location: [0, 0],
-        size: [700, 500],
-        lastLocation: [0, 0],
-      },
+    component: DynamoWatcherComponentDef.generateComponent({
+      title: "Sample Watcher",
       config: {
-        accountId: "123456789",
-        region: "us-east-1",
-        permissionSet: "AWSPowerUserAccess",
-        ssoUrl: "https://myurl.com",
+        accountId: "1234567",
+        region: "ap-southeast-2",
+        permissionSet: "Admin",
       },
-      props: {
-        tableName: "Users",
-      },
-    } as AwsComponent<DWC>,
+      customData: { label: "table", value: "Users" },
+    }),
     network: "connected",
     scale: 1,
     authorisation: "authorized",
@@ -40,7 +25,6 @@ export default () => {
 
   return (
     <BaseComponent
-      state={state}
       dispatch={{
         onAuthorise: () => console.log("AUTHORISE"),
         onTogglePlay: () => {
@@ -56,7 +40,18 @@ export default () => {
         onMove: (location) => {
           console.log(location);
         },
+        onSelection: () => {
+          setState({
+            ...state,
+            component: {
+              ...state.component,
+              selected: !state.component.selected,
+            },
+          });
+        },
       }}
+      state={state}
+      ContentComponent={DynamoWatcher}
       ports={{
         dataFetcher: {
           delay: 1000,
@@ -80,7 +75,6 @@ export default () => {
           },
         } as DataFetcher<DynamoWatcherModel, DynamoWatcherModel>,
       }}
-      ContentComponent={DynamoWatcher}
     />
   );
 };

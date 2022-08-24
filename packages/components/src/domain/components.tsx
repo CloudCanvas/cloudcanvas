@@ -26,18 +26,20 @@ export const DynamoWatcherComponentDef = {
     title,
     config,
     customData,
+    location,
   }: {
     title: string;
     config: AwsComponent<any>["config"];
     customData: CustomData;
+    location?: number[];
   }): AwsComponent<any> => {
     return {
       id: "",
       title: title,
       layout: {
         size: [900, 500],
-        location: [0, 0],
-        lastLocation: [0, 0],
+        location: location || [0, 0],
+        lastLocation: location || [0, 0],
       },
       playing: true,
       def: DynamoWatcherComponentDef,

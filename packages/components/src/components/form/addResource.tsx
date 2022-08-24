@@ -396,14 +396,27 @@ function Accounts({
           heading={o.nickname || o.ssoStartUrl}
           key={o.ssoStartUrl}
         >
-          {o.accounts.map((a) => (
-            <Item
-              name={a.name || a.accountId}
-              value={a}
-              onSelect={() => setAccount(a)}
-              key-={a.accountId}
-            />
-          ))}
+          {o.accounts
+            .slice()
+            .sort((a, b) => {
+              if (a.name && b.name) {
+                return a.name.localeCompare(b.name);
+              } else if (!a.name) {
+                return 10;
+              } else if (!b.name) {
+                return -10;
+              } else {
+                return a.accountId.localeCompare(b.accountId);
+              }
+            })
+            .map((a) => (
+              <Item
+                name={a.name || a.accountId}
+                value={a}
+                onSelect={() => setAccount(a)}
+                key-={a.accountId}
+              />
+            ))}
         </Command.Group>
       ))}
     </>

@@ -24,7 +24,7 @@ export class ComponentStore {
   constructor() {
     makeAutoObservable(this);
 
-    window.localStorage.removeItem("components");
+    // window.localStorage.removeItem("components");
 
     try {
       this.components = JSON.parse(
@@ -44,6 +44,8 @@ export class ComponentStore {
       : CANVAS_CENTER.y + 100;
 
     const location = [x, y];
+
+    console.log(location);
 
     this.addComponent({
       ...component,

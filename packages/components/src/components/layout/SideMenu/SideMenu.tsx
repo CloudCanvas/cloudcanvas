@@ -29,6 +29,7 @@ export type SideMenuProps = {
     onChangeExpanded: (expanded: boolean) => void;
     onRenameOrg: (organisation: Organisation) => Promise<void>;
     onDeleteOrg: (organisation: Organisation) => Promise<void>;
+    onRefreshOrg: (organisation: Organisation) => Promise<void>;
     onAddOrg: () => Promise<void>;
     onRenameAccount: (organisation: Organisation) => Promise<void>;
   };
@@ -377,6 +378,7 @@ const OrgDropdown = ({
 
   items.push(
     ...[
+      { text: "Refresh accounts", id: "refresh", disabled: false },
       { text: "Delete", id: "del", disabled: false },
       {
         text: org.nickname ? "Edit nickname" : "Add nickname",
@@ -391,20 +393,33 @@ const OrgDropdown = ({
     items.push({
       id: "accounts",
       text: "Accounts",
-      items: org.accounts.map((acc) => ({
-        id: acc.accountId,
-        text: acc.name || acc.accountId,
-        items: [
-          {
-            id: acc.accountId + "|terminal",
-            text: "Launch terminal",
-          },
-          {
-            id: acc.accountId + "|browser",
-            text: "Launch browser  ",
-          },
-        ],
-      })),
+      items: org.accounts
+        .slice()
+        .sort((a, b) => {
+          if (a.name && b.name) {
+            return a.name.localeCompare(b.name);
+          } else if (!a.name) {
+            return 10;
+          } else if (!b.name) {
+            return -10;
+          } else {
+            return a.accountId.localeCompare(b.accountId);
+          }
+        })
+        .map((acc) => ({
+          id: acc.accountId,
+          text: acc.name || acc.accountId,
+          items: [
+            {
+              id: acc.accountId + "|terminal",
+              text: "Launch terminal",
+            },
+            {
+              id: acc.accountId + "|browser",
+              text: "Launch browser  ",
+            },
+          ],
+        })),
     });
   }
   return (
@@ -417,6 +432,8 @@ const OrgDropdown = ({
       onItemClick={async (evt) => {
         if (evt.detail.id === "auth") {
           await d.authorise(org);
+        } else if (evt.detail.id === "refresh") {
+          await d.onRefreshOrg(org);
         } else if (evt.detail.id === "del") {
           await d.onDeleteOrg(org);
         } else if (evt.detail.id === "add-nick") {

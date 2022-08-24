@@ -25,7 +25,7 @@ const Template = (args: DynamoWatcherProps) => () =>
         overflow: "scroll",
       }}
     >
-      <ChildComponentWrapper>
+      <ChildComponentWrapper selected={false}>
         <DynamoWatcher {...args} />
       </ChildComponentWrapper>
     </div>

@@ -20,10 +20,11 @@ type MainProps = {
 export default observer((props: MainProps) => {
   const { component, layout } = useStores();
 
+  console.log("rerednering canvas wrapper");
+
   return (
     <div
-      id="canvasContainer
-        "
+      id="canvasContainer"
       style={{
         width: `${CANVAS_WIDTH}px`,
         height: `${CANVAS_HEIGHT}px`,
@@ -48,10 +49,17 @@ export default observer((props: MainProps) => {
           setScale: async (scale) => {
             scale && layout.setScale(scale);
           },
+          setLocation: async (location) => {
+            console.log("location");
+            console.log(location);
+            layout.setLocation(location);
+          },
           unselectAllComponents: async () => {
-            component.updateAllComponents({
-              selected: false,
-            });
+            if (component.selected) {
+              component.updateAllComponents({
+                selected: false,
+              });
+            }
           },
         }}>
         {props.children}

@@ -20,7 +20,10 @@ const defaultProps: MainCanvasProps = {
       window.alert("cmdk");
     },
     setScale: async () => {
-      console.log("authorise");
+      console.log("setScale");
+    },
+    setLocation: async () => {
+      console.log("setLocation");
     },
     unselectAllComponents: async () => {
       console.log("authorise");

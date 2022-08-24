@@ -8,13 +8,13 @@ import { useStores } from "../../store";
 
 export default observer(() => {
   const { aws, component } = useStores();
-  const [expanded, setExpanded] = React.useState(true);
+  const [expanded, setExpanded] = React.useState<boolean | undefined>(
+    undefined
+  );
 
   React.useEffect(() => {
     const set = window.localStorage.getItem("AWS_EXPANDED");
-    if (set === "false") {
-      setExpanded(false);
-    }
+    setExpanded(set === "true");
   }, []);
 
   React.useEffect(() => {
@@ -39,36 +39,42 @@ export default observer(() => {
         height: "100%",
         background: "white",
       }}>
-      <SideMenu
-        state={{
-          organisations: aws.organisations,
-          // TODO Hook ups
-          expanded: expanded,
-        }}
-        dispatch={{
-          authorise: async (org: Organisation) => {
-            await aws.authoriseOrg(org);
-          },
-          grabCredentials: async (accessPair: AccessPair) => {
-            await aws.grabCreds(accessPair);
-          },
-          onChangeExpanded: async (expandedUpdate) => {
-            setExpanded(expandedUpdate);
-          },
-          onRenameOrg: async (org) => {
-            aws.setAddingNicknameToOrg(org.ssoStartUrl);
-          },
-          onDeleteOrg: async (org) => {
-            aws.deleteOrganisation(org);
-          },
-          onAddOrg: async () => {
-            aws.setAddingOrg(true);
-          },
-          onRenameAccount: async (org) => {
-            window.alert("Not supported yet");
-          },
-        }}
-      />
+      {expanded !== undefined && (
+        <SideMenu
+          state={{
+            organisations: aws.organisations,
+            // TODO Hook ups
+            expanded: expanded,
+          }}
+          dispatch={{
+            authorise: async (org: Organisation) => {
+              await aws.authoriseOrg(org);
+            },
+            grabCredentials: async (accessPair: AccessPair) => {
+              await aws.grabCreds(accessPair);
+            },
+            onChangeExpanded: async (expandedUpdate) => {
+              setExpanded(expandedUpdate);
+            },
+            onRenameOrg: async (org) => {
+              aws.setAddingNicknameToOrg(org.ssoStartUrl);
+            },
+            onRefreshOrg: async (org) => {
+              await aws.refreshOrg(org);
+              window.alert("Accounts refreshed");
+            },
+            onDeleteOrg: async (org) => {
+              aws.deleteOrganisation(org);
+            },
+            onAddOrg: async () => {
+              aws.setAddingOrg(true);
+            },
+            onRenameAccount: async (org) => {
+              window.alert("Not supported yet");
+            },
+          }}
+        />
+      )}
     </div>
   );
 });

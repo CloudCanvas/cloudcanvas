@@ -16,7 +16,8 @@ export type MainCanvasProps = {
   state: {};
   dispatch: {
     onCmdk: (pops: { x: number; y: number }) => void;
-    setScale: (scale?: number) => void;
+    setScale: (scale: number) => void;
+    setLocation: (location: number[]) => void;
     unselectAllComponents: () => void;
   };
   children?: React.ReactNode;
@@ -75,6 +76,12 @@ export default (props: MainCanvasProps) => {
           originX: event.deltaX * direction,
           originY: event.deltaY * direction,
         });
+
+        setTimeout(() => {
+          const t = panSurface.current?.getState().transformation;
+          if (!t) return;
+          props.dispatch.setLocation([t.translateX * -1, t.translateY * -1]);
+        }, 50);
       } else {
         panSurface.current?.zoom({
           deltaScale: Math.sign(event.deltaY) > 0 ? -1 : 1,
@@ -83,9 +90,9 @@ export default (props: MainCanvasProps) => {
         });
 
         setTimeout(() => {
-          props.dispatch.setScale(
-            panSurface.current?.getState().transformation.scale
-          );
+          const t = panSurface.current?.getState().transformation;
+          if (!t) return;
+          props.dispatch.setScale(t.scale);
         }, 50);
       }
     });

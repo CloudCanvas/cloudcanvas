@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, WheelEvent } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Rnd } from "react-rnd";
 import { useMachine } from "@xstate/react";
 import { AwsComponent, Component } from "../../../domain/core";
@@ -83,28 +83,28 @@ const BaseComponent = <T, U>({
 
   const { component: c } = state;
 
-  const icon = state.component.def.icon;
+  const icon = c.def.icon;
 
   // We use the props to set the initial location and size but after that we ignore it and control
   // it with internal state to avoid any jitter. The side effects are dispatched to update for next open.
   useEffect(() => {
     setLocation(c.layout.location);
     setSize(c.layout.size);
-  }, [c.layout]);
+  }, []);
 
   // Dispatch location side effect
   useEffect(() => {
     if (!location) return;
 
     dispatch.onMove(location);
-  }, [location, dispatch]);
+  }, [location]);
 
   // Dispatch resize side effect
   useEffect(() => {
     if (!size) return;
 
     dispatch.onResize(size);
-  }, [size, dispatch]);
+  }, [size]);
 
   useEffect(() => {
     if (state.component.playing) {
@@ -112,7 +112,7 @@ const BaseComponent = <T, U>({
     } else {
       streamSend("PAUSED");
     }
-  }, [state.component.playing, streamSend]);
+  }, [state.component.playing]);
 
   useEffect(() => {
     if (state.authorisation === "authorized") {
@@ -120,13 +120,7 @@ const BaseComponent = <T, U>({
     } else {
       streamSend("EXPIRED");
     }
-  }, [state.authorisation, streamSend]);
-
-  const ref = useCallback((div: HTMLDivElement) => {
-    div?.addEventListener("wheel", (event) => {
-      event.stopPropagation();
-    });
-  }, []);
+  }, [state.authorisation]);
 
   if (!location || !size) return null;
 
@@ -175,7 +169,8 @@ const BaseComponent = <T, U>({
             borderBottomColor: c.selected ? "#0972d3" : "black",
             ...spacedRow,
           }}
-          onClick={() => {
+          onClick={(evt) => {
+            evt.stopPropagation();
             dispatch.onSelection(!c.selected);
           }}
         >
@@ -212,8 +207,7 @@ const BaseComponent = <T, U>({
           </div>
         </div>
 
-        {/* @ts-ignore */}
-        <ChildComponentWrapper ref={ref}>
+        <ChildComponentWrapper selected={state.component.selected}>
           {!hasData && <Placeholder state={state} />}
 
           {hasData && ContentComponent && (

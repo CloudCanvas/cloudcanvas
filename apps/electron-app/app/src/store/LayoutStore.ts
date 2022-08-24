@@ -3,12 +3,22 @@ import { makeAutoObservable, runInAction } from "mobx";
 import debounce from "debounce";
 
 export class LayoutStore {
-  scale: number = 0.85;
+  scale: number = 1;
   // TODO
   location: number[] = [0, 0];
 
   constructor() {
     makeAutoObservable(this);
+
+    // window.localStorage.removeItem("layout");
+
+    const layout = JSON.parse(window.localStorage.getItem("layout") || "[]");
+
+    if (!layout) return;
+
+    this.location = layout.location;
+
+    console.log("new location", layout.location);
   }
 
   setScale = debounce((scale: number) => {
@@ -16,4 +26,20 @@ export class LayoutStore {
       this.scale = scale;
     });
   });
+
+  setLocation = debounce((location: number[]) => {
+    runInAction(() => {
+      this.location = location;
+      this.saveLayout();
+    });
+  });
+
+  saveLayout = () => {
+    window.localStorage.setItem(
+      "layout",
+      JSON.stringify({
+        location: this.location,
+      })
+    );
+  };
 }

@@ -1,11 +1,27 @@
-import React, { Ref } from "react";
+import React, { Ref, useEffect, useRef } from "react";
 
 type Props = {
   children: React.ReactNode;
+  selected: boolean;
 };
-export default React.forwardRef((props: Props, ref: Ref<HTMLDivElement>) => {
+export default (props: Props) => {
+  const ref = useRef<HTMLDivElement | undefined>(undefined);
+
+  useEffect(() => {
+    const listener = (event: any) => {
+      if (!event.ctrlKey && props.selected) {
+        event.stopPropagation();
+      }
+    };
+
+    // This feels like I'm missing some knowledge of a cleaner way but fuck it, it'll do for now
+    ref.current?.removeEventListener("wheel", listener);
+    ref.current?.addEventListener("wheel", listener);
+  }, [props.selected]);
+
   return (
     <div
+      // @ts-ignore
       ref={ref}
       style={{
         display: "flex",
@@ -13,6 +29,7 @@ export default React.forwardRef((props: Props, ref: Ref<HTMLDivElement>) => {
         overflow: "scroll",
         marginBottom: 3,
         cursor: "default",
+        overscrollBehavior: props.selected ? "contain" : "auto",
       }}
       id="componentBody"
       className="componentBody"
@@ -20,4 +37,4 @@ export default React.forwardRef((props: Props, ref: Ref<HTMLDivElement>) => {
       {props.children}
     </div>
   );
-});
+};

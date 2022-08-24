@@ -36,6 +36,8 @@ export class ComponentRendererStore {
 
     return {
       onAuthorise: () => {
+        console.log("onAuthorise");
+        console.log("onAuthorise");
         if (!org) {
           window.alert("Authorisation not available, please restart");
           return;
@@ -44,12 +46,22 @@ export class ComponentRendererStore {
         this.awsStore.authoriseOrg(org);
       },
       onTogglePlay: () => {
+        console.log("onTogglePlay");
+        console.log("onTogglePlay");
         return this.componentStore.updateComponent({
           id: component.id,
           playing: !component.playing,
         });
       },
       onResize: (size) => {
+        console.log("onResize");
+        if (
+          size[0] === component.layout.size[0] &&
+          size[1] === component.layout.size[1]
+        ) {
+          return;
+        }
+
         return this.componentStore.updateComponent({
           id: component.id,
           layout: {
@@ -59,6 +71,14 @@ export class ComponentRendererStore {
         });
       },
       onMove: (location) => {
+        if (
+          location[0] === component.layout.location[0] &&
+          location[1] === component.layout.location[1]
+        ) {
+          return;
+        }
+        console.log("onMove");
+
         return this.componentStore.updateComponent({
           id: component.id,
           layout: {
@@ -68,6 +88,12 @@ export class ComponentRendererStore {
         });
       },
       onSelection: (selected) => {
+        if (selected === component.selected) {
+          console.log("skipping");
+          return;
+        }
+
+        console.log("onSelection");
         if (selected) {
           this.componentStore.updateAllComponents({
             selected: false,

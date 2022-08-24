@@ -19,7 +19,9 @@ export class DynamoStreamStore {
   } = {};
 
   constructor(private awsClient: AwsClient) {
-    makeAutoObservable(this);
+    makeAutoObservable(this, {
+      streamManagerDict: false,
+    });
   }
 
   fetchRecords = async (

@@ -34,7 +34,7 @@ export const dcp: BaseComponentProps<number[], number> = {
       },
     },
     authorisation: allGoodStatus.authorisation,
-    scale: 0.85,
+    scale: 1,
   },
   dispatch: baseDispatch,
 };

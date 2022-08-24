@@ -165,9 +165,6 @@ export const createStreamMachine = <T, U>(props: Props<T, U>) => {
       services: {
         fetchRecords: async (ctx) => {
           try {
-            console.log(
-              `Stream machine context: playing = ${ctx.playing}, authorisation = ${ctx.authorisation}`
-            );
             if (!ctx.playing || ctx.authorisation === "expired") {
               return undefined;
             }

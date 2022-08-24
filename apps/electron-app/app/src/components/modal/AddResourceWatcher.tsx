@@ -13,6 +13,9 @@ export default observer(() => {
     const channel = new BroadcastChannel("app-data");
     channel.addEventListener("message", (event) => {
       setVisible(true);
+      component.updateAllComponents({
+        selected: false,
+      });
 
       component.registerLocationToAdd([
         event.data.location.actualLocationX,

@@ -56,9 +56,9 @@ export const baseAwsComponent: AwsComponent<any> = {
 };
 
 export const baseDispatch: BaseComponentProps<unknown, unknown>["dispatch"] = {
+  onAuthorise: () => console.log("AUTHORISE"),
   onSelection: (selected) => console.log(`selected ${selected}`),
   onTogglePlay: () => console.log("TOGGLE"),
-  onAuthorise: () => console.log("AUTHORISE"),
   onResize: (size) => console.log("RESIZE", size),
   onMove: (size) => console.log("MOVE", size),
 };
