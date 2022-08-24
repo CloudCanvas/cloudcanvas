@@ -32,52 +32,49 @@ const defaultProps: MainCanvasProps = {
 };
 
 // Create a master template for mapping args to render the DynamoWatcher component
-const Template =
-  (args: MainCanvasProps, width: number | undefined = undefined) =>
-  () => {
-    let [selected, setSelected] = React.useState(dcp.state.component.selected);
-    return (
-      <div style={{ position: "relative", width: 1000, height: 1000 }}>
-        <MainCanvas {...args}>
-          <BaseComponent
-            {...{
-              ...dcp,
-              state: {
-                ...dcp.state,
-                component: {
-                  ...dcp.state.component,
-                  selected: selected,
-                },
+const Template = (args: MainCanvasProps) => () => {
+  let [selected, setSelected] = React.useState(dcp.state.component.selected);
+  return (
+    <div style={{ position: "relative", width: 1000, height: 1000 }}>
+      <MainCanvas {...args}>
+        <BaseComponent
+          {...{
+            ...dcp,
+            state: {
+              ...dcp.state,
+              component: {
+                ...dcp.state.component,
+                selected: selected,
               },
-              dispatch: {
-                ...dcp.dispatch,
-                onSelection: () => setSelected(!selected),
-              },
-            }}
-            ContentComponent={() => (
-              <div style={{ flex: 1 }}>
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
-                  <div
-                    style={{
-                      height: 200,
-                      width: "100%",
-                      borderWidth: 3,
-                      borderStyle: "solid",
-                      borderColor: "black",
-                      ...centered,
-                    }}
-                    key={i}
-                  >
-                    <h1>{i}</h1>
-                  </div>
-                ))}
+            },
+            dispatch: {
+              ...dcp.dispatch,
+              onSelection: () => setSelected(!selected),
+            },
+          }}
+        >
+          <div style={{ flex: 1 }}>
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
+              <div
+                style={{
+                  height: 200,
+                  width: "100%",
+                  borderWidth: 3,
+                  borderStyle: "solid",
+                  borderColor: "black",
+                  ...centered,
+                }}
+                key={i}
+              >
+                <h1>{i}</h1>
               </div>
-            )}
-          ></BaseComponent>
-        </MainCanvas>
-      </div>
-    );
-  };
+            ))}
+          </div>
+        </BaseComponent>
+      </MainCanvas>
+    </div>
+  );
+};
 // Reuse that template for creating different stories
 
 export const CanvasWithAnItem = Template(defaultProps);

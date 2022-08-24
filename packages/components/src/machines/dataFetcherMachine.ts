@@ -2,28 +2,30 @@ import { assign, createMachine } from "xstate";
 import {
   AuthStatus,
   BaseComponentProps,
-  DataFetcher,
 } from "../components/layout/BaseComponent";
+import { DataFetcher } from "../ports/DataFetcher";
 
-interface Context<T, U> {
-  dataFetcher: DataFetcher<T, U>;
-  data: T;
+interface Context<D, U> {
+  dataFetcher: DataFetcher<D, U>;
+  data: D;
   playing: boolean;
-  authorisation: AuthStatus;
+  authorised: boolean;
+  errorCount: number;
 }
 
-interface Props<T, U> {
-  dataFetcher: DataFetcher<T, U>;
+interface Props<D, U> {
+  dataFetcher: DataFetcher<D, U>;
   playing: boolean;
-  authorisation: AuthStatus;
+  authorised: boolean;
 }
 
-export const createStreamMachine = <T, U>(props: Props<T, U>) => {
-  const initialContext: Context<T, U> = {
+export const createStreamMachine = <D, U>(props: Props<D, U>) => {
+  const initialContext: Context<D, U> = {
     dataFetcher: props.dataFetcher,
     data: props.dataFetcher.initialData,
     playing: props.playing,
-    authorisation: props.authorisation,
+    authorised: props.authorised,
+    errorCount: 0,
   };
 
   /** @xstate-layout N4IgpgJg5mDOIC5SwC4CcwEMC2Y0DoBjDTFASwDsoBiCAewrH0oDc6BrJ1E3A4rclQSs6hUmQYBtAAwBdRKAAOdWGXIMFIAB6IAtAGZ9AVnzTpANnMAmI9KvmL0gIwAWADQgAnogCc+F04A7LbG+i6BgeFOAL7RHtxYvEQkgjR4aHQEigA2pABmmdj4CTh4yQKUUMIUbGLqFDLySCDKqvWaOgguLibSRj6BFoFODuEWHt4IRvr4ABz6Plazsz7dI876sfHoiWVkENlg1ABiAKIAKgDCABIA+gBKp5cA8vcAIgDKmq1qEhQdeishnwTmcrkCDkWVj6E0Q+nMTn8Lms5lmViCVgCri2IBKSX2h2oWlQpCYmDyKDwAApQWYAJTUPF7A5gb4qX4aZqdTGBEHIlw+aRhaSzaSBfSwhAzYZGcUWaZWQIrFyzHFMgh5MAoQgAC0qtAYTBEnGKO1KGq1usq1Vq4ikcjZbT+AIQulBM0xiqcPn0diM-UWksVszmTnh5n0s36VkVPjVZqSmu1eqo1HSmXwOXyhVNPDKSatQhEdT+jUdHP+XMQTicIZ8ovrtYFA36kpGvNB5hl0zM3WWsTiIAodAgcE06vK4io5faVddxhc+H60nry1RrjF5klboRS5r00Cgv0NlFLnjeYIBNZzR+s9AnV003wCOCy+60hVXa3XmroqXs0PVEIXmaFAnPXYLWTSoZ2dOcd2kEFZX9EUjBcdFZXcH8un6fB7EFcwjDRIwghcTZBwnfhSVONAMjQGDOXvQECL3VxFmcPoYyMSUIxDWsjFRf1DHhetwPNejK0Y+clSXQVV1mdcXE3bcgRmWx0VRBZzDQ-ijAHaIgA */
@@ -32,7 +34,7 @@ export const createStreamMachine = <T, U>(props: Props<T, U>) => {
       context: initialContext,
       tsTypes: {} as import("./dataFetcherMachine.typegen").Typegen0,
       schema: {
-        context: {} as Context<T, U>,
+        context: {} as Context<D, U>,
         events: {} as
           | { type: "FETCH_RECORDS" }
           | { type: "AUTHORISED" }
@@ -116,8 +118,7 @@ export const createStreamMachine = <T, U>(props: Props<T, U>) => {
           },
         },
         authManager: {
-          initial:
-            props.authorisation === "authorized" ? "authorized" : "expired",
+          initial: props.authorised ? "authorized" : "expired",
           states: {
             authorized: {
               // @ts-ignore
@@ -157,15 +158,23 @@ export const createStreamMachine = <T, U>(props: Props<T, U>) => {
               return ctx.data;
             }
 
-            const update = ctx.dataFetcher.update(ctx.data, evt.data);
+            const update = ctx.dataFetcher.reduce(ctx.data, evt.data);
             return update;
+          },
+          errorCount: (_ctx, _evt) => {
+            return 0;
+          },
+        }),
+        bumpError: assign({
+          errorCount: (ctx, evt) => {
+            return ctx.errorCount + 1;
           },
         }),
       },
       services: {
         fetchRecords: async (ctx) => {
           try {
-            if (!ctx.playing || ctx.authorisation === "expired") {
+            if (!ctx.playing || !ctx.authorised) {
               return undefined;
             }
 

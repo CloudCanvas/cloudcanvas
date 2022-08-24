@@ -1,15 +1,14 @@
 import React from "react";
-import { BaseComponentProps, DataFetcher } from "../layout/BaseComponent";
-import DynamoWatcher from "../aws/DynamoWatcher";
-import { DynamoRecord, DynamoWatcherModel } from "../aws/model";
+import { BaseComponentProps } from "../layout/BaseComponent";
+import DynamoWatcher from "../aws/DynamoWatcher/view/DynamoWatcher";
+import { DynamoRecord, DynamoWatcherModel } from "../aws/DynamoWatcher/model";
 import { DynamoWatcherComponentDef } from "../../domain";
 import BaseComponent from "../layout/BaseComponent/BaseComponent";
 import MainCanvas, { CANVAS_CENTER } from "../spatial/MainCanvas/MainCanvas";
+import { DataFetcher } from "../../ports/DataFetcher";
 
 export default () => {
-  const [state, setState] = React.useState<
-    BaseComponentProps<DynamoWatcherModel, DynamoWatcherModel>["state"]
-  >({
+  const [state, setState] = React.useState<BaseComponentProps["state"]>({
     component: DynamoWatcherComponentDef.generateComponent({
       title: "Sample Watcher",
       config: {
@@ -70,31 +69,37 @@ export default () => {
           },
         }}
         state={state}
-        ContentComponent={DynamoWatcher}
-        ports={{
-          dataFetcher: {
-            delay: 1000,
-            update: (data, update) => {
-              const updatedModel = [...data, ...update];
-              return updatedModel;
-            },
-            initialData: [],
-            fetch: async () => {
-              return [
-                {
-                  id: Math.random() + "",
-                  at: new Date(),
-                  type: "INSERT",
-                  key: {
-                    id: "e0db8e08-e089-42a8-a11e-8dc0c42024ac",
-                    ts: +new Date(),
-                  },
-                } as DynamoRecord,
-              ];
-            },
-          } as DataFetcher<DynamoWatcherModel, DynamoWatcherModel>,
-        }}
-      />
+      >
+        <DynamoWatcher
+          playing={state.component.playing}
+          authorised={state.authorisation === "authorized"}
+          awsClient={{} as any}
+          customProps={{ tableName: "TestTableName" }}
+          dataFetcher={
+            {
+              delay: 1000,
+              reduce: (data, update) => {
+                const updatedModel = [...data, ...update];
+                return updatedModel;
+              },
+              initialData: [],
+              fetch: async () => {
+                return [
+                  {
+                    id: Math.random() + "",
+                    at: new Date(),
+                    type: "INSERT",
+                    key: {
+                      id: "e0db8e08-e089-42a8-a11e-8dc0c42024ac",
+                      ts: +new Date(),
+                    },
+                  } as DynamoRecord,
+                ];
+              },
+            } as DataFetcher<DynamoWatcherModel, DynamoWatcherModel>
+          }
+        />
+      </BaseComponent>
     </MainCanvas>
   );
 };

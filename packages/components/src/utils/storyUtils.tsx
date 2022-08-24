@@ -44,7 +44,7 @@ export const baseComponent: Component = {
   props: {},
 };
 
-export const baseAwsComponent: AwsComponent<any> = {
+export const baseAwsComponent: AwsComponent = {
   ...baseComponent,
   config: {
     ssoUrl: "https://myUrl.com",
@@ -55,7 +55,22 @@ export const baseAwsComponent: AwsComponent<any> = {
   props: {},
 };
 
-export const baseDispatch: BaseComponentProps<unknown, unknown>["dispatch"] = {
+export const baseAwsComponentZeroed: AwsComponent = {
+  ...baseComponent,
+  layout: {
+    ...baseComponent.layout,
+    location: [0, 0],
+  },
+  config: {
+    ssoUrl: "https://myUrl.com",
+    accountId: "123456789",
+    region: "us-east-1",
+    permissionSet: "AdministratorAccess",
+  },
+  props: {},
+};
+
+export const baseDispatch: BaseComponentProps["dispatch"] = {
   onAuthorise: () => console.log("AUTHORISE"),
   onSelection: (selected) => console.log(`selected ${selected}`),
   onTogglePlay: () => console.log("TOGGLE"),

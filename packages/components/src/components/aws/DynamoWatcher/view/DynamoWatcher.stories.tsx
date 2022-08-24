@@ -1,8 +1,10 @@
 import React from "react";
-import DynamoWatcher, { DynamoWatcherProps } from "./DynamoWatcher";
-import { DynamoRecord } from "./model";
-import ChildComponentWrapper from "../layout/BaseComponent/ChildComponentWrapper";
-import { id } from "../../utils/generalUtils";
+import DynamoWatcher, {
+  DynamoWatcherView,
+  DynamoWatcherViewProps,
+} from "./DynamoWatcher";
+import { DynamoRecord } from "../model";
+import { id } from "../../../../utils/generalUtils";
 
 export default {
   title: "components/aws/DynamoWatcher",
@@ -13,7 +15,7 @@ export default {
 };
 
 // Create a master template for mapping args to render the DynamoWatcher component
-const Template = (args: DynamoWatcherProps) => () =>
+const Template = (args: DynamoWatcherViewProps) => () =>
   (
     <div
       style={{
@@ -25,9 +27,7 @@ const Template = (args: DynamoWatcherProps) => () =>
         overflow: "scroll",
       }}
     >
-      <ChildComponentWrapper selected={false}>
-        <DynamoWatcher {...args} />
-      </ChildComponentWrapper>
+      <DynamoWatcherView {...args} />
     </div>
   );
 

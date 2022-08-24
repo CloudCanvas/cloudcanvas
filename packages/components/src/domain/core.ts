@@ -20,12 +20,12 @@ export interface Component {
   props?: any;
 }
 
-export interface AwsComponent<T> extends Component {
+export interface AwsComponent extends Component {
   config: {
     accountId?: string;
     ssoUrl?: string;
     region?: string;
     permissionSet?: string;
   };
-  props: T;
+  props: any;
 }

@@ -55,6 +55,8 @@ export const exec = async () => {
   await aws.accessProvider.refreshOrg(access.organisations[0].ssoStartUrl);
   await aws.accessProvider.refreshOrg(access.organisations[1].ssoStartUrl);
 
+  aws.s3.
+
   const response = await s3Helper.listAllObjects({
     access: {
       accountId: "433121571808",

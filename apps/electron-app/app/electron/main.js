@@ -184,7 +184,7 @@ async function createWindow() {
   }
 
   win.webContents.on("did-finish-load", () => {
-    win.setTitle(`s3o(v${app.getVersion()})`);
+    win.setTitle(`CloudCanvas (v${app.getVersion()})`);
   });
 
   // Only do these things when in development

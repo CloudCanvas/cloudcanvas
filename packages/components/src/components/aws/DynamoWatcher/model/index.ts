@@ -11,4 +11,6 @@ export type DynamoRecord = {
   oldImage?: Partial<DynamoRecord>;
 };
 
+export type DynamoWatcherUpdate = DynamoRecord[];
+
 export type DynamoWatcherModel = DynamoRecord[];

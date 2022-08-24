@@ -1,5 +1,5 @@
-import { id } from "../../utils/generalUtils";
-import { DynamoRecord } from "./model";
+import { id } from "../../../../utils/generalUtils";
+import { DynamoRecord } from "../model";
 
 export const DynamoWatcherSampleData = [
   {

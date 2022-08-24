@@ -1,6 +1,5 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 import { Rnd } from "react-rnd";
-import { useMachine } from "@xstate/react";
 import { AwsComponent, Component } from "../../../domain/core";
 import {
   TbPlugConnected,
@@ -9,40 +8,29 @@ import {
   TbPlayerPause,
   TbInfoCircle,
 } from "react-icons/tb";
-import { centered, centeredRow, spacedRow } from "../../../utils/layoutUtils";
+import { centeredRow, spacedRow } from "../../../utils/layoutUtils";
 import Popover from "@cloudscape-design/components/popover";
 import Button from "@cloudscape-design/components/button";
 import TextContent from "@cloudscape-design/components/text-content";
 import StatusIndicator from "@cloudscape-design/components/status-indicator";
 import "../../../base.css";
-import { createStreamMachine } from "../../../machines/dataFetcherMachine";
 import ChildComponentWrapper from "./ChildComponentWrapper";
 
 export const BASE_TAB_HGT = 40;
 export const BASE_FOOTER_HGT = 20;
 
 export interface ComponentStatus {
-  authorisation: BaseComponentProps<unknown, unknown>["state"]["authorisation"];
-  network?: BaseComponentProps<unknown, unknown>["state"]["network"];
+  authorisation: BaseComponentProps["state"]["authorisation"];
+  network?: BaseComponentProps["state"]["network"];
   playing: Component["playing"];
-}
-
-export interface DataFetcher<T, U> {
-  delay: number;
-  initialData: T;
-  fetch: () => Promise<U>;
-  update: (current: T, update: U) => T;
 }
 
 export type AuthStatus = "authorized" | "expired";
 export type NetworkStatus = "connected" | "disconnected";
 
-export interface BaseComponentProps<T, U> {
-  ports: {
-    dataFetcher: DataFetcher<T, U>;
-  };
+export interface BaseComponentProps {
   state: {
-    component: Component;
+    component: AwsComponent;
     authorisation: AuthStatus;
     network?: NetworkStatus;
     scale?: number;
@@ -54,34 +42,14 @@ export interface BaseComponentProps<T, U> {
     onMove: (size: number[]) => void;
     onSelection: (selected: boolean) => void;
   };
-  ContentComponent?: (data: any) => JSX.Element;
+  children: React.ReactNode;
 }
 
-const BaseComponent = <T, U>({
-  ports,
-  state,
-  dispatch,
-  ContentComponent,
-}: BaseComponentProps<T, U>) => {
+const BaseComponent = ({ state, dispatch, children }: BaseComponentProps) => {
+  const { component: c } = state;
+
   const [location, setLocation] = React.useState<number[] | undefined>();
   const [size, setSize] = React.useState<number[] | undefined>();
-
-  // Create the machine to manage streaming data.
-  const streamMachine = useMemo(
-    () =>
-      createStreamMachine<T, U>({
-        dataFetcher: ports.dataFetcher,
-        authorisation: state.authorisation,
-        playing: state.component.playing,
-      }),
-    []
-  );
-  const [streamState, streamSend] = useMachine(streamMachine, {
-    // @ts-ignore
-    actions: {},
-  });
-
-  const { component: c } = state;
 
   const icon = c.def.icon;
 
@@ -106,28 +74,7 @@ const BaseComponent = <T, U>({
     dispatch.onResize(size);
   }, [size]);
 
-  useEffect(() => {
-    if (state.component.playing) {
-      streamSend("PLAYING");
-    } else {
-      streamSend("PAUSED");
-    }
-  }, [state.component.playing]);
-
-  useEffect(() => {
-    if (state.authorisation === "authorized") {
-      streamSend("AUTHORISED");
-    } else {
-      streamSend("EXPIRED");
-    }
-  }, [state.authorisation]);
-
   if (!location || !size) return null;
-
-  const hasData =
-    streamState.context.data instanceof Array
-      ? (streamState.context.data?.length || 0) > 0
-      : !!streamState.context.data;
 
   return (
     <Rnd
@@ -208,11 +155,16 @@ const BaseComponent = <T, U>({
         </div>
 
         <ChildComponentWrapper selected={state.component.selected}>
-          {!hasData && <Placeholder state={state} />}
-
-          {hasData && ContentComponent && (
-            <ContentComponent data={streamState.context.data as any} />
-          )}
+          {/* I really don't like how I've done this, I think it's probably best to have a children prop and pass these things directly */}
+          {children}
+          {/* {ContentComponent && (
+            <ContentComponent
+              awsClient={awsAccessClient}
+              playing={state.component.playing}
+              authorised={state.authorisation === "authorized"}
+              customProps={c.props}
+            />
+          )} */}
         </ChildComponentWrapper>
       </div>
     </Rnd>
@@ -250,7 +202,7 @@ const InformationIcon = (props: {
   component: Component;
 }) => {
   // Test for AWS Component as we only show for them
-  const awsComponent = props.component as AwsComponent<any>;
+  const awsComponent = props.component as AwsComponent;
   if (!awsComponent?.config?.accountId) return null;
 
   return (
@@ -390,21 +342,5 @@ const Pointer = ({
     {children}
   </div>
 );
-
-const Placeholder = <T, U>(props: Pick<BaseComponentProps<T, U>, "state">) => {
-  return (
-    <div style={{ ...centered, flex: 1 }}>
-      <TextContent>
-        {props.state.authorisation === "expired" && (
-          <p>Authorisation has expired, refresh to view</p>
-        )}
-        {props.state.authorisation === "authorized" &&
-          !props.state.component.playing && <p>Paused</p>}
-        {props.state.authorisation === "authorized" &&
-          props.state.component.playing && <p>Listening for updates...</p>}
-      </TextContent>
-    </div>
-  );
-};
 
 export default BaseComponent;

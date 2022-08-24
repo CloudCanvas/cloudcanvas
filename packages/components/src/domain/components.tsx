@@ -1,11 +1,10 @@
-import { AccessCard } from "@cloudcanvas/aws-sso-sdk-wrapper";
+import { AWS } from "@cloudcanvas/aws-sso-sdk-wrapper";
 import React from "react";
-import DynamoWatcher, {
-  DynamoWatcherComponent,
-} from "../components/aws/DynamoWatcher";
-import { DynamoWatcherSampleData } from "../components/aws/sampleData";
+import DynamoWatcher from "../components/aws/DynamoWatcher/view/DynamoWatcher";
+import { DynamoWatcherSampleData } from "../components/aws/DynamoWatcher/model/sampleData";
 import { CustomData } from "../components/form";
 import { AwsComponent } from "./core";
+import { DataFetcher } from "../ports/DataFetcher";
 
 // type DataFetcher = {
 //   placeholder: string;
@@ -16,11 +15,34 @@ import { AwsComponent } from "./core";
 //   error: boolean;
 // };
 
+export interface AwsComponentProps {
+  playing: boolean;
+  authorised: boolean;
+  awsClient: AWS;
+  customProps?: any;
+  // allow a custom data fetcher for testing or overriding in general
+  dataFetcher?: DataFetcher<any, any>;
+}
+
 export const DynamoWatcherComponentDef = {
   name: "DynamoDB watcher",
   subtitle: "Watch live updates from a stream-enabled DynamoDB table",
   sampleData: DynamoWatcherSampleData,
-  component: (data: any) => <DynamoWatcher data={data} />,
+  component: (
+    awsClient: AWS,
+    playing: boolean,
+    authorised: boolean,
+    tableName: string
+  ) => (
+    <DynamoWatcher
+      awsClient={awsClient}
+      playing={playing}
+      authorised={authorised}
+      customProps={{
+        tableName,
+      }}
+    />
+  ),
   type: "dynamoDbWatcher",
   generateComponent: ({
     title,
@@ -29,10 +51,10 @@ export const DynamoWatcherComponentDef = {
     location,
   }: {
     title: string;
-    config: AwsComponent<any>["config"];
+    config: AwsComponent["config"];
     customData: CustomData;
     location?: number[];
-  }): AwsComponent<any> => {
+  }): AwsComponent => {
     return {
       id: "",
       title: title,
@@ -67,9 +89,9 @@ export const LambdaWatcherComponentDef = {
     customData,
   }: {
     title: string;
-    config: AwsComponent<any>["config"];
+    config: AwsComponent["config"];
     customData: CustomData;
-  }): AwsComponent<any> => {
+  }): AwsComponent => {
     return {
       id: "",
       title: title,

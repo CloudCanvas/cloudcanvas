@@ -21,7 +21,7 @@ export interface Typegen0 {
     fetchRecords: "done.invoke.streamer.dataFetcher.fetching:invocation[0]";
   };
   missingImplementations: {
-    actions: "bumpError";
+    actions: never;
     services: never;
     guards: never;
     delays: never;
