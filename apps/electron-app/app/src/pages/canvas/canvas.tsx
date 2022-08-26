@@ -7,7 +7,6 @@ import ComponentKeyboardManager from "../../components/managers/ComponentKeyboar
 import MainCanvasWrapper from "../../components/spatial/MainCanvasWrapper";
 import { useStores } from "../../store";
 import isEqual from "lodash.isequal";
-
 import "./canvas.css";
 import { difference } from "../../lib/diff";
 import { DynamoWatcherModel } from "@cloudcanvas/components/lib/components/aws/DynamoWatcher/model";
@@ -34,62 +33,31 @@ export default observer(() => {
 
 const ComponentWrapper = memo(
   observer(({ definition }: { definition: BaseComponentProps }) => {
-    switch (definition.state.component.type) {
-      case "dynamoDbWatcher":
-        // console.log("rerrendering base component");
-        const c = definition.state.component as Components.Core.AwsComponent<
-          DynamoWatcherModel,
-          DynamoWatcherCustomProps
-        >;
+    const c = definition.state.component as Components.Core.AwsComponent<
+      DynamoWatcherModel,
+      DynamoWatcherCustomProps
+    >;
 
-        const catalog = Components.Core.componentCatalog.find(
-          (cc) => cc.type === c.type
-        )!;
+    const catalog = Components.Core.componentCatalog.find(
+      (cc) => cc.type === c.type
+    )!;
 
-        return (
-          <BaseComponent {...definition}>
-            {catalog.component({
-              authorised: definition.state.authorisation === "authorized",
-              playing: c.state.playing,
-              awsClient: aws.aws
-                .account(c.config.accountId)
-                .region(c.config.region)
-                .role(c.config.permissionSet),
-              customProps: c.props,
-            })}
-            {/* <div /> */}
-          </BaseComponent>
-        );
-      case "lambdaWatcher":
-        return (
-          <div
-            style={{
-              width: 350,
-              height: 600,
-              position: "absolute",
-              left: 450 + 30,
-              top: 50,
-              background: "black",
-            }}
-          />
-        );
-
-      default:
-        return (
-          <div
-            style={{
-              width: 350,
-              height: 600,
-              position: "absolute",
-              left: 450 + 30,
-              top: 50,
-              background: "black",
-              zIndex: 909999,
-            }}
-          />
-        );
-    }
+    return (
+      <BaseComponent {...definition}>
+        {catalog.component({
+          authorised: definition.state.authorisation === "authorized",
+          playing: c.state.playing,
+          awsClient: aws.aws
+            .account(c.config.accountId)
+            .region(c.config.region)
+            .role(c.config.permissionSet),
+          customProps: c.props,
+        })}
+        {/* <div /> */}
+      </BaseComponent>
+    );
   }),
+  // Rerendering only when the state has changed.s
   (prevProps, nextProps) => {
     const diff = difference(
       prevProps.definition.state,
