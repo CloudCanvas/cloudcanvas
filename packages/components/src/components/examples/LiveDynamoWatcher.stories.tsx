@@ -1,5 +1,4 @@
 import React from "react";
-import { DynamoWatcherProps } from "../aws";
 import LiveDynamoWatcher from "./LiveDynamoWatcher";
 
 export default {

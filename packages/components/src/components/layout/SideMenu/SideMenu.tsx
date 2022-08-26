@@ -1,9 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  AccessPair,
-  Account,
-  Organisation,
-} from "@cloudcanvas/aws-sso-sdk-wrapper";
+import { AccessPair, Account, Organisation } from "@cloudcanvas/types";
 import {
   Alert,
   Button,

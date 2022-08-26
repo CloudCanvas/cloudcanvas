@@ -6,7 +6,6 @@ import { DynamoStore } from "./DynamoStore";
 import { LayoutStore } from "./LayoutStore";
 import { clipboard } from "../entrypoints/clipboard";
 import { ComponentRendererStore } from "./ComponentRendererStore";
-import { DynamoStreamStore } from "./DynamoStreamStore";
 
 const globalStores = {
   aws: new AwsStore(ssoBridge, clipboard),
@@ -21,7 +20,6 @@ const domainStores = {
     globalStores.layout
   ),
   dynamo: new DynamoStore(aws),
-  dynamoStreams: new DynamoStreamStore(aws),
 };
 
 export const useStores = () => React.useContext(storesContext);

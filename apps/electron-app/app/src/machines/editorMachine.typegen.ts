@@ -2,14 +2,6 @@
 
 export interface Typegen0 {
   "@@xstate/typegen": true;
-  "eventsCausingActions": {
-    updatePast: "DELETE_SHAPE" | "ADD_SHAPE";
-    deleteShape: "DELETE_SHAPE";
-    undo: "UNDO";
-    redo: "REDO";
-    addShape: "ADD_SHAPE";
-    addThreeShapes: "ADD_SHAPE";
-  };
   "internalEvents": {
     "xstate.init": { type: "xstate.init" };
   };
@@ -19,6 +11,14 @@ export interface Typegen0 {
     services: never;
     guards: never;
     delays: never;
+  };
+  "eventsCausingActions": {
+    addShape: "ADD_SHAPE";
+    addThreeShapes: "ADD_SHAPE";
+    deleteShape: "DELETE_SHAPE";
+    redo: "REDO";
+    undo: "UNDO";
+    updatePast: "ADD_SHAPE" | "DELETE_SHAPE";
   };
   "eventsCausingServices": {};
   "eventsCausingGuards": {};

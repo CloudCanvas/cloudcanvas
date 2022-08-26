@@ -1,13 +1,12 @@
 import { makeAutoObservable } from "mobx";
 // @ts-ignore
 import { v4 } from "uuid";
-import {
-  AwsComponent,
-  Component,
-} from "@cloudcanvas/components/lib/domain/core";
+import * as Component from "@cloudcanvas/components";
 import { CANVAS_CENTER } from "../components/spatial/MainCanvasWrapper";
 
-type Update = Partial<Component> & Required<Pick<Component, "id">>;
+type Update = {
+  state: Partial<Component.Core.AwsComponent<any, any>["state"]>;
+} & { id: string };
 /**
  * As we move an element around the canvas it get's translated.
  * This means we should never re-update the component and re-render the x,y as if the translate persists we double jump.
@@ -16,8 +15,8 @@ type Update = Partial<Component> & Required<Pick<Component, "id">>;
  * Then when savng we place the lastX and lastY back into the x and y
  */
 export class ComponentStore {
-  components: Component[] = [];
-  copied?: Component;
+  components: Component.Core.AwsComponent<any, any>[] = [];
+  copied?: Component.Core.AwsComponent<any, any>;
 
   locationToAdd?: [number, number] = undefined;
 
@@ -35,7 +34,9 @@ export class ComponentStore {
     }
   }
 
-  addComponentFromModal = (component: AwsComponent<any>) => {
+  addComponentFromModal = (
+    component: Component.Core.AwsComponent<any, any>
+  ) => {
     const x = this.locationToAdd
       ? this.locationToAdd[0]
       : CANVAS_CENTER.x + 800;
@@ -49,15 +50,20 @@ export class ComponentStore {
 
     this.addComponent({
       ...component,
-      layout: {
-        ...component.layout,
-        lastLocation: location,
-        location,
+      state: {
+        ...component.state,
+        layout: {
+          ...component.state.layout,
+          lastLocation: location,
+          location,
+        },
       },
     });
   };
 
-  addComponent = (component: Omit<Component, "id">) => {
+  addComponent = (
+    component: Omit<Component.Core.AwsComponent<any, any>, "id">
+  ) => {
     this.components.push({ ...component, id: v4() });
 
     this.saveComponents();
@@ -80,16 +86,22 @@ export class ComponentStore {
       {
         ...this.copied,
         id: v4(),
-        selected: false,
-        title: `Copy of ${this.copied.title}`,
-        playing: false,
-        layout: {
-          ...this.copied.layout,
-          location: [
-            this.copied.layout.location[0] + this.copied.layout.size[0] + 50,
-            this.copied.layout.location[1],
-          ],
+        state: {
+          ...this.copied.state,
+          selected: false,
+          playing: false,
+          layout: {
+            ...this.copied.state.layout,
+            location: [
+              this.copied.state.layout.location[0] +
+                this.copied.state.layout.size[0] +
+                50,
+              this.copied.state.layout.location[1],
+            ],
+          },
         },
+        // TODO Allow title to overriddens
+        // title: `Copy of ${this.copied.title}`,
       },
     ];
   };
@@ -116,10 +128,14 @@ export class ComponentStore {
           ...update,
           // Ensure we retain current X and Y as the drag component uses offsets
           // Only last location should be updated
-          layout: {
-            ...c.layout,
-            ...update.layout,
-            location: [...c.layout.location],
+          state: {
+            ...c.state,
+            ...update.state,
+            layout: {
+              ...c.state.layout,
+              ...update.state!.layout,
+              location: [...c.state.layout.location],
+            },
           },
         };
       }
@@ -131,11 +147,11 @@ export class ComponentStore {
     this.saveComponents();
   };
 
-  updateAllComponents = (update: Partial<Component>) => {
+  updateAllComponents = (update: Omit<Update, "id">) => {
     for (const component of this.components) {
       this.updateComponent({
-        id: component.id,
         ...update,
+        id: component.id,
       });
     }
   };
@@ -154,10 +170,13 @@ export class ComponentStore {
       JSON.stringify(
         this.components.map((c) => ({
           ...c,
-          selected: false,
-          layout: {
-            ...c.layout,
-            location: c.layout.lastLocation || c.layout.location,
+          state: {
+            ...c.state,
+            selected: false,
+            layout: {
+              ...c.state.layout,
+              location: c.state.layout.lastLocation || c.state.layout.location,
+            },
           },
         }))
       )
@@ -165,6 +184,6 @@ export class ComponentStore {
   };
 
   get selected() {
-    return this.components.find((c) => c.selected);
+    return this.components.find((c) => c.state.selected);
   }
 }

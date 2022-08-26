@@ -1,0 +1,19 @@
+{
+  "name": "@cloudcanvas/types",
+  "version": "0.0.0",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "source": "./src/index.ts",
+  "license": "MIT",
+  "scripts": {
+    "compile": "yarn lfg",
+    "dev": "yarn lfg -d",
+    "build": "yarn lfg",
+    "lint": "TIMING=1 eslint src/ --ext .ts,.tsx",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+  },
+  "devDependencies": {
+    "@tldraw/lfg": "latest"
+  }
+}

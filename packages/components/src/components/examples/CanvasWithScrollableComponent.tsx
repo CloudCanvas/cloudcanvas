@@ -2,21 +2,20 @@ import React from "react";
 import { BaseComponentProps } from "../layout/BaseComponent";
 import DynamoWatcher from "../aws/DynamoWatcher/view/DynamoWatcher";
 import { DynamoRecord, DynamoWatcherModel } from "../aws/DynamoWatcher/model";
-import { DynamoWatcherComponentDef } from "../../domain";
 import BaseComponent from "../layout/BaseComponent/BaseComponent";
 import MainCanvas, { CANVAS_CENTER } from "../spatial/MainCanvas/MainCanvas";
 import { DataFetcher } from "../../ports/DataFetcher";
+import { DynamoWatcherCatalogComponent } from "../aws/DynamoWatcher/model/catalog";
+import { generateComponenEntry } from "../../domain";
 
 export default () => {
   const [state, setState] = React.useState<BaseComponentProps["state"]>({
-    component: DynamoWatcherComponentDef.generateComponent({
-      title: "Sample Watcher",
-      config: {
-        accountId: "1234567",
-        region: "ap-southeast-2",
-        permissionSet: "Admin",
+    component: generateComponenEntry({
+      type: DynamoWatcherCatalogComponent.type,
+      accessCard: {} as any,
+      customData: {
+        tableName: "TestTable",
       },
-      customData: { label: "table", value: "Users" },
       location: [CANVAS_CENTER.x, CANVAS_CENTER.y],
     }),
     network: "connected",
@@ -50,7 +49,10 @@ export default () => {
               ...state,
               component: {
                 ...state.component,
-                playing: !state.component.playing,
+                state: {
+                  ...state.component.state,
+                  playing: !state.component.state.playing,
+                },
               },
             });
           },
@@ -63,7 +65,10 @@ export default () => {
               ...state,
               component: {
                 ...state.component,
-                selected: !state.component.selected,
+                state: {
+                  ...state.component.state,
+                  selected: !state.component.state.selected,
+                },
               },
             });
           },
@@ -71,7 +76,7 @@ export default () => {
         state={state}
       >
         <DynamoWatcher
-          playing={state.component.playing}
+          playing={state.component.state.playing}
           authorised={state.authorisation === "authorized"}
           awsClient={{} as any}
           customProps={{ tableName: "TestTableName" }}

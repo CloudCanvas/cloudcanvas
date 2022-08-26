@@ -7,25 +7,36 @@ const path = require("path");
 
 module.exports = merge(base, {
   mode: "development",
+  resolve: {
+    fallback: {
+      child_process: false,
+      os: false,
+      fs: false,
+      https: false,
+      http: false,
+      http2: false,
+      // and also other packages that are not found
+    },
+  },
   devtool: "source-map", // Show the source map so we can debug when developing locally
   devServer: {
     host: "localhost",
     port: "40992",
     hot: true, // Hot-reload this server if changes are detected
-    compress: true, // Compress (gzip) files that are served        
+    compress: true, // Compress (gzip) files that are served
     static: {
       directory: path.resolve(__dirname, "app/dist"), // Where we serve the local dev server's files from
       watch: true, // Watch the directory for changes
       staticOptions: {
-        ignored: /node_modules/ // Ignore this path, probably not needed since we define directory above
-      }
-    }
+        ignored: /node_modules/, // Ignore this path, probably not needed since we define directory above
+      },
+    },
   },
   plugins: [
     new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "app/src/index.html"),
-      filename: "index.html"
+      filename: "index.html",
     }),
     new CspHtmlWebpackPlugin({
       "base-uri": ["'self'"],
@@ -33,7 +44,7 @@ module.exports = merge(base, {
       "script-src": ["'self'"],
       "style-src": ["'self'"],
       "frame-src": ["'none'"],
-      "worker-src": ["'none'"]
-    })
-  ]
-})
+      "worker-src": ["'none'"],
+    }),
+  ],
+});

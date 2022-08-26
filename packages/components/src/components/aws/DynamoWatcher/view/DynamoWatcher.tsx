@@ -13,9 +13,11 @@ import { DynamoWatcherModel, DynamoWatcherUpdate } from "../model";
 import { makeDynamoStreamDataFetcher } from "../controller/dynamoStreamDataFetcher";
 import { AwsComponentProps } from "../../../../domain";
 
-export type DynamoWatcherProps = AwsComponentProps;
+export type DynamoWatcherCustomProps = {
+  tableName: string;
+};
 
-export default (props: DynamoWatcherProps) => {
+export default (props: AwsComponentProps<DynamoWatcherCustomProps>) => {
   // Create the machine to manage streaming data.
   const streamMachine = useMemo(
     () =>

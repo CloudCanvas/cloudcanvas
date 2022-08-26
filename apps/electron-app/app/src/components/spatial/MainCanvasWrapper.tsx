@@ -62,7 +62,7 @@ export default observer((props: MainProps) => {
           unselectAllComponents: async () => {
             if (component.selected) {
               component.updateAllComponents({
-                selected: false,
+                state: { selected: false },
               });
             }
           },

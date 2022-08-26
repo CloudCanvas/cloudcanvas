@@ -4,7 +4,7 @@ import {
   ListBucketsCommand,
   ListObjectsCommand,
 } from "@aws-sdk/client-s3";
-import { AWS } from "../domain/aws";
+import { AWS } from "@cloudcanvas/types";
 import { constructTree, getAtPath, S3BucketTree, S3Entry } from "../domain/s3";
 import { S3Helper, DefaultProps } from "../ports/s3Helper";
 

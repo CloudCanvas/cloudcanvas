@@ -2,8 +2,8 @@ import React from "react";
 import MainCanvas, { CANVAS_CENTER, MainCanvasProps } from "./MainCanvas";
 import "bulma/css/bulma.css";
 import BaseComponent from "../../layout/BaseComponent/BaseComponent";
-import { dcp } from "../../layout/BaseComponent/BaseComponent.stories";
 import { centered } from "../../../utils/layoutUtils";
+import { dcp } from "../../../utils/storyUtils";
 
 export default {
   title: "components/spatial/MainCanvas",
@@ -33,7 +33,9 @@ const defaultProps: MainCanvasProps = {
 
 // Create a master template for mapping args to render the DynamoWatcher component
 const Template = (args: MainCanvasProps) => () => {
-  let [selected, setSelected] = React.useState(dcp.state.component.selected);
+  let [selected, setSelected] = React.useState(
+    dcp.state.component.state.selected
+  );
   return (
     <div style={{ position: "relative", width: 1000, height: 1000 }}>
       <MainCanvas {...args}>

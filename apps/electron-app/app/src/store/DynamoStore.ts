@@ -1,8 +1,4 @@
-import {
-  AccessCard,
-  AccessPair,
-  AwsRegion,
-} from "@cloudcanvas/aws-sso-sdk-wrapper";
+import { AccessCard, AccessPair, AwsRegion } from "@cloudcanvas/types";
 import { ListTablesCommand } from "@aws-sdk/client-dynamodb";
 import { makeAutoObservable, runInAction } from "mobx";
 import { AwsClient } from "../ports/aws";

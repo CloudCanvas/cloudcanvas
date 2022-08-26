@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Rnd } from "react-rnd";
-import { AwsComponent, Component } from "../../../domain/core";
+import { AwsComponent } from "../../../domain/core";
 import {
   TbPlugConnected,
   TbPlugConnectedX,
@@ -15,6 +15,7 @@ import TextContent from "@cloudscape-design/components/text-content";
 import StatusIndicator from "@cloudscape-design/components/status-indicator";
 import "../../../base.css";
 import ChildComponentWrapper from "./ChildComponentWrapper";
+import { componentCatalog } from "../../../domain";
 
 export const BASE_TAB_HGT = 40;
 export const BASE_FOOTER_HGT = 20;
@@ -22,7 +23,7 @@ export const BASE_FOOTER_HGT = 20;
 export interface ComponentStatus {
   authorisation: BaseComponentProps["state"]["authorisation"];
   network?: BaseComponentProps["state"]["network"];
-  playing: Component["playing"];
+  playing: boolean;
 }
 
 export type AuthStatus = "authorized" | "expired";
@@ -30,7 +31,7 @@ export type NetworkStatus = "connected" | "disconnected";
 
 export interface BaseComponentProps {
   state: {
-    component: AwsComponent;
+    component: AwsComponent<unknown, unknown>;
     authorisation: AuthStatus;
     network?: NetworkStatus;
     scale?: number;
@@ -51,13 +52,17 @@ const BaseComponent = ({ state, dispatch, children }: BaseComponentProps) => {
   const [location, setLocation] = React.useState<number[] | undefined>();
   const [size, setSize] = React.useState<number[] | undefined>();
 
-  const icon = c.def.icon;
+  const catalogEntry = componentCatalog.find(
+    (c) => c.type === state.component.type
+  )!;
+
+  const icon = catalogEntry.icon;
 
   // We use the props to set the initial location and size but after that we ignore it and control
   // it with internal state to avoid any jitter. The side effects are dispatched to update for next open.
   useEffect(() => {
-    setLocation(c.layout.location);
-    setSize(c.layout.size);
+    setLocation(c.state.layout.location);
+    setSize(c.state.layout.size);
   }, []);
 
   // Dispatch location side effect
@@ -79,7 +84,7 @@ const BaseComponent = ({ state, dispatch, children }: BaseComponentProps) => {
   return (
     <Rnd
       style={{
-        borderColor: c.selected ? "#0972d3" : "black",
+        borderColor: c.state.selected ? "#0972d3" : "black",
         borderWidth: 3,
         borderStyle: "solid",
         borderRadius: 5,
@@ -113,12 +118,12 @@ const BaseComponent = ({ state, dispatch, children }: BaseComponentProps) => {
             width: "100%",
             borderBottomWidth: 3,
             borderBottomStyle: "solid",
-            borderBottomColor: c.selected ? "#0972d3" : "black",
+            borderBottomColor: c.state.selected ? "#0972d3" : "black",
             ...spacedRow,
           }}
           onClick={(evt) => {
             evt.stopPropagation();
-            dispatch.onSelection(!c.selected);
+            dispatch.onSelection(!c.state.selected);
           }}
         >
           <div style={centeredRow}>
@@ -136,7 +141,7 @@ const BaseComponent = ({ state, dispatch, children }: BaseComponentProps) => {
               style={{ marginLeft: 8, color: "black" }}
             >
               {" "}
-              {c.title}{" "}
+              {catalogEntry.title}{" "}
             </h3>
           </div>
 
@@ -145,7 +150,7 @@ const BaseComponent = ({ state, dispatch, children }: BaseComponentProps) => {
               status={{
                 authorisation: state.authorisation,
                 network: state.network,
-                playing: c.playing,
+                playing: c.state.playing,
               }}
               component={c}
               togglePlay={() => dispatch.onTogglePlay()}
@@ -154,7 +159,7 @@ const BaseComponent = ({ state, dispatch, children }: BaseComponentProps) => {
           </div>
         </div>
 
-        <ChildComponentWrapper selected={state.component.selected}>
+        <ChildComponentWrapper selected={state.component.state.selected}>
           {/* I really don't like how I've done this, I think it's probably best to have a children prop and pass these things directly */}
           {children}
           {/* {ContentComponent && (
@@ -173,7 +178,7 @@ const BaseComponent = ({ state, dispatch, children }: BaseComponentProps) => {
 
 const Icons = (props: {
   status: ComponentStatus;
-  component: Component;
+  component: AwsComponent<unknown, unknown>;
   togglePlay: () => void;
   authorise: () => void;
 }) => {
@@ -199,11 +204,14 @@ const Icons = (props: {
 
 const InformationIcon = (props: {
   status: ComponentStatus;
-  component: Component;
+  component: AwsComponent<unknown, unknown>;
 }) => {
   // Test for AWS Component as we only show for them
-  const awsComponent = props.component as AwsComponent;
-  if (!awsComponent?.config?.accountId) return null;
+  if (!props.component?.config?.accountId) return null;
+
+  const catalogEntry = componentCatalog.find(
+    (c) => c.type === props.component.type
+  );
 
   return (
     <Popover
@@ -214,9 +222,9 @@ const InformationIcon = (props: {
       triggerType="custom"
       content={
         <TextContent>
-          {awsComponent.def.name} in account {awsComponent.config.accountId} (
-          {awsComponent.config.region}) using{" "}
-          {awsComponent.config.permissionSet} permission set.
+          {catalogEntry?.title} in account {props.component.config.accountId} (
+          {props.component.config.region}) using{" "}
+          {props.component.config.permissionSet} permission set.
         </TextContent>
       }
     >

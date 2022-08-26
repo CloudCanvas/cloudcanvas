@@ -3,19 +3,16 @@ import {
   ListAccountsCommand,
   SSOClient,
 } from "@aws-sdk/client-sso";
-import {
-  AwsRegion,
-  SsoAuthoriser,
-  SSOSession,
-  uniq,
-} from "@cloudcanvas/aws-sso-api";
+import { SsoAuthoriser, uniq } from "@cloudcanvas/aws-sso-api";
 import {
   Access,
   Account,
   InvalidConfigurationError,
   Organisation,
   PermissionSet,
-} from "../domain/aws";
+  AwsRegion,
+  SSOSession,
+} from "@cloudcanvas/types";
 import { AccessProvider, SSOExpiredError } from "../ports/accessProvider";
 import { ConfigManager } from "../ports/configManager";
 

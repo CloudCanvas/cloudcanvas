@@ -1,4 +1,4 @@
-import { AccessProvider, AWS, AwsRegion } from "../domain/aws";
+import { AccessProvider, AWS, AwsRegion } from "@cloudcanvas/types";
 import { S3Helper } from "../ports/s3Helper";
 import { StreamManager } from "../ports/streamManager";
 import { createAWSProxy } from "./awsProxy";

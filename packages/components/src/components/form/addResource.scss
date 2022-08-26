@@ -207,7 +207,7 @@
   }
 
   [cmdk-list] {
-    overflow: auto;
+    overflow: hidden;
   }
 
   [cmdk-separator] {
@@ -229,8 +229,14 @@
 
   [cmdk-group-heading-right] {
     position: absolute;
-    top: -10px;
-    left: 0px;
+    top: 5px;
+    left: 5px;
+  }
+
+  [cmdk-example-frame] {
+    width: 100%;
+    height: 350px;
+    overflow: scroll;
   }
 
   [cmdk-empty] {

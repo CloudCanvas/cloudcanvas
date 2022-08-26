@@ -7,7 +7,7 @@ import {
 } from "@aws-sdk/client-dynamodb-streams";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { ShardIterator } from "aws-sdk/clients/dynamodbstreams";
-import { AWS } from "../domain/aws";
+import { AWS } from "@cloudcanvas/types";
 import { StreamManager, Response } from "../ports/streamManager";
 import { ClientProps } from "./awsManager";
 

@@ -1,4 +1,4 @@
-import { AccessCard } from "@cloudcanvas/types";
+import { AccessCard } from "./aws";
 
 interface Component<T, P> {
   id: string;

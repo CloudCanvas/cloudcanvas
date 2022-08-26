@@ -1,8 +1,24 @@
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-
-import { DynamoDBStreamsClient } from "@aws-sdk/client-dynamodb-streams";
-import { S3Client } from "@aws-sdk/client-s3";
 import { Credentials } from "@aws-sdk/types";
+
+export const regions = [
+  "us-east-1",
+  "us-east-2",
+  "us-west-1",
+  "us-west-2",
+  "af-south-1",
+  "ap-east-1",
+  "ap-southeast-3",
+  "ap-south-1",
+  "ap-northeast-3",
+  "ap-northeast-2",
+  "ap-southeast-1",
+  "ap-southeast-2",
+  "ap-northeast-1",
+  "ca-central-1",
+  "eu-central-1",
+  "eu-west-1",
+  "eu-west-2",
+];
 
 export type AwsRegion =
   | "us-east-1"
@@ -111,13 +127,20 @@ export type PermissionSet = {
   name: string;
 };
 
-// Interface for accessing AWS across organisations, accounts and regions dynamically
-export type AWS = {
-  account: (account: string) => AWS;
-  role: (account: string) => AWS;
-  region: (region: AwsRegion) => AWS;
-  accessProvider: AccessProvider;
-  s3: S3Client;
-  dynamodb: DynamoDBClient;
-  dynamodbstreams: DynamoDBStreamsClient;
+export type AwsSsoConfig = {
+  alias: string;
+  sso_start_url: string;
+  sso_region: string;
+  sso_account_id: string;
+  sso_role_name: string;
+  region?: string;
+};
+
+// SSO
+
+export type SSOSession = {
+  startUrl: string;
+  region: string;
+  accessToken: string;
+  expiresAt: Date;
 };

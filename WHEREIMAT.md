@@ -25,6 +25,27 @@ Save last position and return on load - we need to actually pass this into the m
 
 Need to allow zoom on an element so has to be selected to scrolll DONE - Problem was design of add and remove and also recreating the function inside the useffect so it never got removed as ref was gone
 
+# Currently
+
+## Refactoring the component architecture
+
+We're reaching the point where becausee the AWS client is passed in we need to mock the data to storyboard properly and that's a pain in the ass.
+
+We should probably pass in an awsClient and a dataFetcher and default the data fetcher or something?
+
+I think we're probably going to have to switch around how we do this and use children inistead
+
+This should be done in the app;
+
+const awsAccessClient = useMemo(
+() =>  
+awsClient
+.account(c.config.accountId!)
+.region(c.config.region! as any)
+.role(c.config.permissionSet!),
+[c.config.accountId, c.config.region, c.config.permissionSet]
+);
+
 # TODO
 
 Get s3o lambda component done

@@ -26,6 +26,7 @@ const project = new typescript.TypeScriptProject({
     "@types/aws-lambda",
     "@cloudcanvas/aws-sso-api@*",
     "@cloudcanvas/aws-sso-global-access-provider@*",
+    "@cloudcanvas/types@*",
     "open",
   ],
   deps: [

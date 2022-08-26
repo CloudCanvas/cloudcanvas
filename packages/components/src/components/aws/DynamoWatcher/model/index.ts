@@ -6,9 +6,9 @@ export type DynamoRecord = {
   id: string;
   at: Date;
   type: "INSERT" | "MODIFY" | "REMOVE";
-  key: Partial<DynamoRecord>;
-  newImage?: Partial<DynamoRecord>;
-  oldImage?: Partial<DynamoRecord>;
+  key: DynamoData;
+  newImage?: DynamoData;
+  oldImage?: DynamoData;
 };
 
 export type DynamoWatcherUpdate = DynamoRecord[];

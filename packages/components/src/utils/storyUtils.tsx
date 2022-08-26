@@ -1,14 +1,16 @@
-import { Organisation } from "@cloudcanvas/aws-sso-sdk-wrapper";
 import React from "react";
 
 import {
   BaseComponentProps,
   ComponentStatus,
 } from "../components/layout/BaseComponent/BaseComponent";
-import { DynamoWatcherComponentDef } from "../domain";
-import { AwsComponent, Component } from "../domain/core";
+import { AwsComponent } from "../domain/core";
 
 import "bulma/css/bulma.css";
+import { DynamoWatcherCatalogComponent } from "../components/aws/DynamoWatcher/model/catalog";
+import { generateComponenEntry } from "../domain";
+import { CANVAS_CENTER } from "../components/spatial/MainCanvas";
+import { Organisation } from "@cloudcanvas/types";
 
 export const allGoodStatus: ComponentStatus = {
   authorisation: "authorized",
@@ -30,44 +32,29 @@ export const pausedStatus: ComponentStatus = {
   playing: false,
 };
 
-export const baseComponent: Component = {
-  id: "base-component",
-  def: DynamoWatcherComponentDef,
-  playing: allGoodStatus.playing,
-  selected: false,
-  title: "Feedback",
-  layout: {
-    location: [51000, 50500],
-    lastLocation: [0, 0],
-    size: [500, 300],
-  },
-  props: {},
-};
+export const baseComponent: AwsComponent<unknown, unknown> =
+  generateComponenEntry({
+    type: DynamoWatcherCatalogComponent.type,
+    accessCard: {
+      accountId: "123456789",
+      region: "us-east-1",
+      permissionSet: "PowerUser",
+    },
+    location: [CANVAS_CENTER.x, CANVAS_CENTER.y],
+    customData: {
+      tableName: "Users",
+    },
+  });
 
-export const baseAwsComponent: AwsComponent = {
+export const baseComponentZeroed: AwsComponent<unknown, unknown> = {
   ...baseComponent,
-  config: {
-    ssoUrl: "https://myUrl.com",
-    accountId: "123456789",
-    region: "us-east-1",
-    permissionSet: "AdministratorAccess",
+  state: {
+    ...baseComponent.state,
+    layout: {
+      ...baseComponent.state.layout,
+      location: [0, 0],
+    },
   },
-  props: {},
-};
-
-export const baseAwsComponentZeroed: AwsComponent = {
-  ...baseComponent,
-  layout: {
-    ...baseComponent.layout,
-    location: [0, 0],
-  },
-  config: {
-    ssoUrl: "https://myUrl.com",
-    accountId: "123456789",
-    region: "us-east-1",
-    permissionSet: "AdministratorAccess",
-  },
-  props: {},
 };
 
 export const baseDispatch: BaseComponentProps["dispatch"] = {
@@ -76,6 +63,35 @@ export const baseDispatch: BaseComponentProps["dispatch"] = {
   onTogglePlay: () => console.log("TOGGLE"),
   onResize: (size) => console.log("RESIZE", size),
   onMove: (size) => console.log("MOVE", size),
+};
+
+export const dcp: BaseComponentProps = {
+  state: {
+    component: {
+      ...baseComponent,
+      state: {
+        ...baseComponent.state,
+        layout: {
+          ...baseComponent.state.layout,
+        },
+      },
+    },
+    authorisation: allGoodStatus.authorisation,
+    scale: 1,
+  },
+  dispatch: baseDispatch,
+  children: <div />,
+};
+
+export const dcpZeroed: BaseComponentProps = {
+  ...dcp,
+  state: {
+    component: baseComponentZeroed,
+    authorisation: allGoodStatus.authorisation,
+    scale: 1,
+  },
+  dispatch: baseDispatch,
+  children: <div />,
 };
 
 export const BaseStory = ({ children }: { children: React.ReactNode }) => (

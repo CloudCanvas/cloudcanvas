@@ -3,7 +3,7 @@ import fs from "fs";
 import glob from "glob";
 // @ts-ignore
 import sha1 from "sha-1";
-import { SSOSession } from "../domain/aws";
+import { SSOSession } from "@cloudcanvas/types";
 import { ConfigManager } from "../ports/configManager";
 
 const defaultSsoLocation = `/.aws/sso/cache/*.json`;

@@ -97,6 +97,11 @@
       "type": "runtime"
     },
     {
+      "name": "@cloudcanvas/types",
+      "version": "*",
+      "type": "runtime"
+    },
+    {
       "name": "aws-sdk",
       "type": "runtime"
     },

@@ -1,4 +1,4 @@
-import { AccessPair, AWSCredentials, SSOSession } from "../domain/aws";
+import { AccessPair, AWSCredentials, SSOSession } from "@cloudcanvas/types";
 
 export interface SsoAuthoriser {
   init: () => Promise<SSOSession[]>;

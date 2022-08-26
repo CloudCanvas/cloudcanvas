@@ -1,4 +1,4 @@
-import { AWS } from "@cloudcanvas/aws-sso-sdk-wrapper";
+import { AWS } from "@cloudcanvas/types";
 import {
   ListStreamsCommand,
   GetShardIteratorCommand,

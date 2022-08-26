@@ -27,6 +27,7 @@ const project = new typescript.TypeScriptProject({
     "@aws-sdk/client-sso",
     "@aws-sdk/client-sso-oidc",
     "@aws-sdk/types",
+    "@cloudcanvas/types@*",
     "aws-sdk",
     "crypto-js",
     "glob",

@@ -6,7 +6,7 @@ import {
   SSOOIDCClient,
   StartDeviceAuthorizationCommand,
 } from "@aws-sdk/client-sso-oidc";
-import { AccessPair, AWSCredentials, SSOSession } from "../domain/aws";
+import { AccessPair, AWSCredentials, SSOSession } from "@cloudcanvas/types";
 import { Browser } from "../ports/browser";
 import { ConfigManager } from "../ports/configManager";
 import { SsoAuthoriser } from "../ports/ssoAuthoriser";

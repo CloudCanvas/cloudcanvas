@@ -1,8 +1,7 @@
 import fs from "fs";
-import os from "os";
 // @ts-ignore
 import sha1 from "sha-1";
-import { SSOSession } from "../domain/aws";
+import { SSOSession } from "@cloudcanvas/types";
 
 export const writeSSOFile = async (
   session: SSOSession,

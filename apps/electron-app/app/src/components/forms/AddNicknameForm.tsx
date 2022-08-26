@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Box,
   Button,
   Form,
   FormField,
   Input,
-  Select,
   SpaceBetween,
 } from "@cloudscape-design/components";
 import { observer } from "mobx-react-lite";

@@ -2,14 +2,18 @@ import React from "react";
 import { Command } from "cmdk";
 import "../../base.css";
 import "./addResource.scss";
-import { AwsComponent, components } from "../../domain";
+import {
+  AwsComponent,
+  componentCatalog,
+  generateComponenEntry,
+} from "../../domain";
 import {
   AccessCard,
   Account,
   AwsRegion,
   Organisation,
-} from "@cloudcanvas/aws-sso-sdk-wrapper";
-import { regions } from "../../domain/aws";
+  regions,
+} from "@cloudcanvas/types";
 
 export type CustomData = { label: string; value: any };
 
@@ -17,10 +21,10 @@ export type AddResourceProps = {
   organisations: Organisation[];
   activeAccount?: Account;
   dataFetcher: (
-    component: typeof components[number],
+    component: typeof componentCatalog[number],
     access: AccessCard
   ) => Promise<CustomData[]>;
-  onAddComponent: (component: AwsComponent<any>) => void;
+  onAddComponent: (component: AwsComponent<unknown, unknown>) => void;
 };
 
 export default (props: AddResourceProps) => {
@@ -29,7 +33,7 @@ export default (props: AddResourceProps) => {
   const [selectedValue, setSelectedValue] = React.useState<string>("");
 
   const [component, setComponent] = React.useState<
-    typeof components[number] | undefined
+    typeof componentCatalog[number] | undefined
   >(undefined);
 
   const [org, setOrg] = React.useState<Organisation | undefined>(undefined);
@@ -146,7 +150,7 @@ export default (props: AddResourceProps) => {
       >
         <div cmdk-vercel-badges="">
           <div cmdk-vercel-badge="">Home</div>
-          {component && <div cmdk-vercel-badge="">{component.name}</div>}
+          {component && <div cmdk-vercel-badge="">{component.title}</div>}
           {org && (
             <div cmdk-vercel-badge="">{org.nickname || org.ssoStartUrl}</div>
           )}
@@ -174,15 +178,15 @@ export default (props: AddResourceProps) => {
             <div cmdk-framer-left="" className={component ? "full" : ""}>
               {!component && (
                 <Command.Group heading="Components">
-                  {components
+                  {componentCatalog
                     .filter((c) => c.icon)
                     .map((c) => (
                       <Item
-                        name={c.name}
+                        name={c.title}
                         value={c}
                         subtitle={c.subtitle}
                         icon={c.icon!}
-                        key={c.name}
+                        key={c.type}
                         onSelect={() => {
                           setComponent(c);
                           setInputValue("");
@@ -241,17 +245,12 @@ export default (props: AddResourceProps) => {
                     setSelectedCustomData(data);
                     setInputValue("");
 
-                    const generatedResource = component!.generateComponent({
-                      title: data.label,
-                      config: {
-                        accountId: account?.accountId,
+                    const generatedResource = generateComponenEntry({
+                      type: component!.type,
+                      accessCard: {
+                        accountId: account!.accountId,
                         permissionSet: permissionSet,
-                        region: region,
-                        ssoUrl: props.organisations.find((o) =>
-                          o.accounts.some(
-                            (a) => a.accountId === account?.accountId
-                          )
-                        )?.ssoStartUrl,
+                        region: region as AwsRegion,
                       },
                       customData: data,
                     });
@@ -282,8 +281,8 @@ const ExampleFrame = ({
 }) => {
   if (!display) return null;
 
-  const someSelected = components.some(
-    (c) => c.name.toLowerCase() === selectedValue
+  const someSelected = componentCatalog.some(
+    (c) => c.title.toLowerCase() === selectedValue
   );
 
   if (!someSelected) {
@@ -296,11 +295,32 @@ const ExampleFrame = ({
           Example
         </h1>
 
-        {components
-          .filter((c) => c.name.toLowerCase() === selectedValue)
-          .map((c) => {
-            return <div key={c.name}>{c.component(c.sampleData)}</div>;
-          })}
+        <div cmdk-example-frame="">
+          {componentCatalog
+            .filter((c) => c.title.toLowerCase() === selectedValue)
+            .map((c) => {
+              return (
+                <div key={c.title}>
+                  {c.component({
+                    awsClient: {} as any,
+                    playing: true,
+                    authorised: true,
+                    customProps: {} as any,
+                    dataFetcher: {
+                      delay: 0,
+                      initialData: c.sampleData(),
+                      fetch: async () => {
+                        return c.sampleUpdate();
+                      },
+                      reduce: (current: any, update: any) => {
+                        return [...current, ...update];
+                      },
+                    },
+                  })}
+                </div>
+              );
+            })}
+        </div>
       </div>
     </div>
   );

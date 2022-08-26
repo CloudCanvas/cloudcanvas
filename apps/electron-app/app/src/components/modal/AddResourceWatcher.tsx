@@ -14,7 +14,7 @@ export default observer(() => {
     channel.addEventListener("message", (event) => {
       setVisible(true);
       component.updateAllComponents({
-        selected: false,
+        state: { selected: false },
       });
 
       component.registerLocationToAdd([

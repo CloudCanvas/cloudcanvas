@@ -11,6 +11,11 @@
       "type": "build"
     },
     {
+      "name": "@cloudcanvas/types",
+      "version": "*",
+      "type": "build"
+    },
+    {
       "name": "@types/aws-lambda",
       "type": "build"
     },

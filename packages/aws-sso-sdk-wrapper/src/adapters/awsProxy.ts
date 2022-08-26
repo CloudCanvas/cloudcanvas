@@ -1,7 +1,7 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBStreamsClient } from "@aws-sdk/client-dynamodb-streams";
 import { S3Client } from "@aws-sdk/client-s3";
-import { AccessPair, AccessProvider, AWS } from "../domain";
+import { AccessPair, AccessProvider, AWS } from "@cloudcanvas/types";
 
 type Execution = {
   account?: string;

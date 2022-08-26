@@ -1,1 +1,2 @@
-export * from "./view/DynamoWatcher";
+import DynamoWatcher from "./view/DynamoWatcher";
+export default DynamoWatcher;

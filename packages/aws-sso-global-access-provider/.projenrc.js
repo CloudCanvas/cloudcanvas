@@ -27,6 +27,7 @@ const project = new typescript.TypeScriptProject({
     "@aws-sdk/client-sso",
     "aws-sdk",
     "@cloudcanvas/aws-sso-api@*",
+    "@cloudcanvas/types@*",
     "yaml",
   ],
 });

@@ -1,12 +1,6 @@
 import React from "react";
 import BaseComponent, { BaseComponentProps } from "./BaseComponent";
-import {
-  allGoodStatus,
-  baseAwsComponent,
-  baseAwsComponentZeroed,
-  baseDispatch,
-  BaseStory,
-} from "../../../utils/storyUtils";
+import { BaseStory, dcpZeroed } from "../../../utils/storyUtils";
 import { AwsComponent } from "../../../domain/core";
 import { CANVAS_CENTER } from "../../spatial/MainCanvas";
 
@@ -16,36 +10,6 @@ export default {
   argTypes: {
     backgroundColor: { control: "color" },
   },
-};
-
-export const dcp: BaseComponentProps = {
-  state: {
-    component: {
-      ...baseAwsComponent,
-      layout: {
-        ...baseAwsComponent.layout,
-      },
-    },
-    authorisation: allGoodStatus.authorisation,
-    scale: 1,
-  },
-  dispatch: baseDispatch,
-  children: <div />,
-};
-
-export const dcpZeroed: BaseComponentProps = {
-  state: {
-    component: {
-      ...baseAwsComponentZeroed,
-      layout: {
-        ...baseAwsComponentZeroed.layout,
-      },
-    },
-    authorisation: allGoodStatus.authorisation,
-    scale: 1,
-  },
-  dispatch: baseDispatch,
-  children: <div />,
 };
 
 // Create a master template for mapping args to render the DynamoWatcher component
@@ -65,7 +29,10 @@ export const AuthorisedAndPaused = Template({
     ...dcpZeroed.state,
     component: {
       ...dcpZeroed.state.component,
-      playing: false,
+      state: {
+        ...dcpZeroed.state.component.state,
+        playing: false,
+      },
     },
     authorisation: "authorized",
   },
@@ -77,7 +44,10 @@ export const UnauthorisedAndPlaying = Template({
     ...dcpZeroed.state,
     component: {
       ...dcpZeroed.state.component,
-      playing: true,
+      state: {
+        ...dcpZeroed.state.component.state,
+        playing: true,
+      },
     },
     authorisation: "expired",
   },
@@ -89,7 +59,10 @@ export const UnauthorisedAndPaused = Template({
     ...dcpZeroed.state,
     component: {
       ...dcpZeroed.state.component,
-      playing: false,
+      state: {
+        ...dcpZeroed.state.component.state,
+        playing: false,
+      },
     },
     authorisation: "expired",
   },
@@ -101,7 +74,10 @@ export const Selected = Template({
     ...dcpZeroed.state,
     component: {
       ...dcpZeroed.state.component,
-      selected: true,
+      state: {
+        ...dcpZeroed.state.component.state,
+        selected: true,
+      },
     },
   },
 });
@@ -134,6 +110,6 @@ export const AwsComponentShowingInformation = Template({
         region: "us-east-1",
         permissionSet: "DeveloperAccess",
       },
-    } as AwsComponent,
+    } as AwsComponent<unknown, unknown>,
   },
 });

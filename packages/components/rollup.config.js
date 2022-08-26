@@ -5,6 +5,7 @@ import typescript from "rollup-plugin-typescript2";
 import scss from "rollup-plugin-scss";
 import svg from "rollup-plugin-svg-import";
 import copy from "rollup-plugin-copy";
+import json from "@rollup/plugin-json";
 
 const packageJson = require("./package.json");
 
@@ -24,7 +25,9 @@ export default {
   ],
   plugins: [
     peerDepsExternal(),
-    resolve(),
+    resolve({
+      browser: true,
+    }),
     commonjs(),
     typescript({ useTsconfigDeclarationDir: true }),
     scss(), // will output compiled styles to output.css
@@ -32,6 +35,7 @@ export default {
       // process SVG to DOM Node or String. Default: false
       stringify: true,
     }),
+    json(),
     copy({
       targets: [
         {

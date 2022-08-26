@@ -1,7 +1,5 @@
-import {
-  AccessProvider,
-  createAWSClient,
-} from "@cloudcanvas/aws-sso-sdk-wrapper";
+import { createAWSClient } from "@cloudcanvas/aws-sso-sdk-wrapper";
+import { AccessProvider } from "@cloudcanvas/types";
 import { LocalAwsBridge } from "../ports/aws";
 
 export const ssoBridge: LocalAwsBridge = (window as any).api.aws;
