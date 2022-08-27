@@ -1,2 +1,2 @@
-import DynamoWatcher from "./view/DynamoWatcher";
+import DynamoWatcher from "./View";
 export default DynamoWatcher;

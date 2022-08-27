@@ -1,32 +1,32 @@
 import React, { useEffect, useMemo } from "react";
 import { Inspector } from "react-inspector";
 import "./DynamoWatcher.css";
-import { dateToLogStr } from "../../../../services/DateService";
-import { topAlignedRow } from "../../../../utils/layoutUtils";
+import { dateToLogStr } from "../../../services/DateService";
+import { topAlignedRow } from "../../../utils/layoutUtils";
 import TextContent from "@cloudscape-design/components/text-content";
 import SpaceBetween from "@cloudscape-design/components/space-between";
-import { diff, toSentenceCase } from "../../../../utils/generalUtils";
-import { createStreamMachine } from "../../../../machines/dataFetcherMachine";
+import { diff, toSentenceCase } from "../../../utils/generalUtils";
+import { createStreamMachine } from "../../../machines/dataFetcherMachine";
 import { useMachine } from "@xstate/react";
-import EmptyDataPlaceholder from "../../../base/EmptyDataPlaceholder/EmptyDataPlaceholder";
-import { DynamoWatcherModel, DynamoWatcherUpdate } from "../model";
-import { makeDynamoStreamDataFetcher } from "../controller/dynamoStreamDataFetcher";
-import { AwsComponentProps } from "../../../../domain";
+import EmptyDataPlaceholder from "../../base/EmptyDataPlaceholder/EmptyDataPlaceholder";
+import { Model, Update } from "./model";
+import { makeLambdaStreamController } from "./controller";
+import { AwsComponentProps } from "../../../domain";
 
-export type DynamoWatcherCustomProps = {
-  tableName: string;
+export type CustomProps = {
+  functionName: string;
 };
 
-export default (props: AwsComponentProps<DynamoWatcherCustomProps>) => {
+export default (props: AwsComponentProps<CustomProps>) => {
   // Create the machine to manage streaming data.
   const streamMachine = useMemo(
     () =>
-      createStreamMachine<DynamoWatcherModel, DynamoWatcherUpdate>({
+      createStreamMachine<Model, Update>({
         dataFetcher:
           props.dataFetcher ||
-          makeDynamoStreamDataFetcher({
+          makeLambdaStreamController({
             config: {
-              tableName: props.customProps.tableName,
+              functionName: props.customProps.functionName,
               delay: 1000,
               initialData: [],
             },
@@ -74,13 +74,13 @@ export default (props: AwsComponentProps<DynamoWatcherCustomProps>) => {
     );
   }
 
-  return <DynamoWatcherView data={streamState.context.data} />;
+  return <View data={streamState.context.data} />;
 };
 
-export type DynamoWatcherViewProps = {
-  data: DynamoWatcherModel;
+export type ViewProps = {
+  data: Model;
 };
-export const DynamoWatcherView = ({ data }: DynamoWatcherViewProps) => {
+export const View = ({ data }: ViewProps) => {
   return (
     <div
       style={{
@@ -93,7 +93,8 @@ export const DynamoWatcherView = ({ data }: DynamoWatcherViewProps) => {
       {data?.map((r, i) => {
         return (
           <div
-            key={r.id}
+            // key={r.id}
+            key={`entry-${i}`}
             style={{
               padding: 8,
               flexDirection: "row",
@@ -106,7 +107,7 @@ export const DynamoWatcherView = ({ data }: DynamoWatcherViewProps) => {
               ...topAlignedRow,
             }}
           >
-            <div style={{ minWidth: 160 }}>
+            {/* <div style={{ minWidth: 160 }}>
               <TextContent>
                 <SpaceBetween direction="horizontal" size="xs">
                   <p style={{ color: "gray" }}>{dateToLogStr(r.at)}</p>
@@ -115,9 +116,10 @@ export const DynamoWatcherView = ({ data }: DynamoWatcherViewProps) => {
                   </p>
                 </SpaceBetween>
               </TextContent>
-            </div>
+            </div> */}
 
-            <Inspector
+            {r}
+            {/* <Inspector
               theme="chromeLight"
               table={false}
               data={
@@ -125,7 +127,7 @@ export const DynamoWatcherView = ({ data }: DynamoWatcherViewProps) => {
                   ? { ...r.key, ...(diff(r.oldImage, r.newImage) || {}) }
                   : r.newImage || r.key
               }
-            />
+            /> */}
           </div>
         );
       })}

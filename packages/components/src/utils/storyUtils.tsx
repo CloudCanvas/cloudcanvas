@@ -7,7 +7,7 @@ import {
 import { AwsComponent } from "../domain/core";
 
 import "bulma/css/bulma.css";
-import { DynamoWatcherCatalogComponent } from "../components/aws/DynamoWatcher/model/catalog";
+import { DynamoWatcherCatalogComponent } from "../components/aws/DynamoWatcher/catalog";
 import { generateComponenEntry } from "../domain";
 import { CANVAS_CENTER } from "../components/spatial/MainCanvas";
 import { Organisation } from "@cloudcanvas/types";

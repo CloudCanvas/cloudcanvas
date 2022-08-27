@@ -11,6 +11,6 @@ export type DynamoRecord = {
   oldImage?: DynamoData;
 };
 
-export type DynamoWatcherUpdate = DynamoRecord[];
+export type Update = DynamoRecord[];
 
-export type DynamoWatcherModel = DynamoRecord[];
+export type Model = DynamoRecord[];

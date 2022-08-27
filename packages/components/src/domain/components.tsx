@@ -1,7 +1,7 @@
 import { AccessCard, AWS } from "@cloudcanvas/types";
 import { AwsComponent } from "./core";
 import { DataFetcher } from "../ports/DataFetcher";
-import { DynamoWatcherCatalogComponent } from "../components/aws/DynamoWatcher/model/catalog";
+import { DynamoWatcherCatalogComponent } from "../components/aws/DynamoWatcher/catalog";
 import { v4 } from "uuid";
 
 export interface AwsComponentProps<P> {

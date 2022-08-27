@@ -1,11 +1,11 @@
 import React from "react";
 import { BaseComponentProps } from "../layout/BaseComponent";
-import DynamoWatcher from "../aws/DynamoWatcher/view/DynamoWatcher";
-import { DynamoRecord, DynamoWatcherModel } from "../aws/DynamoWatcher/model";
+import DynamoWatcher from "../aws/DynamoWatcher/View";
+import { DynamoRecord, Model } from "../aws/DynamoWatcher/model";
 import BaseComponent from "../layout/BaseComponent/BaseComponent";
 import MainCanvas, { CANVAS_CENTER } from "../spatial/MainCanvas/MainCanvas";
 import { DataFetcher } from "../../ports/DataFetcher";
-import { DynamoWatcherCatalogComponent } from "../aws/DynamoWatcher/model/catalog";
+import { DynamoWatcherCatalogComponent } from "../aws/DynamoWatcher/catalog";
 import { generateComponenEntry } from "../../domain";
 
 export default () => {
@@ -101,7 +101,7 @@ export default () => {
                   } as DynamoRecord,
                 ];
               },
-            } as DataFetcher<DynamoWatcherModel, DynamoWatcherModel>
+            } as DataFetcher<Model, Model>
           }
         />
       </BaseComponent>

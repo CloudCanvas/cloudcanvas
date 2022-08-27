@@ -8,12 +8,8 @@ import {
 } from "@aws-sdk/client-dynamodb-streams";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { ShardIterator } from "aws-sdk/clients/dynamodbstreams";
-import {
-  DynamoRecord,
-  DynamoWatcherModel,
-  DynamoWatcherUpdate,
-} from "../model";
-import { DataFetcher } from "../../../../ports/DataFetcher";
+import { DynamoRecord, Model, Update } from "./model";
+import { DataFetcher } from "../../../ports/DataFetcher";
 
 type Config<T, U> = Pick<DataFetcher<T, U>, "delay" | "initialData"> & {
   tableName: string;
@@ -205,9 +201,9 @@ const makeDynamoDbStreamManager = ({
   };
 };
 
-export const makeDynamoStreamDataFetcher = (
-  props: Props<DynamoWatcherModel, DynamoWatcherUpdate>
-): DataFetcher<DynamoWatcherModel, DynamoWatcherUpdate> => {
+export const makeDynamoStreamController = (
+  props: Props<Model, Update>
+): DataFetcher<Model, Update> => {
   const streamManager = makeDynamoDbStreamManager({
     tableName: props.config.tableName,
     aws: props.ports.aws,

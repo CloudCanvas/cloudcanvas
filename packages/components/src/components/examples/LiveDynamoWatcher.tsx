@@ -1,11 +1,11 @@
 import React from "react";
 import { BaseComponentProps } from "../layout/BaseComponent";
-import { DynamoRecord, DynamoWatcherModel } from "../aws/DynamoWatcher/model";
+import { DynamoRecord, Model } from "../aws/DynamoWatcher/model";
 import BaseComponent from "../layout/BaseComponent/BaseComponent";
-import DynamoWatcher from "../aws/DynamoWatcher/view/DynamoWatcher";
+import DynamoWatcher from "../aws/DynamoWatcher/View";
 import { DataFetcher } from "../../ports/DataFetcher";
 import { generateComponenEntry } from "../../domain";
-import { DynamoWatcherCatalogComponent } from "../aws/DynamoWatcher/model/catalog";
+import { DynamoWatcherCatalogComponent } from "../aws/DynamoWatcher/catalog";
 
 export default () => {
   const [state, setState] = React.useState<BaseComponentProps["state"]>({
@@ -82,7 +82,7 @@ export default () => {
                 } as DynamoRecord,
               ];
             },
-          } as DataFetcher<DynamoWatcherModel, DynamoWatcherModel>
+          } as DataFetcher<Model, Model>
         }
       />
     </BaseComponent>
