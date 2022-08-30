@@ -49,7 +49,7 @@ export default (props: MainCanvasProps) => {
 
     if (!panSurface.current) {
       panSurface.current = renderer({
-        scaleSensitivity: 20,
+        scaleSensitivity: 35,
         initialScale: 1,
         minScale: 0.1,
         maxScale: 100,
