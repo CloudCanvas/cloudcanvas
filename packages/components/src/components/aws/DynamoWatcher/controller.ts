@@ -10,9 +10,18 @@ import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { ShardIterator } from "aws-sdk/clients/dynamodbstreams";
 import { DynamoRecord, Model, Update } from "./model";
 import { DataFetcher } from "../../../ports/DataFetcher";
+import { CustomData } from "../../form";
+
+const doLog = false;
+
+const log = (msg: any) => {
+  if (doLog) {
+    log(msg);
+  }
+};
 
 type Config<T, U> = Pick<DataFetcher<T, U>, "delay" | "initialData"> & {
-  tableName: string;
+  customData: CustomData;
 };
 
 type Props<T, U> = {
@@ -186,9 +195,11 @@ const makeDynamoDbStreamManager = ({
           } as DynamoRecord)
       );
 
+      const sorted = mapped.sort((a, b) => +b.at - +a.at);
+
       initialCall = false;
 
-      return mapped as DynamoRecord[];
+      return sorted as DynamoRecord[];
     },
     reset: async () => {
       shardOffset = undefined;
@@ -205,7 +216,7 @@ export const makeDynamoStreamController = (
   props: Props<Model, Update>
 ): DataFetcher<Model, Update> => {
   const streamManager = makeDynamoDbStreamManager({
-    tableName: props.config.tableName,
+    tableName: props.config.customData.value,
     aws: props.ports.aws,
   });
 
@@ -217,7 +228,7 @@ export const makeDynamoStreamController = (
       return records;
     },
     reduce: (current, update) => {
-      return [...current, ...update];
+      return [...update, ...current];
     },
   };
 };

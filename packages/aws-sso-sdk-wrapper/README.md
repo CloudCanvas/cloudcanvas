@@ -63,8 +63,9 @@ const objectsUnderFolder = await aws
   })
 
 const details = await await aws
-  .account("Account1")
-  .role("Role")
+  .account("123456789")
+  .region("ap-southeast-2")
+  .role("AWSPowerUseAccess")
   .s3Helper.getObjectDetails({
     Bucket: bucket,
     Key: "folder1/folder2/file.txt"

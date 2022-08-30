@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import { Inspector } from "react-inspector";
-import "./DynamoWatcher.css";
+import "./View.css";
 import { dateToLogStr } from "../../../services/DateService";
 import { topAlignedRow } from "../../../utils/layoutUtils";
 import TextContent from "@cloudscape-design/components/text-content";
@@ -12,12 +12,9 @@ import EmptyDataPlaceholder from "../../base/EmptyDataPlaceholder/EmptyDataPlace
 import { Model, Update } from "./model";
 import { makeDynamoStreamController } from "./controller";
 import { AwsComponentProps } from "../../../domain";
+import { CustomData } from "../../form";
 
-export type CustomProps = {
-  tableName: string;
-};
-
-export default (props: AwsComponentProps<CustomProps>) => {
+export default (props: AwsComponentProps<CustomData>) => {
   // Create the machine to manage streaming data.
   const streamMachine = useMemo(
     () =>
@@ -26,7 +23,7 @@ export default (props: AwsComponentProps<CustomProps>) => {
           props.dataFetcher ||
           makeDynamoStreamController({
             config: {
-              tableName: props.customProps.tableName,
+              customData: props.customProps,
               delay: 1000,
               initialData: [],
             },
@@ -40,6 +37,7 @@ export default (props: AwsComponentProps<CustomProps>) => {
     []
   );
 
+  // @ts-ignore
   const [streamState, streamSend] = useMachine(streamMachine, {
     actions: {} as any,
   });

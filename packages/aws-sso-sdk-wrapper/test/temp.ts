@@ -1,6 +1,5 @@
 import os from "os";
 import { ListTablesCommand } from "@aws-sdk/client-dynamodb";
-import { ListBucketsCommand } from "@aws-sdk/client-s3";
 import {
   makeAwsConfigManager as makeAuthoriserConfigManager,
   makeSsoAuthoriser,
@@ -11,7 +10,6 @@ import {
 } from "@cloudcanvas/aws-sso-global-access-provider";
 import open from "open";
 import { createAWSClient } from "../src/adapters/awsManager";
-import { constructTree } from "../src/domain/s3";
 
 // This will all happen on ipcMain in an electron app and will be
 // bridged through preload.js to this library in ipcRenderer so as
@@ -44,7 +42,7 @@ export const exec = async () => {
 
   await devAccessProvider.init();
 
-  const { aws, s3Helper } = createAWSClient({
+  const { aws } = createAWSClient({
     accessProvider: devAccessProvider,
   });
 
@@ -55,15 +53,13 @@ export const exec = async () => {
   await aws.accessProvider.refreshOrg(access.organisations[0].ssoStartUrl);
   await aws.accessProvider.refreshOrg(access.organisations[1].ssoStartUrl);
 
-  aws.s3.
-
-  const response = await s3Helper.listAllObjects({
-    access: {
-      accountId: "433121571808",
-      permissionSet: "AdministratorAccess",
-    },
-    bucket: "a-bucket-in-another-region",
-  });
+  // const response = await s3Helper.listAllObjects({
+  //   access: {
+  //     accountId: "433121571808",
+  //     permissionSet: "AdministratorAccess",
+  //   },
+  //   bucket: "a-bucket-in-another-region",
+  // });
 
   // console.log("response");
   // console.log(response);
@@ -111,35 +107,35 @@ export const exec = async () => {
   //   }
   // } while (true);
 
-  await s3Helper.listBuckets({
-    access: {
-      accountId: "433121571808",
-      permissionSet: "AdministratorAccess",
-    },
-  });
+  // await s3Helper.listBuckets({
+  //   access: {
+  //     accountId: "433121571808",
+  //     permissionSet: "AdministratorAccess",
+  //   },
+  // });
 
-  const objects = await s3Helper.listAllObjects({
-    access: {
-      accountId: "433121571808",
-      permissionSet: "AdministratorAccess",
-    },
-    bucket: "wow-this-is-a-great-bucket",
-  });
+  // const objects = await s3Helper.listAllObjects({
+  //   access: {
+  //     accountId: "433121571808",
+  //     permissionSet: "AdministratorAccess",
+  //   },
+  //   bucket: "wow-this-is-a-great-bucket",
+  // });
 
-  const tree = constructTree(objects);
+  // const tree = constructTree(objects);
 
   // console.log("tree");
   // console.log(JSON.stringify(tree, null, 2));
 
-  const otherRegionObjects = await s3Helper.listAllObjects({
-    access: {
-      accountId: "433121571808",
-      permissionSet: "AdministratorAccess",
-    },
-    bucket: "a-bucket-in-another-region",
-  });
+  // const otherRegionObjects = await s3Helper.listAllObjects({
+  //   access: {
+  //     accountId: "433121571808",
+  //     permissionSet: "AdministratorAccess",
+  //   },
+  //   bucket: "a-bucket-in-another-region",
+  // });
 
-  const tree2 = constructTree(otherRegionObjects);
+  // const tree2 = constructTree(otherRegionObjects);
 
   // console.log("tree2");
   // console.log(JSON.stringify(tree2, null, 2));

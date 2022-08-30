@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import "./BaseComponent.scss";
 import { Rnd } from "react-rnd";
 import { AwsComponent } from "../../../domain/core";
 import {
@@ -83,12 +84,9 @@ const BaseComponent = ({ state, dispatch, children }: BaseComponentProps) => {
 
   return (
     <Rnd
-      style={{
-        borderColor: c.state.selected ? "#0972d3" : "black",
-        borderWidth: 3,
-        borderStyle: "solid",
-        borderRadius: 5,
-      }}
+      className={`base-component lined thick ${
+        c.state.selected ? "selected" : ""
+      }`}
       scale={state.scale || 1}
       position={{ x: location[0], y: location[1] }}
       size={{ width: size[0], height: size[1] }}
@@ -141,7 +139,7 @@ const BaseComponent = ({ state, dispatch, children }: BaseComponentProps) => {
               style={{ marginLeft: 8, color: "black" }}
             >
               {" "}
-              {catalogEntry.title}{" "}
+              {c.title}{" "}
             </h3>
           </div>
 

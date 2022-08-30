@@ -1,10 +1,11 @@
-import { id } from "../../../utils/generalUtils";
 import { Model } from "./model";
 
 export const SampleData = (): Model => {
-  if (Math.random() > 0.5) {
-    return ["Log entry 1"];
-  } else {
-    return ["Log entry more"];
-  }
+  return [
+    {
+      message: "Hey hoo. I'm a lambda function log. I live in the cloud.",
+      timestamp: +new Date(),
+      id: Math.random() + "",
+    },
+  ];
 };

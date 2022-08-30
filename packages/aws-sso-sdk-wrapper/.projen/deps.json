@@ -107,6 +107,14 @@
       "type": "build"
     },
     {
+      "name": "@aws-sdk/client-cloudwatch",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-sdk/client-cloudwatch-logs",
+      "type": "runtime"
+    },
+    {
       "name": "@aws-sdk/client-dynamodb",
       "type": "runtime"
     },

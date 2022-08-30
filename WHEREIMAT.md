@@ -29,7 +29,7 @@ Need to allow zoom on an element so has to be selected to scrolll DONE - Problem
 
 ## Refactoring the component architecture
 
-We're reaching the point where becausee the AWS client is passed in we need to mock the data to storyboard properly and that's a pain in the ass.
+We're reaching the point where because the AWS client is passed in we need to mock the data to storyboard properly and that's a pain in the ass.
 
 We should probably pass in an awsClient and a dataFetcher and default the data fetcher or something?
 
@@ -39,17 +39,29 @@ This should be done in the app;
 
 const awsAccessClient = useMemo(
 () =>  
-awsClient
+awsClientN
 .account(c.config.accountId!)
 .region(c.config.region! as any)
 .role(c.config.permissionSet!),
 [c.config.accountId, c.config.region, c.config.permissionSet]
 );
 
-# TODO
+# Notes
 
-Get s3o lambda component done
-Launch a terminal (disabled if not authenticated)
-Launch browser (disabled if not authenticat ed)
+Component re-architecture is done. Now don't need to really do anything to have it render apart from integarte into addResource -> can thiink about how to model this later.
+
+# DONE
+
+Get s3o lambda component done (DONE)
+
+## TODO
+
+Entries descending by default and at the top?
+Launch browser (disabled if not authenticated)
 Wizard on landing
+Auto update
+
+## Next release
+
+Launch a terminal (disabled if not authenticated)
 Edit a component's props

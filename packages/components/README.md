@@ -4,6 +4,26 @@ This package contains a storyboard of all components that can be leveraged to co
 
 These can be used in desktop or web apps but primarily focused on desktop for security reasons at present.
 
+## Calling AWS Services
+
+Right now the controller is embedded alongside the view.
+
+Considering this package is component focused I may perhaps look to break that out.
+
+For now you can test scripts in hacky way by passing a custom tsconfig
+
+```
+npx ts-node --project tsconfig.dev.json test/components/aws/LambdaWatcher/controller.ts
+```
+
+## Security
+
+You should NEVER import aws-sso-api or aws-sso-global-access-provider src/ in this package.
+
+These are provided as devDeps to test the library by directly connecting the accessProvider.
+
+In an electron app this will be divided through message passing in preload.js so as not to expose the file system.
+
 ## Creating a new component
 
 Components can be developed in isolation through storybook (well, ladle) and a library for fetching the data you require.
@@ -23,7 +43,7 @@ view.css            ->  styling
 
 You should also add your component to the `componentCatalog` in `domain/components.ts`.
 
-And the final step at present is to add the required data to be collected into the `addResource.ts` component. We plan on moving this to the catalog as an array of actions to be taken in future.
+And the final step at present is to add the required data to be collected into the `addResource.tsx` component. We plan on moving this to the catalog as an array of actions to be taken in future.
 
 ## Improvements
 

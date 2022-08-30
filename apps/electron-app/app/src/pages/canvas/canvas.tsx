@@ -19,6 +19,7 @@ export default observer(() => {
   return (
     <MainCanvasWrapper>
       <ComponentKeyboardManager />
+
       {componentRenderer.wiredComponents.map((wiredComponent) => {
         return (
           <ComponentWrapper

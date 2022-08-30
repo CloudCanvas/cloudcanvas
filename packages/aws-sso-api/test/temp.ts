@@ -22,7 +22,9 @@ export const exec = async () => {
     "us-east-1"
   );
 
+  console.log("New session");
+
   return newSession;
 };
 
-// exec();
+exec();

@@ -56,13 +56,14 @@
   padding: 8px;
   background: #ffffff;
   border-radius: 16px;
-  overflow: hidden;
+  overflow: scroll;
   border: 1px solid var(--gray6);
   box-shadow: var(--cmdk-shadow);
 
   border-width: 3px;
   border-style: solid;
   border-radius: 5px;
+  position: relative;
 
   .dark & {
     background: var(--gray2);
@@ -150,6 +151,22 @@
     }
   }
 
+  [cmdk-header-wrapper] {
+    position: absolute;
+    padding: 8px;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+  }
+
+  [cmdk-list-wrapper] {
+    position: absolute;
+    padding: 8px;
+    top: 100px;
+    left: 0px;
+    width: 100%;
+  }
+
   [cmdk-framer-icon-wrapper] {
     display: flex;
     align-items: center;
@@ -181,7 +198,7 @@
     width: 40%;
   }
   [cmdk-framer-left].full {
-    width: 50%;
+    width: 100%;
   }
 
   [cmdk-framer-separator] {
@@ -246,11 +263,11 @@
     color: var(--gray11);
   }
 
-  [cmdk-vercel-badges] {
+  [cmdk-badges] {
     margin-bottom: 4px;
   }
 
-  [cmdk-vercel-badge] {
+  [cmdk-badge] {
     height: 20px;
     display: inline-flex;
     align-items: center;

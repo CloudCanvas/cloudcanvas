@@ -12,8 +12,8 @@ import {
   Account,
   AwsRegion,
   Organisation,
-  regions,
 } from "@cloudcanvas/types";
+import { regions } from "../../domain/aws";
 
 export type CustomData = { label: string; value: any };
 
@@ -110,7 +110,7 @@ export default (props: AddResourceProps) => {
     };
 
     fetchCustomData();
-  }, [account?.accountId, region, permissionSet]);
+  }, [component, account?.accountId, region, permissionSet]);
 
   return (
     <div className="">
@@ -147,126 +147,135 @@ export default (props: AddResourceProps) => {
             bounce();
           }
         }}
+        onWheel={(evt) => {
+          evt.stopPropagation();
+        }}
       >
-        <div cmdk-vercel-badges="">
-          <div cmdk-vercel-badge="">Home</div>
-          {component && <div cmdk-vercel-badge="">{component.title}</div>}
-          {org && (
-            <div cmdk-vercel-badge="">{org.nickname || org.ssoStartUrl}</div>
-          )}
-          {account && (
-            <div cmdk-vercel-badge="">{account.name || account.accountId}</div>
-          )}
-          {region && <div cmdk-vercel-badge="">{region}</div>}
-          {permissionSet && <div cmdk-vercel-badge="">{permissionSet}</div>}
-        </div>
-
-        <div cmdk-framer-header="">
-          <SearchIcon />
-          <Command.Input
-            autoFocus
-            value={inputValue}
-            placeholder={getPlaceholder()}
-            onValueChange={(value) => {
-              setInputValue(value);
-            }}
-          />
-        </div>
-
-        <Command.List>
-          <div cmdk-framer-items="">
-            <div cmdk-framer-left="" className={component ? "full" : ""}>
-              {!component && (
-                <Command.Group heading="Components">
-                  {componentCatalog
-                    .filter((c) => c.icon)
-                    .map((c) => (
-                      <Item
-                        name={c.title}
-                        value={c}
-                        subtitle={c.subtitle}
-                        icon={c.icon!}
-                        key={c.type}
-                        onSelect={() => {
-                          setComponent(c);
-                          setInputValue("");
-                        }}
-                      />
-                    ))}
-                </Command.Group>
-              )}
-
-              {component && !org && (
-                <Orgs
-                  orgs={props.organisations}
-                  setOrg={(org) => {
-                    setOrg(org);
-                    setInputValue("");
-                  }}
-                />
-              )}
-
-              {org && !account && (
-                <Accounts
-                  orgs={props.organisations.filter(
-                    (o) => o.ssoStartUrl === org.ssoStartUrl
-                  )}
-                  setAccount={(acc) => {
-                    setAccount(acc);
-                    setInputValue("");
-                  }}
-                />
-              )}
-
-              {account && !region && (
-                <Regions
-                  defaultRegion={org?.defaultRegion}
-                  setRegion={(r) => {
-                    setRegion(r);
-                    setInputValue("");
-                  }}
-                />
-              )}
-
-              {region && !permissionSet && (
-                <PermissionSets
-                  account={account}
-                  setPermissionSet={(ps) => {
-                    setPermissionSet(ps);
-                    setInputValue("");
-                  }}
-                />
-              )}
-
-              {permissionSet && !selectedCustomData && (
-                <CustomData
-                  data={customData}
-                  setData={(data) => {
-                    setSelectedCustomData(data);
-                    setInputValue("");
-
-                    const generatedResource = generateComponenEntry({
-                      type: component!.type,
-                      accessCard: {
-                        accountId: account!.accountId,
-                        permissionSet: permissionSet,
-                        region: region as AwsRegion,
-                      },
-                      customData: data,
-                    });
-
-                    props.onAddComponent(generatedResource);
-                  }}
-                />
-              )}
-              {permissionSet && loadingCustomData && <p>Loading...</p>}
-            </div>
-
-            {!component && <hr cmdk-framer-separator="" />}
-
-            <ExampleFrame selectedValue={selectedValue} display={!component} />
+        <div cmdk-header-wrapper="">
+          <div cmdk-badges="">
+            <div cmdk-badge="">Home</div>
+            {component && <div cmdk-badge="">{component.title}</div>}
+            {org && <div cmdk-badge="">{org.nickname || org.ssoStartUrl}</div>}
+            {account && (
+              <div cmdk-badge="">{account.name || account.accountId}</div>
+            )}
+            {region && <div cmdk-badge="">{region}</div>}
+            {permissionSet && <div cmdk-badge="">{permissionSet}</div>}
           </div>
-        </Command.List>
+
+          <div cmdk-framer-header="">
+            <SearchIcon />
+            <Command.Input
+              autoFocus
+              value={inputValue}
+              placeholder={getPlaceholder()}
+              onValueChange={(value) => {
+                setInputValue(value);
+              }}
+            />
+          </div>
+        </div>
+
+        <div cmdk-list-wrapper="">
+          <Command.List>
+            <div cmdk-framer-items="">
+              <div cmdk-framer-left="" className={component ? "full" : ""}>
+                {!component && (
+                  <Command.Group heading="Components">
+                    {componentCatalog
+                      .filter((c) => c.icon)
+                      .map((c) => (
+                        <Item
+                          name={c.title}
+                          value={c}
+                          subtitle={c.subtitle}
+                          icon={c.icon!}
+                          key={c.type}
+                          onSelect={() => {
+                            setComponent(c);
+                            setInputValue("");
+                          }}
+                        />
+                      ))}
+                  </Command.Group>
+                )}
+
+                {component && !org && (
+                  <Orgs
+                    orgs={props.organisations}
+                    setOrg={(org) => {
+                      setOrg(org);
+                      setInputValue("");
+                    }}
+                  />
+                )}
+
+                {org && !account && (
+                  <Accounts
+                    orgs={props.organisations.filter(
+                      (o) => o.ssoStartUrl === org.ssoStartUrl
+                    )}
+                    setAccount={(acc) => {
+                      setAccount(acc);
+                      setInputValue("");
+                    }}
+                  />
+                )}
+
+                {account && !region && (
+                  <Regions
+                    defaultRegion={org?.defaultRegion}
+                    setRegion={(r) => {
+                      setRegion(r);
+                      setInputValue("");
+                    }}
+                  />
+                )}
+
+                {region && !permissionSet && (
+                  <PermissionSets
+                    account={account}
+                    setPermissionSet={(ps) => {
+                      setPermissionSet(ps);
+                      setInputValue("");
+                    }}
+                  />
+                )}
+
+                {permissionSet && !selectedCustomData && (
+                  <CustomData
+                    data={customData}
+                    setData={(data) => {
+                      setSelectedCustomData(data);
+                      setInputValue("");
+
+                      const generatedResource = generateComponenEntry({
+                        type: component!.type,
+                        title: data.label,
+                        accessCard: {
+                          accountId: account!.accountId,
+                          permissionSet: permissionSet,
+                          region: region as AwsRegion,
+                        },
+                        customData: data,
+                      });
+
+                      props.onAddComponent(generatedResource);
+                    }}
+                  />
+                )}
+                {permissionSet && loadingCustomData && <p>Loading...</p>}
+              </div>
+
+              {!component && <hr cmdk-framer-separator="" />}
+
+              <ExampleFrame
+                selectedValue={selectedValue}
+                display={!component}
+              />
+            </div>
+          </Command.List>
+        </div>
       </Command>
     </div>
   );

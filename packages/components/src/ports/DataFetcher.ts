@@ -1,6 +1,6 @@
-export interface DataFetcher<T, U> {
+export interface DataFetcher<M, U> {
   delay: number;
-  initialData: T;
+  initialData: M;
   fetch: () => Promise<U>;
-  reduce: (current: T, update: U) => T;
+  reduce: (current: M, update: U) => M;
 }

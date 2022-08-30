@@ -3,6 +3,7 @@ import { AccessCard } from "@cloudcanvas/types";
 interface Component<T, P> {
   id: string;
   type: string;
+  title: string;
   state: {
     playing: boolean;
     selected: boolean;

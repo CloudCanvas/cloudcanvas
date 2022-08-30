@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, toJS } from "mobx";
 // @ts-ignore
 import { v4 } from "uuid";
 import * as Component from "@cloudcanvas/components";
@@ -29,6 +29,8 @@ export class ComponentStore {
       this.components = JSON.parse(
         window.localStorage.getItem("components") || "[]"
       );
+      console.log("this.components");
+      console.log(toJS(this.components));
     } catch (err) {
       console.error(err);
     }
@@ -45,8 +47,6 @@ export class ComponentStore {
       : CANVAS_CENTER.y + 100;
 
     const location = [x, y];
-
-    console.log(location);
 
     this.addComponent({
       ...component,
