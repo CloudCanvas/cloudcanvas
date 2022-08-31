@@ -12,6 +12,7 @@ export default () => {
     component: generateComponenEntry({
       type: DynamoWatcherCatalogComponent.type,
       accessCard: {} as any,
+      title: "Sample table",
       customData: {
         tableName: "TestTable",
       },
@@ -58,9 +59,10 @@ export default () => {
     >
       <DynamoWatcher
         playing={state.component.state.playing}
+        selected={state.component.state.selected}
         authorised={state.authorisation === "authorized"}
         awsClient={{} as any}
-        customProps={{ tableName: "TestTableName" }}
+        customProps={{ label: "TestTableName", value: "TestTableName" }}
         dataFetcher={
           {
             delay: 1000,

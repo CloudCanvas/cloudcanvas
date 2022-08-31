@@ -1,14 +1,11 @@
 import React from "react";
 import { Model } from "./model";
 import { ComponentCatalogEntry } from "../../../domain";
-import View, { CustomProps } from "./View";
+import View from "./View";
 import { SampleData } from "./sampleData";
 import { customDataFetcher } from "./configManager";
 
-export const LambdaWatcherCatalogComponent: ComponentCatalogEntry<
-  Model,
-  CustomProps
-> = {
+export const LambdaWatcherCatalogComponent: ComponentCatalogEntry<Model> = {
   title: "Lambda watcher",
   subtitle: "Watch live logs from a Lambda function",
   sampleData: SampleData,

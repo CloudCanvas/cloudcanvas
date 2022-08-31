@@ -158,16 +158,7 @@ const BaseComponent = ({ state, dispatch, children }: BaseComponentProps) => {
         </div>
 
         <ChildComponentWrapper selected={state.component.state.selected}>
-          {/* I really don't like how I've done this, I think it's probably best to have a children prop and pass these things directly */}
           {children}
-          {/* {ContentComponent && (
-            <ContentComponent
-              awsClient={awsAccessClient}
-              playing={state.component.playing}
-              authorised={state.authorisation === "authorized"}
-              customProps={c.props}
-            />
-          )} */}
         </ChildComponentWrapper>
       </div>
     </Rnd>

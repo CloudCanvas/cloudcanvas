@@ -48,6 +48,7 @@ const ComponentWrapper = memo(
         {catalog.component({
           authorised: definition.state.authorisation === "authorized",
           playing: c.state.playing,
+          selected: c.state.selected,
           awsClient: aws.aws
             .account(c.config.accountId)
             .region(c.config.region)

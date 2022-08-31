@@ -20,7 +20,7 @@ const log = (msg: any) => {
   }
 };
 
-type Config<T, U> = Pick<DataFetcher<T, U>, "delay" | "initialData"> & {
+type Config<T, U> = Pick<DataFetcher<T, U>, "initialData"> & {
   customData: CustomData;
 };
 
@@ -221,14 +221,19 @@ export const makeDynamoStreamController = (
   });
 
   return {
-    delay: props.config.delay,
     initialData: props.config.initialData,
     fetch: async () => {
       const records = await streamManager.fetchRecords();
       return records;
     },
     reduce: (current, update) => {
-      return [...update, ...current];
+      const newModel = [...update, ...current];
+      return newModel;
+      // if (newModel.length > 0) {
+      //   return newModel.slice(newModel.length - 100);
+      // } else {
+      //   return newModel;
+      // }
     },
   };
 };

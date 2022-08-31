@@ -1,14 +1,11 @@
 import React from "react";
 import { Model } from "./model";
 import { ComponentCatalogEntry } from "../../../domain";
-import View, { CustomProps } from "./View";
+import View from "./View";
 import { SampleData } from "./sampleData";
 import { customDataFetcher } from "./configManager";
 
-export const DynamoWatcherCatalogComponent: ComponentCatalogEntry<
-  Model,
-  CustomProps
-> = {
+export const DynamoWatcherCatalogComponent: ComponentCatalogEntry<Model> = {
   title: "DynamoDB watcher",
   subtitle: "Watch live updates from a stream-enabled DynamoDB table",
   sampleData: SampleData,

@@ -22,7 +22,7 @@ const log = (msg: any) => {
   }
 };
 
-type Config<M, U> = Pick<DataFetcher<M, U>, "delay" | "initialData"> & {
+type Config<M, U> = Pick<DataFetcher<M, U>, "initialData"> & {
   customData: CustomData;
 };
 
@@ -213,7 +213,6 @@ export const makeLambdaStreamController = (
   });
 
   return {
-    delay: props.config.delay,
     initialData: props.config.initialData,
     fetch: async () => {
       const records = await logStreamManager.fetchRecords();

@@ -314,9 +314,9 @@ const ExampleFrame = ({
                     awsClient: {} as any,
                     playing: true,
                     authorised: true,
+                    selected: false,
                     customProps: {} as any,
                     dataFetcher: {
-                      delay: 0,
                       initialData: c.sampleData(),
                       fetch: async () => {
                         return c.sampleUpdate();

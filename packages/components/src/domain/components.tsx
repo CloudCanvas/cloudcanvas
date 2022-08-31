@@ -7,6 +7,8 @@ import { v4 } from "uuid";
 import { CustomData } from "../components/form";
 
 export interface AwsComponentProps<P> {
+  // TODO Ensure selected is added
+  selected: boolean;
   playing: boolean;
   authorised: boolean;
   awsClient: AWS;
@@ -15,14 +17,14 @@ export interface AwsComponentProps<P> {
   dataFetcher?: DataFetcher<any, any>;
 }
 
-export type ComponentCatalogEntry<T, P> = {
+export type ComponentCatalogEntry<T> = {
   type: string;
   title: string;
   subtitle: string;
   customDataFetcher: (aws: AWS) => Promise<CustomData[]>;
   sampleData: () => T;
   sampleUpdate: () => T;
-  component: (props: AwsComponentProps<P>) => JSX.Element;
+  component: (props: AwsComponentProps<CustomData>) => JSX.Element;
   icon: string;
   defaultSize: number[];
 };

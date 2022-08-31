@@ -16,7 +16,6 @@ const exec = async () => {
         value: "analyticsv2",
         label: "analyticsv2",
       },
-      delay: 1000,
       initialData: [],
     },
     ports: { aws: awsClient },

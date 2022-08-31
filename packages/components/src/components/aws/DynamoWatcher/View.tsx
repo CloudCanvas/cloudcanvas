@@ -1,18 +1,21 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { Inspector } from "react-inspector";
 import "./View.css";
 import { dateToLogStr } from "../../../services/DateService";
-import { topAlignedRow } from "../../../utils/layoutUtils";
+import { centeredRow, topAlignedRow } from "../../../utils/layoutUtils";
 import TextContent from "@cloudscape-design/components/text-content";
 import SpaceBetween from "@cloudscape-design/components/space-between";
 import { diff, toSentenceCase } from "../../../utils/generalUtils";
 import { createStreamMachine } from "../../../machines/dataFetcherMachine";
 import { useMachine } from "@xstate/react";
 import EmptyDataPlaceholder from "../../base/EmptyDataPlaceholder/EmptyDataPlaceholder";
-import { Model, Update } from "./model";
+import { DynamoRecord, Model, Update } from "./model";
 import { makeDynamoStreamController } from "./controller";
 import { AwsComponentProps } from "../../../domain";
 import { CustomData } from "../../form";
+import { useTrail, a } from "@react-spring/web";
+// @ts-ignore
+import { useIsVisible } from "react-is-visible";
 
 export default (props: AwsComponentProps<CustomData>) => {
   // Create the machine to manage streaming data.
@@ -24,7 +27,6 @@ export default (props: AwsComponentProps<CustomData>) => {
           makeDynamoStreamController({
             config: {
               customData: props.customProps,
-              delay: 1000,
               initialData: [],
             },
             ports: {
@@ -72,61 +74,104 @@ export default (props: AwsComponentProps<CustomData>) => {
     );
   }
 
-  return <View data={streamState.context.data} />;
+  return <View data={streamState.context.data} selected={props.selected} />;
 };
 
 export type ViewProps = {
   data: Model;
+  selected: boolean;
 };
-export const View = ({ data }: ViewProps) => {
-  return (
-    <div
-      style={{
-        paddingTop: 0,
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      {data?.map((r, i) => {
-        return (
-          <div
-            key={r.id}
-            style={{
-              padding: 8,
-              flexDirection: "row",
-              borderRightWidth: 0,
-              borderLeftWidth: 0,
-              borderTopWidth: i === 0 ? 1 : 0,
-              borderBottomWidth: 1,
-              borderStyle: "dotted",
-              borderColor: "lightgray",
-              ...topAlignedRow,
-            }}
-          >
-            <div style={{ minWidth: 160 }}>
-              <TextContent>
-                <SpaceBetween direction="horizontal" size="xs">
-                  <p style={{ color: "gray" }}>{dateToLogStr(r.at)}</p>
-                  <p style={{ width: 70, paddingLeft: 20 }}>
-                    {toSentenceCase(r.type)}
-                  </p>
-                </SpaceBetween>
-              </TextContent>
-            </div>
+export const View = ({ data, selected }: ViewProps) => {
+  const bottomRef = useRef<HTMLDivElement | null>();
 
-            <Inspector
-              theme="chromeLight"
-              table={false}
-              data={
-                r.type === "MODIFY" && r.oldImage && r.newImage
-                  ? { ...r.key, ...(diff(r.oldImage, r.newImage) || {}) }
-                  : r.newImage || r.key
-              }
-            />
-          </div>
-        );
-      })}
+  const [atBottom, setAtBottom] = React.useState(true);
+  const trail = useTrail(data.length, {
+    config: { mass: 5, tension: 2000, friction: 200 },
+    opacity: 1,
+    // height: 70,
+    from: { opacity: 0 },
+    // from: { opacity: 0, height: 0 },
+  });
+
+  useEffect(() => {
+    if (atBottom || !selected) {
+      bottomRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
+    }
+  }, [data.length]);
+
+  return (
+    <div style={{}}>
+      {trail.map(({ ...style }, index) => (
+        <a.div
+          key={index}
+          style={{
+            ...style,
+            background: index % 2 === 0 ? "white" : "#f2f2f2",
+          }}
+        >
+          <a.div style={{ height: 70, display: "flex", alignItems: "center" }}>
+            <Item key={data[index].id} r={data[index]} i={index} />
+          </a.div>
+        </a.div>
+      ))}
+
+      <AtBottomWatcher setAtBottom={setAtBottom} ref={bottomRef} />
     </div>
   );
 };
+
+const Item = React.memo(({ r, i }: { r: DynamoRecord; i: number }) => (
+  <div
+    key={r.id}
+    style={{
+      flex: 1,
+      flexDirection: "row",
+      willChange: "transform, opacity, height",
+      minHeight: 50,
+      ...centeredRow,
+    }}
+  >
+    <div style={{ minWidth: 160 }}>
+      <TextContent>
+        <SpaceBetween direction="horizontal" size="xs">
+          <p style={{ color: "gray" }}>{dateToLogStr(r.at)}</p>
+          <p style={{ width: 70, paddingLeft: 20 }}>{toSentenceCase(r.type)}</p>
+        </SpaceBetween>
+      </TextContent>
+    </div>
+
+    <Inspector
+      theme="chromeLight"
+      table={false}
+      data={
+        r.type === "MODIFY" && r.oldImage && r.newImage
+          ? { ...r.key, ...(diff(r.oldImage, r.newImage) || {}) }
+          : r.newImage || r.key
+      }
+    />
+  </div>
+));
+
+type AtBottomWatcherProps = {
+  setAtBottom: (bottom: boolean) => void;
+};
+const AtBottomWatcher = React.forwardRef(
+  (props: AtBottomWatcherProps, forwardRef) => {
+    const innerRef = useRef<HTMLDivElement | null>(null);
+    const isVisible = useIsVisible(innerRef);
+
+    useEffect(() => {
+      props.setAtBottom(isVisible);
+    }, [isVisible]);
+
+    return (
+      // @ts-ignore
+      <div ref={forwardRef} style={{ height: 10 }}>
+        <div ref={innerRef} />
+      </div>
+    );
+  }
+);

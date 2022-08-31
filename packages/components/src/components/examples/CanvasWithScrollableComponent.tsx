@@ -7,12 +7,15 @@ import MainCanvas, { CANVAS_CENTER } from "../spatial/MainCanvas/MainCanvas";
 import { DataFetcher } from "../../ports/DataFetcher";
 import { DynamoWatcherCatalogComponent } from "../aws/DynamoWatcher/catalog";
 import { generateComponenEntry } from "../../domain";
+import { v4 } from "uuid";
 
+let count = 30;
 export default () => {
   const [state, setState] = React.useState<BaseComponentProps["state"]>({
     component: generateComponenEntry({
       type: DynamoWatcherCatalogComponent.type,
       accessCard: {} as any,
+      title: "TestTable",
       customData: {
         tableName: "TestTable",
       },
@@ -77,18 +80,22 @@ export default () => {
       >
         <DynamoWatcher
           playing={state.component.state.playing}
+          selected={state.component.state.selected}
           authorised={state.authorisation === "authorized"}
           awsClient={{} as any}
-          customProps={{ tableName: "TestTableName" }}
+          customProps={{ label: "TestTableName", value: "TestTableName" }}
           dataFetcher={
             {
-              delay: 1000,
               reduce: (data, update) => {
                 const updatedModel = [...data, ...update];
                 return updatedModel;
               },
               initialData: [],
               fetch: async () => {
+                count--;
+                if (count <= 0) {
+                  return [];
+                }
                 return [
                   {
                     id: Math.random() + "",
@@ -97,6 +104,20 @@ export default () => {
                     key: {
                       id: "e0db8e08-e089-42a8-a11e-8dc0c42024ac",
                       ts: +new Date(),
+                    },
+                  } as DynamoRecord,
+                  {
+                    id: Math.random() + "",
+                    at: new Date(),
+                    type: "INSERT",
+                    key: {
+                      id: "e0db8e08-e089-42a8-a11e-8dc0c42024ac",
+                      ts: +new Date(),
+                      a: v4(),
+                      b: v4(),
+                      c: v4(),
+                      d: v4(),
+                      e: v4(),
                     },
                   } as DynamoRecord,
                 ];

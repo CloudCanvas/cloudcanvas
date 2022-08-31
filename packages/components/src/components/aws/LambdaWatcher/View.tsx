@@ -8,7 +8,7 @@ import SpaceBetween from "@cloudscape-design/components/space-between";
 import { createStreamMachine } from "../../../machines/dataFetcherMachine";
 import { useMachine } from "@xstate/react";
 import EmptyDataPlaceholder from "../../base/EmptyDataPlaceholder/EmptyDataPlaceholder";
-import { Model, Update } from "./model";
+import { LogEntry, Model, Update } from "./model";
 import { makeLambdaStreamController } from "./controller";
 import { AwsComponentProps } from "../../../domain";
 import { CustomData } from "../../form";
@@ -23,7 +23,6 @@ export default (props: AwsComponentProps<CustomData>) => {
           makeLambdaStreamController({
             config: {
               customData: props.customProps,
-              delay: 1000,
               initialData: [],
             },
             ports: {
@@ -88,37 +87,39 @@ export const View = ({ data }: ViewProps) => {
       }}
     >
       {data?.map((r, i) => {
-        return (
-          <div
-            key={r.id}
-            style={{
-              padding: 8,
-              flexDirection: "row",
-              borderRightWidth: 0,
-              borderLeftWidth: 0,
-              borderTopWidth: i === 0 ? 1 : 0,
-              background: i % 2 === 0 ? "white" : "#f2f2f2",
-              ...topAlignedRow,
-            }}
-          >
-            <div style={{ minWidth: 160 }}>
-              <TextContent>
-                <SpaceBetween direction="horizontal" size="xs">
-                  <p>
-                    <small style={{ color: "rgb(22,25,31)" }}>
-                      {dateToLogStr(new Date(r.timestamp!))}
-                    </small>
-                  </p>
-                  <MessageOrObject msg={r.message || ""} />
-                </SpaceBetween>
-              </TextContent>
-            </div>
-          </div>
-        );
+        return <Item key={r.id} r={r} i={i} />;
       })}
     </div>
   );
 };
+
+const Item = React.memo(({ r, i }: { r: LogEntry; i: number }) => (
+  <div
+    key={r.id}
+    style={{
+      padding: 8,
+      flexDirection: "row",
+      borderRightWidth: 0,
+      borderLeftWidth: 0,
+      borderTopWidth: i === 0 ? 1 : 0,
+      background: i % 2 === 0 ? "white" : "#f2f2f2",
+      ...topAlignedRow,
+    }}
+  >
+    <div style={{ minWidth: 160 }}>
+      <TextContent>
+        <SpaceBetween direction="horizontal" size="xs">
+          <p>
+            <small style={{ color: "rgb(22,25,31)" }}>
+              {dateToLogStr(new Date(r.timestamp!))}
+            </small>
+          </p>
+          <MessageOrObject msg={r.message || ""} />
+        </SpaceBetween>
+      </TextContent>
+    </div>
+  </div>
+));
 
 const tryParse = (possibleJSON: string) => {
   try {

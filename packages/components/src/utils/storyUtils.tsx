@@ -34,6 +34,7 @@ export const pausedStatus: ComponentStatus = {
 
 export const baseComponent: AwsComponent<unknown, unknown> =
   generateComponenEntry({
+    title: "Sample component",
     type: DynamoWatcherCatalogComponent.type,
     accessCard: {
       accountId: "123456789",
