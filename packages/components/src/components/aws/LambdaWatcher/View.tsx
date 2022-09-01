@@ -12,6 +12,7 @@ import { LogEntry, Model, Update } from "./model";
 import { makeLambdaStreamController } from "./controller";
 import { AwsComponentProps } from "../../../domain";
 import { CustomData } from "../../form";
+import ScrollFollower from "../../shared/ScrollFollower";
 
 export default (props: AwsComponentProps<CustomData>) => {
   // Create the machine to manage streaming data.
@@ -70,56 +71,75 @@ export default (props: AwsComponentProps<CustomData>) => {
     );
   }
 
-  return <View data={streamState.context.data} />;
+  return (
+    <View
+      data={streamState.context.data.slice(0, streamState.context.counter)}
+      selected={props.selected}
+      setSelected={() => props.setSelected(true)}
+    />
+  );
 };
 
 export type ViewProps = {
   data: Model;
+  selected: boolean;
+  setSelected: () => void;
 };
-export const View = ({ data }: ViewProps) => {
+export const View = ({ data, selected, setSelected }: ViewProps) => {
   return (
-    <div
-      style={{
-        paddingTop: 0,
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      {data?.map((r, i) => {
-        return <Item key={r.id} r={r} i={i} />;
-      })}
-    </div>
+    <ScrollFollower dataCount={data.length} selected={selected}>
+      {data.map((item, index) => (
+        <div
+          key={item.id}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            background: index % 2 === 0 ? "white" : "#f2f2f2",
+          }}
+        >
+          <Item key={item.id} r={item} selFn={setSelected} />
+        </div>
+      ))}
+    </ScrollFollower>
   );
 };
 
-const Item = React.memo(({ r, i }: { r: LogEntry; i: number }) => (
-  <div
-    key={r.id}
-    style={{
-      padding: 8,
-      flexDirection: "row",
-      borderRightWidth: 0,
-      borderLeftWidth: 0,
-      borderTopWidth: i === 0 ? 1 : 0,
-      background: i % 2 === 0 ? "white" : "#f2f2f2",
-      ...topAlignedRow,
-    }}
-  >
-    <div style={{ minWidth: 160 }}>
-      <TextContent>
-        <SpaceBetween direction="horizontal" size="xs">
-          <p>
-            <small style={{ color: "rgb(22,25,31)" }}>
-              {dateToLogStr(new Date(r.timestamp!))}
-            </small>
-          </p>
-          <MessageOrObject msg={r.message || ""} />
-        </SpaceBetween>
-      </TextContent>
+const Item = React.memo(({ r, selFn }: { r: LogEntry; selFn: () => void }) => {
+  // TODO Use ReactCSSTransition stuff for this.
+  const itemRef = React.useCallback((node: HTMLDivElement) => {
+    if (!node) return;
+
+    setTimeout(() => {
+      node.className = `${node.className} item-enter`;
+    }, 5);
+  }, []);
+
+  return (
+    <div
+      ref={itemRef}
+      key={r.id}
+      style={{
+        padding: 8,
+        flexDirection: "row",
+        ...topAlignedRow,
+      }}
+      className="inspector item"
+    >
+      <div style={{ minWidth: 160 }}>
+        <TextContent>
+          <SpaceBetween direction="horizontal" size="xs">
+            <p>
+              <small style={{ color: "rgb(22,25,31)" }}>
+                {dateToLogStr(new Date(r.timestamp!))}
+              </small>
+            </p>
+            <MessageOrObject msg={r.message || ""} selFn={selFn} />
+          </SpaceBetween>
+        </TextContent>
+      </div>
     </div>
-  </div>
-));
+  );
+});
 
 const tryParse = (possibleJSON: string) => {
   try {
@@ -136,11 +156,21 @@ const tryParse = (possibleJSON: string) => {
   }
 };
 
-const MessageOrObject = ({ msg }: { msg: string }) => {
+const MessageOrObject = ({
+  msg,
+  selFn,
+}: {
+  msg: string;
+  selFn: () => void;
+}) => {
   const { parsed, str } = tryParse(msg);
 
   if (parsed) {
-    return <Inspector theme="chromeLight" table={false} data={parsed} />;
+    return (
+      <div onClick={selFn}>
+        <Inspector theme="chromeLight" table={false} data={parsed} />
+      </div>
+    );
   } else {
     return (
       <TextContent>

@@ -8,6 +8,7 @@ import { DataFetcher } from "../ports/DataFetcher";
 interface Context<D, U> {
   dataFetcher: DataFetcher<D, U>;
   data: D;
+  counter: number;
   playing: boolean;
   authorised: boolean;
   errorCount: number;
@@ -25,6 +26,7 @@ export const createStreamMachine = <D, U>(props: Props<D, U>) => {
     data: props.dataFetcher.initialData,
     playing: props.playing,
     authorised: props.authorised,
+    counter: 0,
     errorCount: 0,
   };
 
@@ -51,6 +53,28 @@ export const createStreamMachine = <D, U>(props: Props<D, U>) => {
       type: "parallel",
       id: "streamer",
       states: {
+        /**
+         * This is a strange hack. We like data to animate in once at a time to this state basically loops and increments a counter every 10ms
+         * and the counter is used to select the array of data to return i.e. counter = 4, data =[1,2,3,4,5,6,7], component should only render [1,2,3,4]
+         */
+        offsetCounter: {
+          initial: "idle",
+          states: {
+            idle: {
+              after: {
+                "50": {
+                  target: "maybeIncrement",
+                },
+              },
+            },
+            maybeIncrement: {
+              always: {
+                actions: ["checkIncrement"],
+                target: "idle",
+              },
+            },
+          },
+        },
         dataFetcher: {
           initial: "idle",
           states: {
@@ -152,6 +176,7 @@ export const createStreamMachine = <D, U>(props: Props<D, U>) => {
     },
     {
       actions: {
+        // TODO Figure out how to stagger the adds?
         addRecords: assign({
           data: (ctx, evt) => {
             if (!evt.data) {
@@ -168,6 +193,20 @@ export const createStreamMachine = <D, U>(props: Props<D, U>) => {
         bumpError: assign({
           errorCount: (ctx, evt) => {
             return ctx.errorCount + 1;
+          },
+        }),
+        checkIncrement: assign({
+          counter: (ctx, evt) => {
+            if (!Array.isArray(ctx.data)) return ctx.counter;
+
+            if (ctx.counter >= (ctx.data as any[]).length) {
+              return ctx.counter;
+            }
+
+            return ctx.counter + 1;
+          },
+          errorCount: (_ctx, _evt) => {
+            return 0;
           },
         }),
       },

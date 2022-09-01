@@ -313,6 +313,7 @@ const ExampleFrame = ({
                   {c.component({
                     awsClient: {} as any,
                     playing: true,
+                    setSelected: () => {},
                     authorised: true,
                     selected: false,
                     customProps: {} as any,

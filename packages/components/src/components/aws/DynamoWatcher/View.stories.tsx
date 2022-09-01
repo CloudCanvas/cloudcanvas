@@ -29,7 +29,11 @@ const Template = (args: ViewProps) => () =>
   );
 
 // Reuse that template for creating different stories
-export const NoRecords = Template({ data: [], selected: false });
+export const NoRecords = Template({
+  data: [],
+  selected: false,
+  setSelected: () => {},
+});
 
 export const RecordsKeyOnly = Template({
   data: [
@@ -53,6 +57,7 @@ export const RecordsKeyOnly = Template({
     } as DynamoRecord,
   ],
   selected: false,
+  setSelected: () => {},
 });
 
 export const RecordsNewImage = Template({
@@ -89,6 +94,7 @@ export const RecordsNewImage = Template({
     } as DynamoRecord,
   ],
   selected: false,
+  setSelected: () => {},
 });
 
 export const RecordsNewAndOldImage = Template({
@@ -130,6 +136,7 @@ export const RecordsNewAndOldImage = Template({
     } as DynamoRecord,
   ],
   selected: false,
+  setSelected: () => {},
 });
 
 const lotsOfRecords: DynamoRecord[] = [];
@@ -154,4 +161,5 @@ for (let i = 0; i < 100; i++) {
 export const LotsOfRecords = Template({
   data: lotsOfRecords,
   selected: false,
+  setSelected: () => {},
 });

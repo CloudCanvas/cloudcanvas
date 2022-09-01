@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import "./BaseComponent.scss";
 import { Rnd } from "react-rnd";
 import { AwsComponent } from "../../../domain/core";
@@ -50,6 +50,9 @@ export interface BaseComponentProps {
 const BaseComponent = ({ state, dispatch, children }: BaseComponentProps) => {
   const { component: c } = state;
 
+  const dragTime = useRef(+new Date());
+  const hasDragged = useRef(false);
+
   const [location, setLocation] = React.useState<number[] | undefined>();
   const [size, setSize] = React.useState<number[] | undefined>();
 
@@ -85,17 +88,32 @@ const BaseComponent = ({ state, dispatch, children }: BaseComponentProps) => {
   return (
     <Rnd
       className={`base-component lined thick ${
-        c.state.selected ? "selected" : ""
+        c.state.selected ? "selected" : "unselected"
       }`}
       scale={state.scale || 1}
       position={{ x: location[0], y: location[1] }}
       size={{ width: size[0], height: size[1] }}
       onDragStop={(e, d) => {
         setLocation([d.x, d.y]);
+
+        // onDragStop always happens even if no drag happened
+        // The user may have dragged and waited before letting go so
+        // we need to know if there was a drag to set the time and then not trigger a click event
+        if (hasDragged.current) {
+          dragTime.current = +new Date();
+        }
+        hasDragged.current = false;
       }}
-      onResizeStop={(_e, _direction, ref, _delta, position) => {
+      onDrag={(e, data) => {
+        if (Math.max(Math.abs(data.deltaX), Math.abs(data.deltaY)) > 5) {
+          hasDragged.current = true;
+        }
+        dragTime.current = +new Date();
+      }}
+      onResizeStop={(e, _direction, ref, _delta, position) => {
         setSize([parseFloat(ref.style.width), parseFloat(ref.style.height)]);
         setLocation([position.x, position.y]);
+        // e.stopPropagation();
       }}
       cancel=".componentBody"
       allowAnyClick={false}
@@ -121,7 +139,11 @@ const BaseComponent = ({ state, dispatch, children }: BaseComponentProps) => {
           }}
           onClick={(evt) => {
             evt.stopPropagation();
-            dispatch.onSelection(!c.state.selected);
+
+            // Only send click if a drag did no just hapen
+            if (Math.abs(+new Date() - dragTime.current) > 50) {
+              dispatch.onSelection(!c.state.selected);
+            }
           }}
         >
           <div style={centeredRow}>

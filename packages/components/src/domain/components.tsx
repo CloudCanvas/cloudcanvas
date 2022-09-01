@@ -7,8 +7,8 @@ import { v4 } from "uuid";
 import { CustomData } from "../components/form";
 
 export interface AwsComponentProps<P> {
-  // TODO Ensure selected is added
   selected: boolean;
+  setSelected: (selected: boolean) => void;
   playing: boolean;
   authorised: boolean;
   awsClient: AWS;

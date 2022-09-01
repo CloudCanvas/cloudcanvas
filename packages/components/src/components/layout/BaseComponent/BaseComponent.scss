@@ -8,6 +8,7 @@
   background: transparent;
   transition: box-shadow 0.5s ease;
   outline: none;
+  border-radius: 15px;
   box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
   //   border-radius: 255px 4px 225px 4px/4px 225px 4px 255px;
   overflow: hidden;
@@ -26,5 +27,11 @@
   }
   &.lined.thick.selected {
     border: solid 4px #0972d3;
+  }
+
+  &.unselected {
+    ::-webkit-scrollbar {
+      display: none;
+    }
   }
 }

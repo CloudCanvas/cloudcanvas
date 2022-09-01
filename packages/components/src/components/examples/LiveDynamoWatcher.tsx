@@ -59,6 +59,18 @@ export default () => {
     >
       <DynamoWatcher
         playing={state.component.state.playing}
+        setSelected={(isSelected) => {
+          setState({
+            ...state,
+            component: {
+              ...state.component,
+              state: {
+                ...state.component.state,
+                selected: isSelected,
+              },
+            },
+          });
+        }}
         selected={state.component.state.selected}
         authorised={state.authorisation === "authorized"}
         awsClient={{} as any}

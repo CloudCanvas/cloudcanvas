@@ -10,7 +10,7 @@ export default {
 };
 
 // Create a master template for mapping args to render the LambdaWatcher component
-const Template = (args: ViewProps) => () =>
+const Template = (args: Pick<ViewProps, "data">) => () =>
   (
     <div
       style={{
@@ -22,7 +22,7 @@ const Template = (args: ViewProps) => () =>
         overflow: "scroll",
       }}
     >
-      <View {...args} />
+      <View {...args} selected={false} setSelected={() => {}} />
     </div>
   );
 

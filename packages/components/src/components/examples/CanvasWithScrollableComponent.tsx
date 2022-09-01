@@ -81,6 +81,18 @@ export default () => {
         <DynamoWatcher
           playing={state.component.state.playing}
           selected={state.component.state.selected}
+          setSelected={(isSelected) => {
+            setState({
+              ...state,
+              component: {
+                ...state.component,
+                state: {
+                  ...state.component.state,
+                  selected: isSelected,
+                },
+              },
+            });
+          }}
           authorised={state.authorisation === "authorized"}
           awsClient={{} as any}
           customProps={{ label: "TestTableName", value: "TestTableName" }}
