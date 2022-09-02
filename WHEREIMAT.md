@@ -54,6 +54,7 @@ Component re-architecture is done. Now don't need to really do anything to have 
 
 Get s3o lambda component done (DONE)
 Entries descending by default and at the top? DONE
+Wizard on landing DONE
 
 # Notes
 
@@ -68,30 +69,16 @@ over time and "pop" in.
 
 ## TODO
 
-Wizard on landing
-Launch browser (disabled if not authenticated)
 Expiry need to tick over without a refresh
+
+Lambda component needs to have a max limit with ellipsis
+Clicking onSelect on inspector should not toggfle it should just set selected
 Auto update
+
+Auto scroll is affecting parent window. Ahhhhhhh mother fucker.
 
 ## Next release
 
+Launch browser (disabled if not authenticated)
 Launch a terminal (disabled if not authenticated)
 Edit a component's props
-
-Neat and secure!
-CloudCanvas uses your local credentials to allow you to create your own interactive cloud console on an infinite canvas.
-
-Your organisations
-These are all the organisations we detected for you and the accounts associated with them.
-
-SSO
-CloudCanvas only supports AWS SSO access to align with security best practices.
-
-Your new home
-We use the same best practices as AWS for refreshing and securing your credentials locally. Sessions created here integrate with the AWS SDK on the command line!
-
-Accounts
-All the accounts associated with your organisations will be auto detected and available to create components.
-
-Done
-That's it for now. Hit Finish and then hit CMD+K to create your first component.

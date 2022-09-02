@@ -62,7 +62,7 @@ export const createStreamMachine = <D, U>(props: Props<D, U>) => {
           states: {
             idle: {
               after: {
-                "50": {
+                "100": {
                   target: "maybeIncrement",
                 },
               },

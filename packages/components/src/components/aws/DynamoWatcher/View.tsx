@@ -131,16 +131,14 @@ const Item = React.memo(
         }}
         className="inspector item"
       >
-        <div style={{ minWidth: 160 }}>
-          <TextContent>
-            <SpaceBetween direction="horizontal" size="xs">
-              <p style={{ color: "gray" }}>{dateToLogStr(r.at)}</p>
-              <p style={{ width: 70, paddingLeft: 20 }}>
-                {toSentenceCase(r.type)}
-              </p>
-            </SpaceBetween>
-          </TextContent>
-        </div>
+        <TextContent>
+          <SpaceBetween direction="horizontal" size="xs">
+            <p style={{ color: "gray" }}>{dateToLogStr(r.at)}</p>
+            <p style={{ width: 70, paddingLeft: 20 }}>
+              {toSentenceCase(r.type)}
+            </p>
+          </SpaceBetween>
+        </TextContent>
 
         <div onClick={() => selFn()}>
           <Inspector

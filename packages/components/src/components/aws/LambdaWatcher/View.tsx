@@ -125,18 +125,16 @@ const Item = React.memo(({ r, selFn }: { r: LogEntry; selFn: () => void }) => {
       }}
       className="inspector item"
     >
-      <div style={{ minWidth: 160 }}>
-        <TextContent>
-          <SpaceBetween direction="horizontal" size="xs">
-            <p>
-              <small style={{ color: "rgb(22,25,31)" }}>
-                {dateToLogStr(new Date(r.timestamp!))}
-              </small>
-            </p>
-            <MessageOrObject msg={r.message || ""} selFn={selFn} />
-          </SpaceBetween>
-        </TextContent>
-      </div>
+      <TextContent>
+        <SpaceBetween direction="horizontal" size="xs">
+          <p>
+            <small style={{ color: "rgb(22,25,31)" }}>
+              {dateToLogStr(new Date(r.timestamp!))}
+            </small>
+          </p>
+          <MessageOrObject msg={r.message || ""} selFn={selFn} />
+        </SpaceBetween>
+      </TextContent>
     </div>
   );
 });

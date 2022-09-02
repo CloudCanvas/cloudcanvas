@@ -342,8 +342,8 @@ const Role = ({
           {role}{" "}
           {org.authorisedUntil && +org.authorisedUntil > +new Date() && (
             <SpaceBetween direction="horizontal" size="xs">
-              <a>Launch terminal</a>
-              <a>Launch browser</a>
+              <a>Launch terminal (coming soon)</a>
+              <a>Launch browser (coming soon)</a>
             </SpaceBetween>
           )}
         </p>
