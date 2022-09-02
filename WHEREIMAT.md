@@ -53,15 +53,45 @@ Component re-architecture is done. Now don't need to really do anything to have 
 # DONE
 
 Get s3o lambda component done (DONE)
+Entries descending by default and at the top? DONE
+
+# Notes
+
+It definitely feels nice but there's a few small user experience things to solve.
+
+#1 In particular for lambda logs, the updates jump in batches and you lose track. I think even if 100 updates come in they should appear staggered
+over time and "pop" in.
+
+#2 Each initial entry should be the same size so we need to ellipsis the text and have it expandable.
+
+#3 Really need those split screen controls or some way to f
 
 ## TODO
 
-Entries descending by default and at the top?
-Launch browser (disabled if not authenticated)
 Wizard on landing
+Launch browser (disabled if not authenticated)
+Expiry need to tick over without a refresh
 Auto update
 
 ## Next release
 
 Launch a terminal (disabled if not authenticated)
 Edit a component's props
+
+Neat and secure!
+CloudCanvas uses your local credentials to allow you to create your own interactive cloud console on an infinite canvas.
+
+Your organisations
+These are all the organisations we detected for you and the accounts associated with them.
+
+SSO
+CloudCanvas only supports AWS SSO access to align with security best practices.
+
+Your new home
+We use the same best practices as AWS for refreshing and securing your credentials locally. Sessions created here integrate with the AWS SDK on the command line!
+
+Accounts
+All the accounts associated with your organisations will be auto detected and available to create components.
+
+Done
+That's it for now. Hit Finish and then hit CMD+K to create your first component.

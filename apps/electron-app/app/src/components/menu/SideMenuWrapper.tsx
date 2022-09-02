@@ -6,7 +6,7 @@ import { ssoBridge } from "../../entrypoints/aws";
 import { useStores } from "../../store";
 
 export default observer(() => {
-  const { aws, component } = useStores();
+  const { aws } = useStores();
   const [expanded, setExpanded] = React.useState<boolean | undefined>(
     undefined
   );

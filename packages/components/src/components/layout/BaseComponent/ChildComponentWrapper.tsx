@@ -16,10 +16,8 @@ export default (props: Props) => {
 
   useEffect(() => {
     if (props.selected) {
-      console.log("adding event listener");
       ref.current?.addEventListener("wheel", listener);
     } else {
-      console.log("removing event listener");
       ref.current?.removeEventListener("wheel", listener);
     }
 

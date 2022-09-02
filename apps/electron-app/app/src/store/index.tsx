@@ -2,10 +2,10 @@ import React from "react";
 import { AwsStore } from "./AwsStore";
 import { aws, ssoBridge } from "../entrypoints/aws";
 import { ComponentStore } from "./ComponentStore";
-import { DynamoStore } from "./DynamoStore";
 import { LayoutStore } from "./LayoutStore";
 import { clipboard } from "../entrypoints/clipboard";
 import { ComponentRendererStore } from "./ComponentRendererStore";
+import { WelcomeStore } from "./WelcomeStore";
 
 const globalStores = {
   aws: new AwsStore(ssoBridge, clipboard),
@@ -19,7 +19,7 @@ const domainStores = {
     globalStores.component,
     globalStores.layout
   ),
-  dynamo: new DynamoStore(aws),
+  welcome: new WelcomeStore(),
 };
 
 export const useStores = () => React.useContext(storesContext);
