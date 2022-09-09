@@ -57,6 +57,8 @@ Entries descending by default and at the top? DONE
 Wizard on landing DONE
 Expiry need to tick over without a refresh - DONE
 Clicking onSelect on inspector should not toggfle it should just set selected - DONE
+Lambda component needs to have a max limit with ellipsis - DONE
+Title on minimal component menu to show org - not part of the component options. - DONE
 
 # Notes
 
@@ -71,8 +73,6 @@ over time and "pop" in.
 
 ## TODO
 
-Lambda component needs to have a max limit with ellipsis
-Title on minimal component menu to show org
 Auto scroll is affecting parent window. Ahhhhhhh mother fucker. - Just use a scrollTo position
 Auto update
 

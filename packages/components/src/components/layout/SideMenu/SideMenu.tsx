@@ -361,7 +361,9 @@ const OrgDropdown = ({
   small?: boolean;
 }) => {
   const authorised = org.authorisedUntil && +org.authorisedUntil > +new Date();
-  const items: any[] = [];
+  const items: any[] = [
+    { text: org.nickname || org.ssoStartUrl, id: "org", disabled: true },
+  ];
 
   if (!authorised) {
     items.push({
