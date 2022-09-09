@@ -6,6 +6,8 @@ export class WelcomeStore {
   constructor() {
     makeAutoObservable(this);
 
+    // window.localStorage.removeItem("welcome");
+
     const stepStr = JSON.parse(window.localStorage.getItem("welcome") || "0");
 
     try {

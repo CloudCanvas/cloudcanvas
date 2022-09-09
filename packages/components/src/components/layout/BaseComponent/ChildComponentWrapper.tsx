@@ -31,11 +31,13 @@ export default (props: Props) => {
       style={{
         display: "flex",
         flex: 1,
-        overflow: "scroll",
+        overflowX: "hidden",
+        overflowY: "scroll",
         marginBottom: 3,
         cursor: "default",
         overscrollBehavior: props.selected ? "contain" : "auto",
       }}
+      onClick={(e) => e.stopPropagation()}
       id="componentBody"
       className="componentBody"
     >

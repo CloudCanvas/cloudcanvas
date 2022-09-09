@@ -14,28 +14,28 @@ export default {
 const defaultProps: SideMenuProps = {
   state: { organisations: sampleOrgs, expanded: true },
   dispatch: {
-    authorise: async (accessPair) => {
+    authorise: async (_accessPair) => {
       window.alert("authorise");
     },
-    grabCredentials: async (accessPair) => {
+    grabCredentials: async (_accessPair) => {
       window.alert("grabCredentials");
     },
-    onChangeExpanded: async (expanded) => {
+    onChangeExpanded: async (_expanded) => {
       window.alert("onChangeExpanded");
     },
-    onRenameOrg: async (organisation) => {
+    onRenameOrg: async (_organisation) => {
       window.alert("onRenameOrg");
     },
-    onRefreshOrg: async (organisation) => {
+    onRefreshOrg: async (_organisation) => {
       window.alert("onRenameOrg");
     },
-    onDeleteOrg: async (organisation) => {
+    onDeleteOrg: async (_organisation) => {
       window.alert("onDeleteOrg");
     },
     onAddOrg: async () => {
       window.alert("onAddOrg");
     },
-    onRenameAccount: async (organisation) => {
+    onRenameAccount: async (_organisation) => {
       window.alert("onRenameAccount");
     },
   },
@@ -56,9 +56,22 @@ const Template =
 // Reuse that template for creating different stories
 
 export const StandardMenu = Template(defaultProps);
+
 export const MinimisedStandardMenu = Template({
   ...defaultProps,
   state: { ...defaultProps.state, expanded: false },
+});
+
+export const MinimisedStandardMenuWithExpriringCreds = Template({
+  ...defaultProps,
+  state: {
+    ...defaultProps.state,
+    expanded: false,
+    organisations: sampleOrgs.map((so) => ({
+      ...so,
+      authorisedUntil: new Date(+new Date() + 1000),
+    })),
+  },
 });
 
 export const StandardMenuAtWidth = Template(defaultProps, 400);

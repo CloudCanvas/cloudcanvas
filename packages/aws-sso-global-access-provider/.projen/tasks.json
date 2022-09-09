@@ -40,6 +40,14 @@
       ],
       "condition": "! git log --oneline -1 | grep -q \"chore(release):\""
     },
+    "clean": {
+      "name": "clean",
+      "steps": [
+        {
+          "exec": "rm -rf .turbo && rm -rf node_modules && rm -rf lib"
+        }
+      ]
+    },
     "clobber": {
       "name": "clobber",
       "description": "hard resets to HEAD of origin and cleans the local repo",

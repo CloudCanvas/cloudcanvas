@@ -1,0 +1,139 @@
+.aws-ui__table {
+  min-width: 100%;
+  width: 100%;
+  table-layout: fixed;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.awsui-table-row {
+  caption-side: top;
+  cursor: auto;
+  direction: ltr;
+  empty-cells: show;
+  font-stretch: normal;
+  hyphens: none;
+  letter-spacing: normal;
+  list-style: disc outside none;
+  orphans: 2;
+  tab-size: 8;
+  text-align-last: auto;
+  text-shadow: none;
+  text-transform: none;
+  visibility: visible;
+  widows: 2;
+  word-spacing: normal;
+  font-size: 12px;
+  color: #16191f;
+  border-spacing: 0;
+  box-sizing: border-box;
+}
+
+.awsui-table-row--odd {
+  background: rgba(0, 0, 0, 0.05) !important;
+}
+
+.logs__log-events-table__cell {
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  padding: 6px 10px;
+  cursor: pointer;
+  display: inline-block;
+  margin-bottom: -4px;
+}
+
+.logs__log-events-table__timestamp-cell {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.logs__log-events-table__formatted-message {
+  overflow: visible;
+  padding-top: 8px;
+  padding-bottom: 12px;
+  white-space: break-spaces;
+}
+.logs__log-events-table__cell_message {
+  -webkit-text-size-adjust: 100%;
+  caption-side: top;
+  direction: ltr;
+  empty-cells: show;
+  font-stretch: normal;
+  hyphens: none;
+  letter-spacing: normal;
+  list-style: disc outside none;
+  orphans: 2;
+  tab-size: 8;
+  text-align-last: auto;
+  text-shadow: none;
+  text-transform: none;
+  visibility: visible;
+  widows: 2;
+  word-spacing: normal;
+  color: #16191f;
+  border-spacing: 0;
+  word-wrap: break-word;
+  white-space: nowrap;
+}
+
+.logs__log-events-table__cursor-text {
+  cursor: pointer;
+}
+
+.logs__log-events-table__inspector span {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.logs__log-events-table__inspector li {
+  background: inherit !important;
+}
+
+.item {
+  transition: scale 0.25s, opacity 0.25s;
+  transition-delay: 0.1s;
+  transition-timing-function: ease-in;
+  scale: 0.99;
+  opacity: 0;
+}
+
+.item-enter {
+  scale: 1;
+  opacity: 1;
+}
+
+.logs__log-events-table__inspector > ol > li > div {
+  display: none;
+}
+
+.pill {
+  margin-right: 8px;
+  border-radius: 10px;
+  padding: 2px 10px;
+  font-weight: bold;
+  background-color: #ddeddf;
+  color: #8cbe8b;
+}
+
+.okay-pill {
+  background-color: #ddeddf;
+  color: #8cbe8b;
+}
+
+.info-pill {
+  background-color: #010101;
+  color: #ffffff;
+}
+
+.warning-pill {
+  background-color: #f0e4dc;
+  color: #cca387;
+}
+
+.error-pill {
+  background-color: #f0e4dc;
+  color: #cca387;
+}

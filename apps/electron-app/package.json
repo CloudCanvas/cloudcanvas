@@ -6,6 +6,8 @@
   "main": "app/electron/main.js",
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf app/dist",
+    "installDeps": "yarn",
     "audit-app": "npx electronegativity -i ./ -x LimitNavigationGlobalCheck,PermissionRequestHandlerGlobalCheck",
     "translate": "node ./app/localization/translateMissing.js",
     "dev-server": "cross-env NODE_ENV=development webpack serve --config ./webpack.development.js > dev-scripts/webpack-dev-server.log 2> dev-scripts/webpack-dev-server-error.log",
@@ -14,6 +16,7 @@
     "prod-build": "cross-env NODE_ENV=production npx webpack --mode=production --config ./webpack.production.js",
     "prod": "npm run prod-build && electron .",
     "pack": "electron-builder --dir",
+    "clkean": "electron-builder --dir",
     "dist": "npm run test && npm run prod-build && electron-builder",
     "dist-mac": "npm run test && npm run prod-build && electron-builder --mac",
     "dist-linux": "npm run test && npm run prod-build && electron-builder --linux",

@@ -7,6 +7,10 @@ export type ViewProps = {
   children: React.ReactNode;
 };
 
+/**
+ * Follows the scroll of the container if certain conditins are met
+ * @returns
+ */
 export const ScrollFollower = ({
   children,
   dataCount,
@@ -16,12 +20,20 @@ export const ScrollFollower = ({
 
   const [atBottom, setAtBottom] = React.useState(true);
 
+  /**
+   * Here we can't use scrollIntoView as it messes with the parent view scroll which is horrle.
+   * So we have to use
+   */
   useEffect(() => {
     if (atBottom || !selected) {
-      bottomRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "end",
-      });
+      const location = bottomRef.current?.getBoundingClientRect();
+      // bottomRef.current?.scrollIntoView({
+      //   behavior: "smooth",
+      //   block: "nearest",
+      //   inline: "nearest",
+      // });
+      console.log(`Scroll to ${location?.y}`);
+      // TODO Need to send this request to the owner of scroll really
     }
   }, [dataCount]);
 

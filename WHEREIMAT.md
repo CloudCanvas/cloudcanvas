@@ -55,6 +55,8 @@ Component re-architecture is done. Now don't need to really do anything to have 
 Get s3o lambda component done (DONE)
 Entries descending by default and at the top? DONE
 Wizard on landing DONE
+Expiry need to tick over without a refresh - DONE
+Clicking onSelect on inspector should not toggfle it should just set selected - DONE
 
 # Notes
 
@@ -69,16 +71,25 @@ over time and "pop" in.
 
 ## TODO
 
-Expiry need to tick over without a refresh
-
 Lambda component needs to have a max limit with ellipsis
-Clicking onSelect on inspector should not toggfle it should just set selected
+Title on minimal component menu to show org
+Auto scroll is affecting parent window. Ahhhhhhh mother fucker. - Just use a scrollTo position
 Auto update
-
-Auto scroll is affecting parent window. Ahhhhhhh mother fucker.
 
 ## Next release
 
 Launch browser (disabled if not authenticated)
 Launch a terminal (disabled if not authenticated)
 Edit a component's props
+
+Sometimes you have to build something to see if it works.
+
+The first iteration of Cloud Canvas has a few flaws I learned as I've used.
+
+I have a redesign I feel addresses these but I'll releaser what I have and see if the users have the same issues.
+
+# TODO
+
+Finish up LogEntry
+Web3 jobs
+Sensive AppSync issue

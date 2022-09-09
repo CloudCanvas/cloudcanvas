@@ -8,9 +8,12 @@
   ],
   "scripts": {
     "build": "turbo run build",
+    "clean": "turbo run clean",
     "compile": "turbo run compile",
+    "installDeps": "turbo run installDeps",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
+    "projen": "turbo run projen",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {

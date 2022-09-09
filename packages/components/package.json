@@ -30,8 +30,10 @@
   },
   "scripts": {
     "ladle": "ladle serve",
+    "installDeps": "yarn",
     "build": "rollup -c --context window",
-    "compile": "tsc"
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf lib",
+    "compile": "rollup -c --context window"
   },
   "peerDependencies": {
     "@cloudscape-design/components": "^3.0.15",

@@ -5,12 +5,14 @@ import {
   DescribeStreamCommand,
   GetRecordsCommand,
   GetRecordsCommandOutput,
+  OperationType,
 } from "@aws-sdk/client-dynamodb-streams";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { ShardIterator } from "aws-sdk/clients/dynamodbstreams";
 import { DynamoRecord, Model, Update } from "./model";
 import { DataFetcher } from "../../../ports/DataFetcher";
 import { CustomData } from "../../form";
+import BaseModel from "../shared/BaseModel";
 
 const doLog = false;
 
@@ -183,8 +185,8 @@ const makeDynamoDbStreamManager = ({
       const mapped = records.map(
         (r) =>
           ({
-            at: r.dynamodb?.ApproximateCreationDateTime || new Date(),
-            type: r.eventName,
+            at: +(r.dynamodb?.ApproximateCreationDateTime || new Date()),
+            type: typeForOperation(r.eventName as any),
             key: r.dynamodb?.Keys ? unmarshall(r.dynamodb?.Keys) : undefined,
             newImage: r.dynamodb?.NewImage
               ? unmarshall(r.dynamodb?.NewImage)
@@ -192,10 +194,15 @@ const makeDynamoDbStreamManager = ({
             oldImage: r.dynamodb?.OldImage
               ? unmarshall(r.dynamodb?.OldImage)
               : undefined,
-          } as DynamoRecord)
+          } as Omit<DynamoRecord, "message">)
       );
 
-      const sorted = mapped.sort((a, b) => +b.at - +a.at);
+      const withMessage = mapped.map((m) => ({
+        ...m,
+        message: JSON.stringify(m.newImage || m.oldImage || m.key),
+      }));
+
+      const sorted = withMessage.sort((a, b) => +b.at - +a.at);
 
       initialCall = false;
 
@@ -227,7 +234,7 @@ export const makeDynamoStreamController = (
       return records;
     },
     reduce: (current, update) => {
-      const newModel = [...update, ...current];
+      const newModel = [...current, ...update];
       return newModel;
       // if (newModel.length > 0) {
       //   return newModel.slice(newModel.length - 100);
@@ -236,4 +243,17 @@ export const makeDynamoStreamController = (
       // }
     },
   };
+};
+
+const typeForOperation = (op?: OperationType): BaseModel["type"] => {
+  switch (op) {
+    case "INSERT":
+      return "okay";
+    case "MODIFY":
+      return "warning";
+    case "REMOVE":
+      return "warning";
+    default:
+      return "info";
+  }
 };

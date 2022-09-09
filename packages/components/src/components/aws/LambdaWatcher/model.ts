@@ -1,6 +1,8 @@
-import { OutputLogEvent } from "@aws-sdk/client-cloudwatch-logs";
+import BaseModel from "../shared/BaseModel";
 
-export type LogEntry = OutputLogEvent & { id: string };
+export interface LogEntry extends BaseModel {
+  id: string;
+}
 
 export type Update = LogEntry[];
 export type Model = LogEntry[];

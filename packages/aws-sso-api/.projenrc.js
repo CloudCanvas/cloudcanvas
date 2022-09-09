@@ -21,6 +21,7 @@ const project = new typescript.TypeScriptProject({
   },
   scripts: {
     integration: "npx jest -c jest.integration.js --runInBand",
+    clean: "rm -rf .turbo && rm -rf node_modules && rm -rf lib",
   },
   devDeps: ["@types/crypto-js", "@types/glob", "open"],
   deps: [

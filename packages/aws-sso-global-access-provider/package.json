@@ -1,8 +1,10 @@
 {
   "name": "@cloudcanvas/aws-sso-global-access-provider",
   "scripts": {
+    "installDeps": "yarn",
     "build": "npx projen build",
     "bump": "npx projen bump",
+    "clean": "npx projen clean",
     "clobber": "npx projen clobber",
     "compile": "npx projen compile",
     "default": "npx projen default",

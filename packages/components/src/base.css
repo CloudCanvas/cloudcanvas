@@ -20,16 +20,3 @@
 .inspector li {
   background: inherit !important;
 }
-
-.item {
-  transition: scale 0.25s, opacity 0.25s;
-  transition-delay: 0.1s;
-  transition-timing-function: ease-in;
-  scale: 0.99;
-  opacity: 0;
-}
-
-.item-enter {
-  scale: 1;
-  opacity: 1;
-}

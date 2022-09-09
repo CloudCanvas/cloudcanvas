@@ -129,6 +129,7 @@ export default (props: MainCanvasProps) => {
         width: "100%",
         position: "absolute",
         background: "#f6f4f4",
+        overflow: "hidden",
       }}
     >
       <div
@@ -139,6 +140,7 @@ export default (props: MainCanvasProps) => {
           background: "white",
           border: "2px dashed black",
           position: "absolute",
+          overflow: "hidden",
         }}
         onClick={() => {
           props.dispatch.unselectAllComponents();

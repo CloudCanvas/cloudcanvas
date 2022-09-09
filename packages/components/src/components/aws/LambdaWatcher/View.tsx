@@ -1,18 +1,14 @@
 import React, { useEffect, useMemo } from "react";
-import { Inspector } from "react-inspector";
 import "./View.css";
-import { dateToLogStr } from "../../../services/DateService";
-import { topAlignedRow } from "../../../utils/layoutUtils";
-import TextContent from "@cloudscape-design/components/text-content";
-import SpaceBetween from "@cloudscape-design/components/space-between";
 import { createStreamMachine } from "../../../machines/dataFetcherMachine";
 import { useMachine } from "@xstate/react";
 import EmptyDataPlaceholder from "../../base/EmptyDataPlaceholder/EmptyDataPlaceholder";
-import { LogEntry, Model, Update } from "./model";
+import { Model, Update } from "./model";
 import { makeLambdaStreamController } from "./controller";
 import { AwsComponentProps } from "../../../domain";
 import { CustomData } from "../../form";
 import ScrollFollower from "../../shared/ScrollFollower";
+import LogEntries from "../../layout/LogEntries/LogEntries";
 
 export default (props: AwsComponentProps<CustomData>) => {
   // Create the machine to manage streaming data.
@@ -67,6 +63,7 @@ export default (props: AwsComponentProps<CustomData>) => {
       <EmptyDataPlaceholder
         playing={props.playing}
         authorised={props.authorised}
+        message="Listening for updates, logs can take a few seconds to sync to cloudwatch.."
       />
     );
   }
@@ -88,94 +85,12 @@ export type ViewProps = {
 export const View = ({ data, selected, setSelected }: ViewProps) => {
   return (
     <ScrollFollower dataCount={data.length} selected={selected}>
-      {data.map((item, index) => (
-        <div
-          key={item.id}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            background: index % 2 === 0 ? "white" : "#f2f2f2",
-          }}
-        >
-          <Item key={item.id} r={item} selFn={setSelected} />
-        </div>
-      ))}
+      <LogEntries
+        state={{
+          entries: data,
+        }}
+        dispatch={{ selFn: setSelected }}
+      />
     </ScrollFollower>
   );
-};
-
-const Item = React.memo(({ r, selFn }: { r: LogEntry; selFn: () => void }) => {
-  // TODO Use ReactCSSTransition stuff for this.
-  const itemRef = React.useCallback((node: HTMLDivElement) => {
-    if (!node) return;
-
-    setTimeout(() => {
-      node.className = `${node.className} item-enter`;
-    }, 5);
-  }, []);
-
-  return (
-    <div
-      ref={itemRef}
-      key={r.id}
-      style={{
-        padding: 8,
-        flexDirection: "row",
-        ...topAlignedRow,
-      }}
-      className="inspector item"
-    >
-      <TextContent>
-        <SpaceBetween direction="horizontal" size="xs">
-          <p>
-            <small style={{ color: "rgb(22,25,31)" }}>
-              {dateToLogStr(new Date(r.timestamp!))}
-            </small>
-          </p>
-          <MessageOrObject msg={r.message || ""} selFn={selFn} />
-        </SpaceBetween>
-      </TextContent>
-    </div>
-  );
-});
-
-const tryParse = (possibleJSON: string) => {
-  try {
-    const parsed = JSON.parse(possibleJSON);
-    return {
-      parsed,
-      str: possibleJSON,
-    };
-  } catch (err) {
-    return {
-      parsed: undefined,
-      str: possibleJSON,
-    };
-  }
-};
-
-const MessageOrObject = ({
-  msg,
-  selFn,
-}: {
-  msg: string;
-  selFn: () => void;
-}) => {
-  const { parsed, str } = tryParse(msg);
-
-  if (parsed) {
-    return (
-      <div onClick={selFn}>
-        <Inspector theme="chromeLight" table={false} data={parsed} />
-      </div>
-    );
-  } else {
-    return (
-      <TextContent>
-        <p>
-          <small style={{ color: "rgb(22,25,31)" }}>{str}</small>
-        </p>
-      </TextContent>
-    );
-  }
 };

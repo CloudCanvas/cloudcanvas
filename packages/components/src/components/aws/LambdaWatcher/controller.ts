@@ -1,7 +1,6 @@
 import { AWS } from "@cloudcanvas/types";
 import { v4 } from "uuid";
 import {
-  OutputLogEvent,
   DescribeLogStreamsCommand,
   GetLogEventsCommand,
 } from "@aws-sdk/client-cloudwatch-logs";
@@ -192,8 +191,13 @@ const makeCloudwatchLogStreamManager = ({
       const allEventsAscending = logMessagesResponse
         .flatMap((lmr) => lmr.events)
         .filter((e) => e.timestamp)
-        .sort((a, b) => b.timestamp! - a.timestamp!)
-        .map((r) => ({ ...r, id: v4() }));
+        .sort((a, b) => a.timestamp! - b.timestamp!)
+        .map((r) => ({
+          at: r.timestamp || +new Date(),
+          message: r.message || "",
+          id: v4(),
+        }))
+        .map((m) => augmentModel(m));
 
       return allEventsAscending;
     },
@@ -219,7 +223,34 @@ export const makeLambdaStreamController = (
       return records;
     },
     reduce: (current, update) => {
-      return [...update, ...current];
+      return [...current, ...update];
     },
   };
+};
+
+const augmentModel = (entry: LogEntry): LogEntry => {
+  if (entry?.message.startsWith("START")) {
+    return {
+      ...entry,
+      type: "okay",
+      highlightText: "START",
+      message: entry.message.replace("START RequestId: ", ""),
+    };
+  } else if (entry?.message.startsWith("END")) {
+    return {
+      ...entry,
+      type: "warning",
+      highlightText: "END",
+      message: entry.message.replace("END RequestId: ", ""),
+    };
+  } else if (entry?.message.startsWith("REPORT")) {
+    return {
+      ...entry,
+      type: "info",
+      highlightText: "REPORT",
+      message: entry.message.replace("REPORT RequestId: ", ""),
+    };
+  } else {
+    return entry;
+  }
 };
