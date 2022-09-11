@@ -111,17 +111,30 @@ export default () => {
                 return [
                   {
                     id: Math.random() + "",
-                    at: new Date(),
-                    type: "INSERT",
+                    at: +new Date(),
+                    dType: "INSERT",
                     key: {
                       id: "e0db8e08-e089-42a8-a11e-8dc0c42024ac",
                       ts: +new Date(),
                     },
+                    message: JSON.stringify({
+                      id: "e0db8e08-e089-42a8-a11e-8dc0c42024ac",
+                      ts: +new Date(),
+                    }),
                   } as DynamoRecord,
                   {
                     id: Math.random() + "",
-                    at: new Date(),
-                    type: "INSERT",
+                    at: +new Date(),
+                    dType: "INSERT",
+                    message: JSON.stringify({
+                      id: "e0db8e08-e089-42a8-a11e-8dc0c42024ac",
+                      ts: +new Date(),
+                      a: v4(),
+                      b: v4(),
+                      c: v4(),
+                      d: v4(),
+                      e: v4(),
+                    }),
                     key: {
                       id: "e0db8e08-e089-42a8-a11e-8dc0c42024ac",
                       ts: +new Date(),

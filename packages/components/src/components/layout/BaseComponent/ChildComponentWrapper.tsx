@@ -32,7 +32,7 @@ export default (props: Props) => {
         display: "flex",
         flex: 1,
         overflowX: "hidden",
-        overflowY: "scroll",
+        overflowY: "hidden",
         marginBottom: 3,
         cursor: "default",
         overscrollBehavior: props.selected ? "contain" : "auto",

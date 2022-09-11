@@ -136,6 +136,7 @@
     "bulma": "^0.9.4",
     "debounce": "^1.2.1",
     "electron-devtools-installer": "^3.2.0",
+    "electron-updater": "^5.2.1",
     "i18next": "^21.8.11",
     "i18next-electron-fs-backend": "^2.0.0",
     "i18next-fs-backend": "^1.1.4",

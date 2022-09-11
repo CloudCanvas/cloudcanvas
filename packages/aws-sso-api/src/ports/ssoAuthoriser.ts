@@ -7,7 +7,8 @@ export interface SsoAuthoriser {
   ) => Promise<SSOSession | undefined>;
   getFederatedAccessToken: (
     startUrl: string,
-    region: string
+    region: string,
+    force?: boolean
   ) => Promise<SSOSession>;
   getAccountAccessToken: (
     session: SSOSession,

@@ -17,6 +17,7 @@ export const ScrollFollower = ({
   selected,
 }: ViewProps) => {
   const bottomRef = useRef<HTMLDivElement | null>();
+  const scrollRef = useRef<HTMLDivElement | null>();
 
   const [atBottom, setAtBottom] = React.useState(true);
 
@@ -26,19 +27,21 @@ export const ScrollFollower = ({
    */
   useEffect(() => {
     if (atBottom || !selected) {
-      const location = bottomRef.current?.getBoundingClientRect();
-      // bottomRef.current?.scrollIntoView({
-      //   behavior: "smooth",
-      //   block: "nearest",
-      //   inline: "nearest",
-      // });
-      console.log(`Scroll to ${location?.y}`);
-      // TODO Need to send this request to the owner of scroll really
+      setTimeout(() => {
+        scrollRef.current?.scrollTo({
+          top: 100000000,
+          behavior: "smooth",
+        });
+      }, 0);
     }
   }, [dataCount]);
 
   return (
-    <div style={{ width: "100%" }}>
+    <div
+      style={{ width: "100%", height: "100%", overflow: "scroll" }}
+      // @ts-ignore
+      ref={scrollRef}
+    >
       {children}
 
       <AtBottomWatcher setAtBottom={setAtBottom} ref={bottomRef} />

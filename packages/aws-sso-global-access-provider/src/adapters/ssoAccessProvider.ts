@@ -145,7 +145,8 @@ export const makeSsoAccessProvider = ({
   const refreshOrg = async (org: Organisation) => {
     const federatedAccess = await authoriser.getFederatedAccessToken(
       org.ssoStartUrl,
-      org.ssoRegion
+      org.ssoRegion,
+      true
     );
 
     const details = await fetchAllAccountsAndRoles(federatedAccess);
@@ -335,7 +336,8 @@ export const makeSsoAccessProvider = ({
       // Ensure we have a valid session
       const federatedAccess = await authoriser.getFederatedAccessToken(
         authOrg.ssoStartUrl,
-        authOrg.ssoRegion
+        authOrg.ssoRegion,
+        true
       );
 
       if (!federatedAccess) {

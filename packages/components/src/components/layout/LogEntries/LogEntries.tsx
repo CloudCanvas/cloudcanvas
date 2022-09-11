@@ -1,8 +1,9 @@
+import React, { useEffect, useId } from "react";
 import { Icon } from "@cloudscape-design/components";
-import React, { useId } from "react";
 import { Inspector } from "react-inspector";
 import { dateToLogStr } from "../../../services/DateService";
 import BaseModel from "../../aws/shared/BaseModel";
+import { useSpring, animated } from "@react-spring/web";
 import "./LogEntries.css";
 
 export type LogEntries = {
@@ -55,27 +56,34 @@ export default React.memo((props: LogEntriesProps) => {
 const LogEntry = React.memo(({ entry, i }: { entry: BaseModel; i: number }) => {
   const [expanded, setExpanded] = React.useState(false);
 
+  const [open, toggle] = React.useState(false);
+  const springProps = useSpring({
+    scale: open ? 1 : 0.99,
+    opacity: open ? 1 : 0,
+    height: open ? 32 : 0,
+  });
+
   const [width, setWidth] = React.useState(0);
-
-  const rowRef = React.useCallback((node: HTMLTableRowElement) => {
-    setWidth(node?.getBoundingClientRect().width);
-    if (!node) return;
-
-    setTimeout(() => {
-      node.className = `${node.className} item-enter`;
-    }, 5);
-  }, []);
 
   const onClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.stopPropagation();
     setExpanded(!expanded);
   };
 
+  const rowRef = React.useCallback((node: HTMLTableRowElement) => {
+    setWidth(node?.getBoundingClientRect().width);
+  }, []);
+
+  useEffect(() => {
+    toggle(true);
+  }, []);
+
   return (
-    <tr
+    <animated.tr
       className={`awsui-table-row item ${
         i % 2 === 1 ? "awsui-table-row--odd" : ""
       }`}
+      style={springProps}
       ref={rowRef}
     >
       <td>
@@ -137,7 +145,7 @@ const LogEntry = React.memo(({ entry, i }: { entry: BaseModel; i: number }) => {
         </span>
       </td>
       <td></td>
-    </tr>
+    </animated.tr>
   );
 });
 

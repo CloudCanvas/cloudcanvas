@@ -21,7 +21,7 @@ const AtBottomWatcher = React.forwardRef(
 
     return (
       // @ts-ignore
-      <div ref={forwardRef} style={{ height: 10 }} className="at-bottom">
+      <div ref={forwardRef} style={{ height: 20 }} className="at-bottom">
         <div ref={innerRef} />
       </div>
     );

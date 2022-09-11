@@ -62,7 +62,11 @@ export const makeSsoAuthoriser = (ports: Ports): SsoAuthoriser => {
         return undefined;
       }
     },
-    getFederatedAccessToken: async (federatedUrl, region) => {
+    getFederatedAccessToken: async (federatedUrl, region, force) => {
+      if (force) {
+        federatedAccessDict[federatedUrl] = undefined;
+      }
+
       const existing = federatedAccessDict[federatedUrl];
 
       if (existing !== undefined && sessionIsValid(await existing)) {

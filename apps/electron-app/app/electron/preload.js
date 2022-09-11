@@ -80,8 +80,6 @@ contextBridge.exposeInMainWorld("api", {
     },
     authoriseOrg: async (ssoUrl) => {
       const response = await ipcRenderer.invoke("app:aws-authoriseOrg", ssoUrl);
-      console.log("authoriseOrg - response");
-      console.log(response);
       return response;
     },
     lightAuthorise: async (accessPair) => {
