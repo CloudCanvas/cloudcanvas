@@ -81,8 +81,6 @@ contextBridge.exposeInMainWorld("api", {
       return await ipcRenderer.invoke("app:config-fetch");
     },
     saveConfig: async (config) => {
-      console.log("config");
-      console.log(typeof config);
       return await ipcRenderer.invoke("app:config-save", config);
     },
   },

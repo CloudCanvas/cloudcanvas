@@ -31,9 +31,6 @@ export class ComponentStore {
   init = async () => {
     const config = await this.configManager.fetchConfig();
 
-    // TODO Why is this not coming back?
-    console.log(JSON.parse(config!));
-
     if (config) {
       runInAction(() => (this.components = JSON.parse(config).components));
     }
@@ -65,21 +62,17 @@ export class ComponentStore {
   addComponent = (component: Omit<AwsComponent<any, any>, "id">) => {
     this.components.push({ ...component, id: v4() });
 
-    console.log("Saving com");
     this.saveComponents();
   };
 
   copySelectedComponent = () => {
     if (!this.selected) return;
 
-    console.log("setting copied");
     this.copied = this.selected;
   };
 
   pasteSelectedComponent = () => {
     if (!this.copied) return;
-
-    console.log("setting pasted");
 
     this.components = [
       ...this.components,
