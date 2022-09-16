@@ -3,6 +3,7 @@ import { AccessCard } from "./aws";
 interface Component<T, P> {
   id: string;
   type: string;
+  title: string;
   state: {
     playing: boolean;
     selected: boolean;

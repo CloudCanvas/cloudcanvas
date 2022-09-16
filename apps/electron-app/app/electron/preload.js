@@ -1,6 +1,7 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 const fs = require("fs");
+const os = require("os");
 const i18nextBackend = require("i18next-electron-fs-backend");
 const Store = require("secure-electron-store").default;
 // const ContextMenu = require("secure-electron-context-menu").default;
@@ -73,7 +74,18 @@ contextBridge.exposeInMainWorld("api", {
       await ipcRenderer.invoke("copy-to-clipboard", text);
     },
   },
+  homeDir: os.homedir(),
   // Goto ports/aws.ts for typings
+  configManager: {
+    fetchConfig: async () => {
+      return await ipcRenderer.invoke("app:config-fetch");
+    },
+    saveConfig: async (config) => {
+      console.log("config");
+      console.log(typeof config);
+      return await ipcRenderer.invoke("app:config-save", config);
+    },
+  },
   aws: {
     access: async () => {
       return await ipcRenderer.invoke("app:aws-access");

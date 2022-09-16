@@ -1,5 +1,6 @@
 import { makeAutoObservable } from "mobx";
 import * as Component from "@cloudcanvas/components";
+import { AwsComponent } from "@cloudcanvas/types";
 import { BaseComponentProps } from "@cloudcanvas/components/lib/components/layout/BaseComponent";
 import { AwsStore } from "./AwsStore";
 import { ComponentStore } from "./ComponentStore";
@@ -16,7 +17,7 @@ export class ComponentRendererStore {
   }
 
   generateState = (
-    component: Component.Core.AwsComponent<any, any>
+    component: AwsComponent<any, any>
   ): BaseComponentProps["state"] => {
     const org = this.awsStore.orgForAcc(component.config.accountId);
     return {
@@ -30,7 +31,7 @@ export class ComponentRendererStore {
   };
 
   generateDispatch = (
-    component: Component.Core.AwsComponent<any, any>
+    component: AwsComponent<any, any>
   ): BaseComponentProps["dispatch"] => {
     const org = this.awsStore.orgForAcc(component.config.accountId);
 

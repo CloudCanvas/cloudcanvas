@@ -31,6 +31,14 @@ const {
   makeAwsConfigManager: makeAuthoriserConfigManager,
   makeSsoAuthoriser,
 } = require("@cloudcanvas/aws-sso-api");
+const { makeFileConfigManager } = require("@cloudcanvas/configuration-manager");
+
+const configManager = makeFileConfigManager({
+  homeDir: os.homedir(),
+});
+
+// TODO Put baclconst isDevLocal = isDev;
+const isDevLocal = true;
 
 autoUpdater.logger = console;
 // autoUpdater.logger.transports.file.level = "info";
@@ -140,7 +148,8 @@ async function createWindow() {
     height: 900,
     title: "Loading AWS Profiles...",
     webPreferences: {
-      devTools: isDev,
+      devTools: isDevLocal,
+      devTools: true,
       nodeIntegration: false,
       nodeIntegrationInWorker: false,
       nodeIntegrationInSubFrames: false,
@@ -170,7 +179,7 @@ async function createWindow() {
   store.mainBindings(ipcMain, win, fs, callback);
 
   // Sets up bindings for our custom context menu
-  ContextMenu.mainBindings(ipcMain, win, Menu, isDev, {
+  ContextMenu.mainBindings(ipcMain, win, Menu, isDevLocal, {
     loudAlertTemplate: [
       {
         id: "loudAlert",
@@ -474,6 +483,17 @@ ipcMain.handle("app:aws-provideNickname", async (_event, nickname, ssoUrl) => {
 });
 
 /**
+ * Save config
+ */
+ipcMain.handle("app:config-fetch", async (_event) => {
+  return await configManager.fetchConfig();
+});
+
+ipcMain.handle("app:config-save", async (_event, config) => {
+  await configManager.saveConfig(config);
+});
+
+/**
  * Clipboard
  */
 ipcMain.handle("copy-to-clipboard", async (_event, text) => {
@@ -515,7 +535,7 @@ ipcMain.on("show-context-menu", (event, args) => {
     });
   }
 
-  if (isDev) {
+  if (isDevLocal) {
     template.push({
       label: "Inspect",
       click: () => {

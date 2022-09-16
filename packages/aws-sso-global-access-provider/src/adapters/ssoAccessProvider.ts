@@ -101,7 +101,10 @@ export const makeSsoAccessProvider = ({
   };
 
   const refreshOrgs = async (): Promise<Access> => {
+    // Fetch orgs from Cloud Canvas cache file
     const cachedOrgs = await configManager.readAccessCacheFile(cachedFile);
+
+    // Fetch orgs from ~/.aws/config
     const awsConfigOrgs = await configManager.readYamlConfigFile(configFile);
 
     // Ensure we pickup any new additions to the config file
@@ -112,7 +115,7 @@ export const makeSsoAccessProvider = ({
           s.ssoStartUrl === cachedOrg.ssoStartUrl && !cachedOrg.logicallyDeleted
       );
 
-      const existingAccs = matchingOrg?.accounts || [];
+      const existingAccs = cachedOrg?.accounts || [];
 
       // The ones that are in matching org not in cachedOrg
       const missingRoles = (matchingOrg?.roles || []).filter(

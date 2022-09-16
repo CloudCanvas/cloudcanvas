@@ -2,14 +2,11 @@ import React from "react";
 import { Command } from "cmdk";
 import "../../base.css";
 import "./addResource.scss";
-import {
-  AwsComponent,
-  componentCatalog,
-  generateComponenEntry,
-} from "../../domain";
+import { componentCatalog, generateComponenEntry } from "../../domain";
 import {
   AccessCard,
   Account,
+  AwsComponent,
   AwsRegion,
   Organisation,
 } from "@cloudcanvas/types";

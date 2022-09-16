@@ -1,11 +1,13 @@
-import { makeAutoObservable, toJS } from "mobx";
+import { makeAutoObservable, runInAction, toJS } from "mobx";
 // @ts-ignore
 import { v4 } from "uuid";
-import * as Component from "@cloudcanvas/components";
+import { AwsComponent } from "@cloudcanvas/types";
 import { CANVAS_CENTER } from "../components/spatial/MainCanvasWrapper";
+import { ConfigManager } from "@cloudcanvas/configuration-manager";
+import { Config } from "../domain/config";
 
 type Update = {
-  state: Partial<Component.Core.AwsComponent<any, any>["state"]>;
+  state: Partial<AwsComponent<any, any>["state"]>;
 } & { id: string };
 /**
  * As we move an element around the canvas it get's translated.
@@ -15,30 +17,29 @@ type Update = {
  * Then when savng we place the lastX and lastY back into the x and y
  */
 export class ComponentStore {
-  components: Component.Core.AwsComponent<any, any>[] = [];
-  copied?: Component.Core.AwsComponent<any, any>;
+  components: AwsComponent<any, any>[] = [];
+  copied?: AwsComponent<any, any>;
 
   locationToAdd?: [number, number] = undefined;
 
-  constructor() {
+  constructor(private configManager: ConfigManager) {
     makeAutoObservable(this);
 
-    // window.localStorage.removeItem("components");
-
-    try {
-      this.components = JSON.parse(
-        window.localStorage.getItem("components") || "[]"
-      );
-      console.log("this.components");
-      console.log(toJS(this.components));
-    } catch (err) {
-      console.error(err);
-    }
+    this.init();
   }
 
-  addComponentFromModal = (
-    component: Component.Core.AwsComponent<any, any>
-  ) => {
+  init = async () => {
+    const config = await this.configManager.fetchConfig();
+
+    // TODO Why is this not coming back?
+    console.log(JSON.parse(config!));
+
+    if (config) {
+      runInAction(() => (this.components = JSON.parse(config).components));
+    }
+  };
+
+  addComponentFromModal = (component: AwsComponent<any, any>) => {
     const x = this.locationToAdd
       ? this.locationToAdd[0]
       : CANVAS_CENTER.x + 800;
@@ -61,11 +62,10 @@ export class ComponentStore {
     });
   };
 
-  addComponent = (
-    component: Omit<Component.Core.AwsComponent<any, any>, "id">
-  ) => {
+  addComponent = (component: Omit<AwsComponent<any, any>, "id">) => {
     this.components.push({ ...component, id: v4() });
 
+    console.log("Saving com");
     this.saveComponents();
   };
 
@@ -164,22 +164,26 @@ export class ComponentStore {
     this.locationToAdd = undefined;
   };
 
-  saveComponents = () => {
-    window.localStorage.setItem(
-      "components",
-      JSON.stringify(
-        this.components.map((c) => ({
-          ...c,
-          state: {
-            ...c.state,
-            selected: false,
-            layout: {
-              ...c.state.layout,
-              location: c.state.layout.lastLocation || c.state.layout.location,
-            },
-          },
-        }))
-      )
+  saveComponents = async () => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const update = this.components.map((c) => ({
+      ...c,
+      state: {
+        ...c.state,
+        selected: false,
+        layout: {
+          ...c.state.layout,
+          // Pop last location into location (we don't update location as translate manages it once the app is loaded)
+          location: c.state.layout.lastLocation || c.state.layout.location,
+        },
+      },
+    }));
+
+    await this.configManager.saveConfig(
+      JSON.stringify({
+        components: update,
+      })
     );
   };
 

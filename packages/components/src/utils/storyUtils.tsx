@@ -3,13 +3,11 @@ import {
   BaseComponentProps,
   ComponentStatus,
 } from "../components/layout/BaseComponent/BaseComponent";
-import { AwsComponent } from "../domain/core";
-
 import "bulma/css/bulma.css";
 import { DynamoWatcherCatalogComponent } from "../components/aws/DynamoWatcher/catalog";
 import { generateComponenEntry } from "../domain";
 import { CANVAS_CENTER } from "../components/spatial/MainCanvas";
-import { Organisation } from "@cloudcanvas/types";
+import { AwsComponent, Organisation } from "@cloudcanvas/types";
 
 export const allGoodStatus: ComponentStatus = {
   authorisation: "authorized",

@@ -19,8 +19,8 @@ export default observer(() => {
       });
 
       component.registerLocationToAdd([
-        event.data.location.actualLocationX,
-        event.data.location.actualLocationY,
+        event.data.location.actualLocationX + 100,
+        event.data.location.actualLocationY + 100,
       ]);
     });
   }, []);

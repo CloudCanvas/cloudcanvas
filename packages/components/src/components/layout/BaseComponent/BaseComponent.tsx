@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import "./BaseComponent.scss";
 import { Rnd } from "react-rnd";
-import { AwsComponent } from "../../../domain/core";
+import { AwsComponent } from "@cloudcanvas/types";
 import {
   TbPlugConnected,
   TbPlugConnectedX,
@@ -287,12 +287,12 @@ const PlayIcon = ({
   togglePlay: () => void;
 }) => {
   if (status.playing && status.authorisation === "authorized") {
-    return <TbPlayerPause color="green" onClick={togglePlay} />;
+    return <TbPlayerPlay color="green" onClick={togglePlay} />;
   }
   if (status.playing && status.authorisation === "expired") {
-    return <TbPlayerPause color="orange" onClick={togglePlay} />;
+    return <TbPlayerPlay color="orange" onClick={togglePlay} />;
   } else {
-    return <TbPlayerPlay color="black" onClick={togglePlay} />;
+    return <TbPlayerPause color="black" onClick={togglePlay} />;
   }
 };
 

@@ -1,6 +1,7 @@
 import { BaseComponent } from "@cloudcanvas/components";
 import { BaseComponentProps } from "@cloudcanvas/components/lib/components/layout/BaseComponent";
 import * as Components from "@cloudcanvas/components";
+import { AwsComponent } from "@cloudcanvas/types";
 import { observer } from "mobx-react-lite";
 import React, { memo } from "react";
 import ComponentKeyboardManager from "../../components/managers/ComponentKeyboardManager";
@@ -34,7 +35,7 @@ export default observer(() => {
 
 const ComponentWrapper = memo(
   observer(({ definition }: { definition: BaseComponentProps }) => {
-    const c = definition.state.component as Components.Core.AwsComponent<
+    const c = definition.state.component as AwsComponent<
       DynamoWatcherModel,
       DynamoWatcherCustomProps
     >;
@@ -68,10 +69,11 @@ const ComponentWrapper = memo(
     );
 
     if (Object.keys(diff).length > 0) {
-      console.log(
-        `Rerendering ${nextProps.definition.state.component.id} as state has changed;`
-      );
-      console.log(diff);
+      // TODO Don't re-render on zoom change
+      // console.log(
+      //   `Rerendering ${nextProps.definition.state.component.id} as state has changed;`
+      // );
+      // console.log(diff);
     }
 
     const equal = isEqual(

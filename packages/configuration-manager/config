@@ -1,0 +1,61 @@
+; [default]
+; region = ap-southeast-2
+; AWS_ACCESS_KEY_ID=AKIA6PASAXOWCR5UNZNA
+; AWS_SECRET_ACCESS_KEY=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
+
+[profile brianfoodytrader]
+aws_access_key_id=AKIA6PASAXOWCR5UNZNA
+aws_secret_access_key=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
+
+[profile bambooprod]
+role_arn = arn:aws:iam::053651923274:role/OrganizationAccountAccessRole
+source_profile = bamboo
+
+[profile sbrian]
+sso_start_url = https://d-90677e2e6d.awsapps.com/start
+sso_region = us-east-1
+sso_account_id = 532747402531
+sso_role_name = AdministratorAccess
+region = eu-central-1
+
+[profile bamboowork]
+sso_start_url = https://d-90677e2e6d.awsapps.com/start
+sso_region = us-east-1
+sso_account_id = 431781111075
+sso_role_name = AdministratorAccess
+region = us-east-2
+
+[profile trading]
+sso_start_url = https://d-90677e2e6d.awsapps.com/start
+sso_region = us-east-1
+sso_account_id = 994322725804
+sso_role_name = AdministratorAccess
+region = eu-central-1
+
+[profile sprod]
+sso_start_url = https://d-90677e2e6d.awsapps.com/start
+sso_region = us-east-1
+sso_account_id = 897386833887
+sso_role_name = AdministratorAccess
+region = eu-central-1
+
+[profile sdev]
+sso_start_url = https://d-90677e2e6d.awsapps.com/start
+sso_region = us-east-1
+sso_account_id = 838606223797
+sso_role_name = AdministratorAccess
+region = eu-central-1
+
+[profile splay]
+sso_start_url = https://d-90677e2e6d.awsapps.com/start
+sso_region = us-east-1
+sso_account_id = 334263444453
+sso_role_name = AdministratorAccess
+region = eu-central-1
+
+[profile spersonal]
+sso_start_url = https://d-90677e2e6d.awsapps.com/start
+sso_region = us-east-1
+sso_account_id = 532747402531
+sso_role_name = AdministratorAccess
+region = eu-central-1

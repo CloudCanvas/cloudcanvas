@@ -60,6 +60,7 @@ Clicking onSelect on inspector should not toggfle it should just set selected - 
 Lambda component needs to have a max limit with ellipsis - DONE
 Title on minimal component menu to show org - not part of the component options. - DONE
 Auto scroll is affecting parent window. Ahhhhhhh mother fucker. - Just use a scrollTo position - DONE
+Should be able to retry "authorise" - DONE
 
 # Notes
 
@@ -74,11 +75,18 @@ over time and "pop" in.
 
 ## TODO
 
-Auto update - todo -> https://github.com/iffy/electron-updater-example
-Should be able to retry "authorise"
+When authorised components do not immediately begin calling. Perhaops the aith status doesn't filter down?
+
+After losing internet and coming back it does not continue polling - IT LOOOKS LIKE THE ACCOUNTS WERE LOST
+
+Do not overwrite account names! Ties into above - DONE
+Weird white patch
 
 ## Next release
 
+Sitewise tracker
+Auto update - todo -> https://github.com/iffy/electron-updater-example
+Double click to zoom in selected, double click to zoom back out
 Launch browser (disabled if not authenticated)
 Launch a terminal (disabled if not authenticated)
 Edit a component's props

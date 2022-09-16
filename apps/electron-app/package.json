@@ -1,6 +1,6 @@
 {
   "name": "@cloudcanvas/electron-app",
-  "version": "19.0.1",
+  "version": "0.0.1",
   "description": "Electron app based on secure-electron-template.",
   "private": true,
   "main": "app/electron/main.js",
@@ -127,6 +127,7 @@
     "@cloudcanvas/aws-sso-global-access-provider": "*",
     "@cloudcanvas/aws-sso-sdk-wrapper": "*",
     "@cloudcanvas/components": "*",
+    "@cloudcanvas/configuration-manager": "*",
     "@cloudscape-design/components": "^3.0.18",
     "@cloudscape-design/global-styles": "^1.0.1",
     "@loadable/component": "^5.15.2",

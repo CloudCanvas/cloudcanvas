@@ -26,10 +26,17 @@ export const exec = async () => {
   });
 
   const access = await accessProvider.init();
-  console.log(access);
 
-  await accessProvider.authoriseOrg(access.organisations[0].ssoStartUrl);
-  await accessProvider.authoriseOrg(access.organisations[0].ssoStartUrl);
+  console.log(access.organisations[2].accounts.length);
+  const access2a = await accessProvider.authoriseOrg(
+    access.organisations[2].ssoStartUrl
+  );
+  console.log(access2a.organisations[2].accounts.length);
+
+  const access2b = await accessProvider.refreshOrg(
+    access.organisations[2].ssoStartUrl
+  );
+  console.log(access2b.organisations[2].accounts.length);
 
   await accessProvider.lightAuthorise({
     accountId: access.organisations[0].accounts[0].accountId,
@@ -45,4 +52,4 @@ export const exec = async () => {
   });
 };
 
-// exec();
+exec();

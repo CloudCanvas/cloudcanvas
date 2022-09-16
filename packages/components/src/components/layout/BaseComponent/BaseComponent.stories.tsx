@@ -1,8 +1,7 @@
 import React from "react";
 import BaseComponent, { BaseComponentProps } from "./BaseComponent";
 import { BaseStory, dcpZeroed } from "../../../utils/storyUtils";
-import { AwsComponent } from "../../../domain/core";
-import { CANVAS_CENTER } from "../../spatial/MainCanvas";
+import { AwsComponent } from "@cloudcanvas/types";
 
 export default {
   title: "components/layout/BaseComponent",
