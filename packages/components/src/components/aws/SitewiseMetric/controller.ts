@@ -51,7 +51,7 @@ const makeIotAliasStreamer = ({
   };
 };
 
-export const makeLambdaStreamController = (
+export const makeController = (
   props: Props<Model, Update>
 ): DataFetcher<Model, Update> => {
   const logStreamManager = makeIotAliasStreamer({

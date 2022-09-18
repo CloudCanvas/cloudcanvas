@@ -62,7 +62,7 @@ export const makeSsoAuthoriser = (ports: Ports): SsoAuthoriser => {
         return undefined;
       }
     },
-    getFederatedAccessToken: async (federatedUrl, region, force) => {
+    getFederatedAccessToken: async (federatedUrl, region, _force) => {
       // Don't think I need this
       // if (force) {
       //   federatedAccessDict[federatedUrl] = undefined;

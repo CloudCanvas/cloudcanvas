@@ -14,13 +14,18 @@ const fetchAllAliases = async (aws: AWS): Promise<string[]> => {
     const response: ListTimeSeriesCommandOutput = await aws.iotsitewise.send(
       new ListTimeSeriesCommand({
         nextToken,
+        maxResults: 250,
       })
     );
 
     nextToken = response.nextToken;
 
+    console.log("nextToken");
+    console.log(nextToken);
+
+    console.log(aliases.length);
+
     aliases.push(...(response.TimeSeriesSummaries || []).map((t) => t.alias!));
-    console.log(response);
   } while (!!nextToken);
 
   return aliases;
