@@ -3,6 +3,7 @@ import { CloudWatchClient } from "@aws-sdk/client-cloudwatch";
 import { CloudWatchLogsClient } from "@aws-sdk/client-cloudwatch-logs";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBStreamsClient } from "@aws-sdk/client-dynamodb-streams";
+import { IoTSiteWiseClient } from "@aws-sdk/client-iotsitewise";
 import { LambdaClient } from "@aws-sdk/client-lambda";
 import { S3Client } from "@aws-sdk/client-s3";
 
@@ -18,6 +19,7 @@ export type AWS = {
   dynamodb: DynamoDBClient;
   dynamodbstreams: DynamoDBStreamsClient;
   lambda: LambdaClient;
+  iotsitewise: IoTSiteWiseClient;
 };
 
 export class UnauthorisedError extends Error {

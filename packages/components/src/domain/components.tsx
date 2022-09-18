@@ -4,6 +4,7 @@ import { DynamoWatcherCatalogComponent } from "../components/aws/DynamoWatcher/c
 import { LambdaWatcherCatalogComponent } from "../components/aws/LambdaWatcher/catalog";
 import { v4 } from "uuid";
 import { CustomData } from "../components/form";
+import { SitewiseMetricCatalogComponent } from "../components/aws/SitewiseMetric/catalog";
 
 export interface AwsComponentProps<P> {
   selected: boolean;
@@ -63,4 +64,5 @@ export const generateComponenEntry = ({
 export const componentCatalog = [
   DynamoWatcherCatalogComponent,
   LambdaWatcherCatalogComponent,
+  SitewiseMetricCatalogComponent,
 ] as const;

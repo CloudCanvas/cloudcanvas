@@ -36,6 +36,7 @@ const project = new typescript.TypeScriptProject({
     "@aws-sdk/client-dynamodb",
     "@aws-sdk/client-dynamodb-streams",
     "@aws-sdk/client-lambda",
+    "@aws-sdk/client-iotsitewise",
     "@aws-sdk/client-s3",
     "@aws-sdk/lib-dynamodb",
     "@aws-sdk/util-dynamodb",
