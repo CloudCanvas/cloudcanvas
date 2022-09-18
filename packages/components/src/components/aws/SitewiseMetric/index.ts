@@ -1,2 +1,2 @@
-import LambdaWatcher from "./View";
-export default LambdaWatcher;
+import SitewiseMetric from "./View";
+export default SitewiseMetric;

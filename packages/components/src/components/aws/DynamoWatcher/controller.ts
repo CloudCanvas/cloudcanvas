@@ -12,7 +12,7 @@ import { ShardIterator } from "aws-sdk/clients/dynamodbstreams";
 import { DynamoRecord, Model, Update } from "./model";
 import { DataFetcher } from "../../../ports/DataFetcher";
 import { CustomData } from "../../form";
-import BaseModel from "../shared/BaseModel";
+import BaseLogModel from "../shared/BaseModel";
 
 const doLog = false;
 
@@ -245,7 +245,7 @@ export const makeDynamoStreamController = (
   };
 };
 
-const typeForOperation = (op?: OperationType): BaseModel["type"] => {
+const typeForOperation = (op?: OperationType): BaseLogModel["type"] => {
   switch (op) {
     case "INSERT":
       return "okay";

@@ -2,7 +2,7 @@ import React from "react";
 import LogEntries, { LogEntriesProps } from "./LogEntries";
 import "bulma/css/bulma.css";
 import SampleLogEntry from "./SampleLogEntry";
-import BaseModel from "../../aws/shared/BaseModel";
+import BaseLogModel from "../../aws/shared/BaseModel";
 
 export default {
   title: "components/layout/LogEntry",
@@ -27,7 +27,7 @@ const defaultProps: LogEntriesProps = {
 };
 
 // Create a master template for mapping args to render the DynamoWatcher component
-const Template = (entries?: BaseModel[]) => () =>
+const Template = (entries?: BaseLogModel[]) => () =>
   (
     <div
       className="template-wrapper"

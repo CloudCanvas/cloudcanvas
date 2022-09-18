@@ -1,4 +1,4 @@
-interface BaseModel {
+interface BaseLogModel {
   at: number;
 
   /**
@@ -12,4 +12,4 @@ interface BaseModel {
   message: string;
 }
 
-export default BaseModel;
+export default BaseLogModel;

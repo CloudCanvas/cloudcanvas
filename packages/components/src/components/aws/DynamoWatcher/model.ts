@@ -1,10 +1,10 @@
-import BaseModel from "../shared/BaseModel";
+import BaseLogModel from "../shared/BaseModel";
 
 export type DynamoData = {
   [key: string]: string | number | Object | boolean;
 };
 
-export interface DynamoRecord extends BaseModel {
+export interface DynamoRecord extends BaseLogModel {
   id: string;
   dType: "INSERT" | "MODIFY" | "REMOVE";
   key: DynamoData;

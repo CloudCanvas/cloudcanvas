@@ -7,8 +7,6 @@ import { Model, Update } from "./model";
 import { makeLambdaStreamController } from "./controller";
 import { AwsComponentProps } from "../../../domain";
 import { CustomData } from "../../form";
-import ScrollFollower from "../../shared/ScrollFollower";
-import LogEntries from "../../layout/LogEntries/LogEntries";
 
 export default (props: AwsComponentProps<CustomData>) => {
   // Create the machine to manage streaming data.
@@ -20,7 +18,11 @@ export default (props: AwsComponentProps<CustomData>) => {
           makeLambdaStreamController({
             config: {
               customData: props.customProps,
-              initialData: [],
+              initialData: {
+                from: new Date(+new Date() - 1000 * 60 * 60),
+                to: new Date(),
+                values: [],
+              },
             },
             ports: {
               aws: props.awsClient,
@@ -70,7 +72,7 @@ export default (props: AwsComponentProps<CustomData>) => {
 
   return (
     <View
-      data={streamState.context.data.slice(0, streamState.context.counter)}
+      data={streamState.context.data}
       selected={props.selected}
       setSelected={() => props.setSelected(true)}
     />
@@ -83,14 +85,6 @@ export type ViewProps = {
   setSelected: () => void;
 };
 export const View = ({ data, selected, setSelected }: ViewProps) => {
-  return (
-    <ScrollFollower dataCount={data.length} selected={selected}>
-      <LogEntries
-        state={{
-          entries: data,
-        }}
-        dispatch={{ selFn: setSelected }}
-      />
-    </ScrollFollower>
-  );
+  // TODO Show chart
+  return <div></div>;
 };

@@ -1,8 +1,8 @@
-import BaseModel from "../shared/BaseModel";
-
-export interface LogEntry extends BaseModel {
-  id: string;
+export interface TimeSeriesData {
+  from: Date;
+  to: Date;
+  values: { x: number; y: number }[];
 }
 
-export type Update = LogEntry[];
-export type Model = LogEntry[];
+export type Update = TimeSeriesData;
+export type Model = TimeSeriesData;

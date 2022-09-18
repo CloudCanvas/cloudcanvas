@@ -1,6 +1,6 @@
-import BaseModel from "../shared/BaseModel";
+import BaseLogModel from "../shared/BaseModel";
 
-export interface LogEntry extends BaseModel {
+export interface LogEntry extends BaseLogModel {
   id: string;
 }
 

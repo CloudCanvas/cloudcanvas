@@ -2,7 +2,7 @@ import React, { useEffect, useId } from "react";
 import { Icon } from "@cloudscape-design/components";
 import { Inspector } from "react-inspector";
 import { dateToLogStr } from "../../../services/DateService";
-import BaseModel from "../../aws/shared/BaseModel";
+import BaseLogModel from "../../aws/shared/BaseModel";
 import { useSpring, animated } from "@react-spring/web";
 import "./LogEntries.css";
 
@@ -21,7 +21,7 @@ export type LogEntries = {
 
 export type LogEntriesProps = {
   state: {
-    entries: BaseModel[];
+    entries: BaseLogModel[];
   };
   dispatch: {
     selFn: () => void;
@@ -53,101 +53,103 @@ export default React.memo((props: LogEntriesProps) => {
   );
 });
 
-const LogEntry = React.memo(({ entry, i }: { entry: BaseModel; i: number }) => {
-  const [expanded, setExpanded] = React.useState(false);
+const LogEntry = React.memo(
+  ({ entry, i }: { entry: BaseLogModel; i: number }) => {
+    const [expanded, setExpanded] = React.useState(false);
 
-  const [open, toggle] = React.useState(false);
-  const springProps = useSpring({
-    scale: open ? 1 : 0.99,
-    opacity: open ? 1 : 0,
-    height: open ? 32 : 0,
-  });
+    const [open, toggle] = React.useState(false);
+    const springProps = useSpring({
+      scale: open ? 1 : 0.99,
+      opacity: open ? 1 : 0,
+      height: open ? 32 : 0,
+    });
 
-  const [width, setWidth] = React.useState(0);
+    const [width, setWidth] = React.useState(0);
 
-  const onClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    event.stopPropagation();
-    setExpanded(!expanded);
-  };
+    const onClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+      event.stopPropagation();
+      setExpanded(!expanded);
+    };
 
-  const rowRef = React.useCallback((node: HTMLTableRowElement) => {
-    setWidth(node?.getBoundingClientRect().width);
-  }, []);
+    const rowRef = React.useCallback((node: HTMLTableRowElement) => {
+      setWidth(node?.getBoundingClientRect().width);
+    }, []);
 
-  useEffect(() => {
-    toggle(true);
-  }, []);
+    useEffect(() => {
+      toggle(true);
+    }, []);
 
-  return (
-    <animated.tr
-      className={`awsui-table-row item ${
-        i % 2 === 1 ? "awsui-table-row--odd" : ""
-      }`}
-      style={springProps}
-      ref={rowRef}
-    >
-      <td>
-        <span
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            height: 32,
-          }}
-          onClick={onClick}
-        >
+    return (
+      <animated.tr
+        className={`awsui-table-row item ${
+          i % 2 === 1 ? "awsui-table-row--odd" : ""
+        }`}
+        style={springProps}
+        ref={rowRef}
+      >
+        <td>
           <span
             style={{
-              transform: expanded ? "rotate(180deg)" : "rotate(90deg)",
-              transition: "transform 0.1s ease-in-out",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: 32,
             }}
+            onClick={onClick}
           >
-            <Icon name="caret-up" />
-          </span>
-        </span>
-      </td>
-      <td style={{ overflow: "visible", width: 80 }}>
-        <span>
-          <span className="logs__log-events-table__cell" onClick={onClick}>
-            <span className="logs__log-events-table__timestamp-cell">
-              {dateToLogStr(new Date(entry.at))}
-            </span>
-          </span>
-          {expanded && (
-            <div
-              className="logs__log-events-table__formatted-message"
+            <span
               style={{
-                width: width,
-                transition: "height 0.2s ease-in-out",
+                transform: expanded ? "rotate(180deg)" : "rotate(90deg)",
+                transition: "transform 0.1s ease-in-out",
               }}
-              data-testid="logs__log-events-table__formatted-message"
             >
-              <div className="logs__log-events-table__content">
-                <MessageOrObject msg={entry.message} selFn={() => {}} />
-              </div>
-            </div>
-          )}
-        </span>
-      </td>
-      <td style={{ minWidth: 140 }}>
-        <span
-          className="logs__log-events-table__cell logs__log-events-table__cell_message logs__log-events-table__cursor-text"
-          onClick={onClick}
-        >
-          {entry.highlightText ? (
-            <span className={`pill ${entry.type || "info"}-pill`}>
-              {entry.highlightText}
+              <Icon name="caret-up" />
             </span>
-          ) : null}
-          <span data-testid="logs__log-events-table__message">
-            {entry.message}
           </span>
-        </span>
-      </td>
-      <td></td>
-    </animated.tr>
-  );
-});
+        </td>
+        <td style={{ overflow: "visible", width: 80 }}>
+          <span>
+            <span className="logs__log-events-table__cell" onClick={onClick}>
+              <span className="logs__log-events-table__timestamp-cell">
+                {dateToLogStr(new Date(entry.at))}
+              </span>
+            </span>
+            {expanded && (
+              <div
+                className="logs__log-events-table__formatted-message"
+                style={{
+                  width: width,
+                  transition: "height 0.2s ease-in-out",
+                }}
+                data-testid="logs__log-events-table__formatted-message"
+              >
+                <div className="logs__log-events-table__content">
+                  <MessageOrObject msg={entry.message} selFn={() => {}} />
+                </div>
+              </div>
+            )}
+          </span>
+        </td>
+        <td style={{ minWidth: 140 }}>
+          <span
+            className="logs__log-events-table__cell logs__log-events-table__cell_message logs__log-events-table__cursor-text"
+            onClick={onClick}
+          >
+            {entry.highlightText ? (
+              <span className={`pill ${entry.type || "info"}-pill`}>
+                {entry.highlightText}
+              </span>
+            ) : null}
+            <span data-testid="logs__log-events-table__message">
+              {entry.message}
+            </span>
+          </span>
+        </td>
+        <td></td>
+      </animated.tr>
+    );
+  }
+);
 
 const tryParse = (possibleJSON: string) => {
   try {
