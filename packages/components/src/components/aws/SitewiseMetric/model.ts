@@ -1,7 +1,7 @@
 export interface TimeSeriesData {
   from: Date;
   to: Date;
-  values: { x: number; y: number }[];
+  values: { x: Date; y: number }[];
 }
 
 export type Update = TimeSeriesData;

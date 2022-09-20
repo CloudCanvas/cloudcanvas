@@ -62,9 +62,23 @@ export const createStreamMachine = <D, U>(props: Props<D, U>) => {
           states: {
             idle: {
               after: {
-                "25": {
-                  target: "maybeIncrement",
-                },
+                "50": [
+                  {
+                    target: "maybeIncrement",
+                    cond: (ctx, evt) => {
+                      if (!Array.isArray(ctx.data)) return false;
+
+                      if (ctx.counter >= ctx.data.length) {
+                        return false;
+                      }
+
+                      return true;
+                    },
+                  },
+                  {
+                    target: "idle",
+                  },
+                ],
               },
             },
             maybeIncrement: {
@@ -80,7 +94,7 @@ export const createStreamMachine = <D, U>(props: Props<D, U>) => {
           states: {
             idle: {
               after: {
-                "1000": {
+                "3000": {
                   target: "fetching",
                 },
               },
@@ -197,12 +211,7 @@ export const createStreamMachine = <D, U>(props: Props<D, U>) => {
         }),
         checkIncrement: assign({
           counter: (ctx, evt) => {
-            if (!Array.isArray(ctx.data)) return ctx.counter;
-
-            if (ctx.counter >= (ctx.data as any[]).length) {
-              return ctx.counter;
-            }
-
+            console.log(`Incremeneting counter (${ctx.counter}) by 1`);
             return ctx.counter + 1;
           },
           errorCount: (_ctx, _evt) => {

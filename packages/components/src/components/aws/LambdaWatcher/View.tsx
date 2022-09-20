@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from "react";
 import "./View.css";
 import { createStreamMachine } from "../../../machines/dataFetcherMachine";
-import { useMachine } from "@xstate/react";
+import { useInterpret, useMachine, useSelector } from "@xstate/react";
 import EmptyDataPlaceholder from "../../base/EmptyDataPlaceholder/EmptyDataPlaceholder";
 import { Model, Update } from "./model";
 import { makeLambdaStreamController } from "./controller";
@@ -10,7 +10,7 @@ import { CustomData } from "../../form";
 import ScrollFollower from "../../shared/ScrollFollower";
 import LogEntries from "../../layout/LogEntries/LogEntries";
 
-export default (props: AwsComponentProps<CustomData>) => {
+export default React.memo((props: AwsComponentProps<CustomData>) => {
   // Create the machine to manage streaming data.
   const streamMachine = useMemo(
     () =>
@@ -32,31 +32,33 @@ export default (props: AwsComponentProps<CustomData>) => {
     []
   );
 
-  // @ts-ignore
-  const [streamState, streamSend] = useMachine(streamMachine, {
-    actions: {} as any,
-  });
+  const service = useInterpret(
+    // @ts-ignore
+    streamMachine,
+    {
+      actions: {} as any,
+    }
+  );
+
+  const data = useSelector(service, (state) => state.context.data);
 
   useEffect(() => {
     if (props.playing) {
-      streamSend("PLAYING");
+      service.send("PLAYING");
     } else {
-      streamSend("PAUSED");
+      service.send("PAUSED");
     }
   }, [props.playing]);
 
   useEffect(() => {
     if (props.authorised) {
-      streamSend("AUTHORISED");
+      service.send("AUTHORISED");
     } else {
-      streamSend("EXPIRED");
+      service.send("EXPIRED");
     }
   }, [props.authorised]);
 
-  const hasData =
-    streamState.context.data instanceof Array
-      ? (streamState.context.data?.length || 0) > 0
-      : !!streamState.context.data;
+  const hasData = data instanceof Array ? (data?.length || 0) > 0 : !!data;
 
   if (!hasData) {
     return (
@@ -68,21 +70,22 @@ export default (props: AwsComponentProps<CustomData>) => {
     );
   }
 
+  console.log("Re-rendering lambda watcher");
   return (
     <View
-      data={streamState.context.data.slice(0, streamState.context.counter)}
+      data={data}
       selected={props.selected}
       setSelected={() => props.setSelected(true)}
     />
   );
-};
+});
 
 export type ViewProps = {
   data: Model;
   selected: boolean;
   setSelected: () => void;
 };
-export const View = ({ data, selected, setSelected }: ViewProps) => {
+export const View = React.memo(({ data, selected, setSelected }: ViewProps) => {
   return (
     <ScrollFollower dataCount={data.length} selected={selected}>
       <LogEntries
@@ -93,4 +96,4 @@ export const View = ({ data, selected, setSelected }: ViewProps) => {
       />
     </ScrollFollower>
   );
-};
+});

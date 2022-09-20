@@ -75,12 +75,8 @@ over time and "pop" in.
 
 ## TODO
 
-When authorised components do not immediately begin calling. Perhaops the aith status doesn't filter down? - DONE
-
-After losing internet and coming back it does not continue polling - IT LOOOKS LIKE THE ACCOUNTS WERE LOST - DONE
-
-Do not overwrite account names! Ties into above - DONE
-Weird white patch
+Sitewise tracker - Need to leave entry as plaintext (too many potential at times)
+Fix the update thing going on
 
 ## Next release
 

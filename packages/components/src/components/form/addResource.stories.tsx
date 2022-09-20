@@ -14,7 +14,8 @@ export default {
 
 const defaultProps: AddResourceProps = {
   organisations: sampleOrgs,
-  dataFetcher: async () => {
+  dataFetcher: async (_comp, _access, prefix) => {
+    console.log(`fetching with prefix: ${prefix}`);
     await new Promise((resolve) => setTimeout(resolve, 1000));
     return [1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => ({
       label: `Table ${i}`,

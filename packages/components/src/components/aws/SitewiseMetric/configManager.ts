@@ -5,39 +5,27 @@ import {
 } from "@aws-sdk/client-iotsitewise";
 import { CustomData } from "../../form";
 
-const fetchAllAliases = async (aws: AWS): Promise<string[]> => {
-  const aliases: string[] = [];
+const fetchAllAliases = async (
+  aws: AWS,
+  prefix?: string
+): Promise<string[]> => {
+  const response: ListTimeSeriesCommandOutput = await aws.iotsitewise.send(
+    new ListTimeSeriesCommand({
+      aliasPrefix: prefix,
+      maxResults: 50,
+    })
+  );
 
-  let nextToken: any | undefined = undefined;
-
-  do {
-    const response: ListTimeSeriesCommandOutput = await aws.iotsitewise.send(
-      new ListTimeSeriesCommand({
-        nextToken,
-        maxResults: 250,
-      })
-    );
-
-    nextToken = response.nextToken;
-
-    console.log("nextToken");
-    console.log(nextToken);
-
-    console.log(aliases.length);
-
-    aliases.push(...(response.TimeSeriesSummaries || []).map((t) => t.alias!));
-  } while (!!nextToken);
-
-  return aliases;
+  return (response.TimeSeriesSummaries || []).map((t) => t.alias!);
 };
 
-export const customDataFetcher = async (aws: AWS): Promise<CustomData[]> => {
-  const aliases = await fetchAllAliases(aws);
+export const customDataFetcher = async (
+  aws: AWS,
+  prefix?: string
+): Promise<CustomData[]> => {
+  const aliases = await fetchAllAliases(aws, prefix);
 
   const sorted = aliases.sort((a, b) => a.localeCompare(b));
-
-  console.log("sorted");
-  console.log(sorted);
 
   return sorted.map((alias) => ({
     label: alias,

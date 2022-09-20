@@ -2,6 +2,7 @@ import { AWS } from "@cloudcanvas/types";
 import { TimeSeriesData, Model, Update } from "./model";
 import { DataFetcher } from "../../../ports/DataFetcher";
 import { CustomData } from "../../form";
+import { GetAssetPropertyAggregatesCommand } from "@aws-sdk/client-iotsitewise";
 import { SampleData } from "./sampleData";
 
 const doLog = true;
@@ -44,8 +45,29 @@ const makeIotAliasStreamer = ({
 
   return {
     fetchRecords: async () => {
-      // TODO Fetch data for the last hour for the alias
-      return SampleData();
+      // an hour ago
+      const from = new Date(+new Date() - 1000 * 60 * 60);
+      const to = new Date();
+
+      const data = await client.send(
+        new GetAssetPropertyAggregatesCommand({
+          aggregateTypes: ["AVERAGE"],
+          startDate: from,
+          endDate: to,
+          propertyAlias: alias,
+          resolution: "1m",
+        })
+      );
+
+      return {
+        from,
+        to,
+        values:
+          data.aggregatedValues?.map((av) => ({
+            x: av.timestamp!,
+            y: av.value?.average!,
+          })) || [],
+      };
     },
     reset: async () => {},
   };
@@ -54,7 +76,7 @@ const makeIotAliasStreamer = ({
 export const makeController = (
   props: Props<Model, Update>
 ): DataFetcher<Model, Update> => {
-  const logStreamManager = makeIotAliasStreamer({
+  const dataManager = makeIotAliasStreamer({
     alias: props.config.customData.value,
     aws: props.ports.aws,
   });
@@ -62,9 +84,14 @@ export const makeController = (
   return {
     initialData: props.config.initialData,
     fetch: async () => {
-      return await logStreamManager.fetchRecords();
+      return await dataManager.fetchRecords();
     },
     reduce: (current, update) => {
+      if (!update) return current;
+
+      console.log("update");
+      console.log(update);
+
       return update;
     },
   };

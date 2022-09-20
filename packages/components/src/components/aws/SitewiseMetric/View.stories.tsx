@@ -16,8 +16,8 @@ const Template = (args: Pick<ViewProps, "data">) => () =>
   (
     <div
       style={{
-        width: 600,
-        height: 400,
+        width: 900,
+        height: 430,
         borderRadius: 3,
         borderWidth: 3,
         borderStyle: "solid",

@@ -26,9 +26,9 @@
     "projen": "npx projen"
   },
   "devDependencies": {
-    "@cloudcanvas/aws-sso-api": "^0.0.0",
-    "@cloudcanvas/aws-sso-global-access-provider": "^0.0.0",
-    "@cloudcanvas/types": "^0.0.0",
+    "@cloudcanvas/aws-sso-api": "*",
+    "@cloudcanvas/aws-sso-global-access-provider": "*",
+    "@cloudcanvas/types": "*",
     "@types/aws-lambda": "^8.10.86",
     "@types/jest": "^27.0.3",
     "@types/node": "^14.17.0",

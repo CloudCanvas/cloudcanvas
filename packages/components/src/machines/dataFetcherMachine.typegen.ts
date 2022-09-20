@@ -13,11 +13,11 @@ export interface Typegen0 {
       type: "error.platform.streamer.dataFetcher.fetching:invocation[0]";
       data: unknown;
     };
-    "xstate.after(1000)#streamer.dataFetcher.idle": {
-      type: "xstate.after(1000)#streamer.dataFetcher.idle";
+    "xstate.after(3000)#streamer.dataFetcher.idle": {
+      type: "xstate.after(3000)#streamer.dataFetcher.idle";
     };
-    "xstate.after(25)#streamer.offsetCounter.idle": {
-      type: "xstate.after(25)#streamer.offsetCounter.idle";
+    "xstate.after(50)#streamer.offsetCounter.idle": {
+      type: "xstate.after(50)#streamer.offsetCounter.idle";
     };
     "xstate.init": { type: "xstate.init" };
   };
@@ -38,7 +38,7 @@ export interface Typegen0 {
   eventsCausingServices: {
     fetchRecords:
       | "FETCH_RECORDS"
-      | "xstate.after(1000)#streamer.dataFetcher.idle";
+      | "xstate.after(3000)#streamer.dataFetcher.idle";
   };
   eventsCausingGuards: {};
   eventsCausingDelays: {};

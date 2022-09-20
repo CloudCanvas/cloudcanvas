@@ -42,7 +42,7 @@ export default observer(() => {
         style={{ width: 800, height: 500 }}>
         <AddResource
           organisations={awsStore.organisations}
-          dataFetcher={async (component, accessCard) => {
+          dataFetcher={async (component, accessCard, prefix) => {
             component.defaultSize;
             // Okay where do I get the AWS config for the actual data fetchiunfg dynamically?
             const awsClient = aws.aws
@@ -50,7 +50,7 @@ export default observer(() => {
               .region(accessCard.region)
               .role(accessCard.permissionSet);
 
-            return await component.customDataFetcher(awsClient);
+            return await component.customDataFetcher(awsClient, prefix);
           }}
           onAddComponent={(resource) => {
             component.addComponentFromModal(resource);

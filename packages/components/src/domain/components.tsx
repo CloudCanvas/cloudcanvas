@@ -21,7 +21,7 @@ export type ComponentCatalogEntry<T> = {
   type: string;
   title: string;
   subtitle: string;
-  customDataFetcher: (aws: AWS) => Promise<CustomData[]>;
+  customDataFetcher: (aws: AWS, prefix?: string) => Promise<CustomData[]>;
   sampleData: () => T;
   sampleUpdate: () => T;
   component: (props: AwsComponentProps<CustomData>) => JSX.Element;

@@ -56,6 +56,8 @@ const makeCloudwatchLogStreamManager = ({
 
   let initial = true;
 
+  let startAt = +new Date();
+
   let logStreamDict: {
     [logStreamName: string]: {
       nextToken: string | undefined;
@@ -197,13 +199,15 @@ const makeCloudwatchLogStreamManager = ({
           message: r.message || "",
           id: v4(),
         }))
-        .map((m) => augmentModel(m));
+        .map((m) => augmentModel(m))
+        .filter((r) => r.at >= startAt);
 
       return allEventsAscending;
     },
     reset: async () => {
       initial = true;
       logStreamDict = {};
+      startAt = +new Date();
     },
   };
 };
@@ -223,6 +227,7 @@ export const makeLambdaStreamController = (
       return records;
     },
     reduce: (current, update) => {
+      if (!update) return current;
       return [...current, ...update];
     },
   };

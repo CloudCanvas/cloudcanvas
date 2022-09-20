@@ -234,6 +234,8 @@ export const makeDynamoStreamController = (
       return records;
     },
     reduce: (current, update) => {
+      if (!update) return current;
+
       const newModel = [...current, ...update];
       return newModel;
       // if (newModel.length > 0) {

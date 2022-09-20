@@ -19,7 +19,8 @@ export type AddResourceProps = {
   activeAccount?: Account;
   dataFetcher: (
     component: typeof componentCatalog[number],
-    access: AccessCard
+    access: AccessCard,
+    prefix?: string
   ) => Promise<CustomData[]>;
   onAddComponent: (component: AwsComponent<unknown, unknown>) => void;
 };
@@ -93,11 +94,15 @@ export default (props: AddResourceProps) => {
 
         setLoadingCustomData(true);
 
-        const data = await props.dataFetcher(component!, {
-          accountId: account.accountId,
-          permissionSet: permissionSet,
-          region: region as AwsRegion,
-        });
+        const data = await props.dataFetcher(
+          component!,
+          {
+            accountId: account.accountId,
+            permissionSet: permissionSet,
+            region: region as AwsRegion,
+          },
+          inputValue
+        );
 
         setCustomData(data);
       } catch (err) {
@@ -107,7 +112,7 @@ export default (props: AddResourceProps) => {
     };
 
     fetchCustomData();
-  }, [component, account?.accountId, region, permissionSet]);
+  }, [component, account?.accountId, region, permissionSet, inputValue]);
 
   return (
     <div className="">

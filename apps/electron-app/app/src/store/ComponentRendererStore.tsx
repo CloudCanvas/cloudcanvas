@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, toJS } from "mobx";
 import * as Component from "@cloudcanvas/components";
 import { AwsComponent } from "@cloudcanvas/types";
 import { BaseComponentProps } from "@cloudcanvas/components/lib/components/layout/BaseComponent";
@@ -37,8 +37,6 @@ export class ComponentRendererStore {
 
     return {
       onAuthorise: () => {
-        console.log("onAuthorise");
-        console.log("onAuthorise");
         if (!org) {
           window.alert("Authorisation not available, please restart");
           return;
@@ -47,8 +45,6 @@ export class ComponentRendererStore {
         this.awsStore.authoriseOrg(org);
       },
       onTogglePlay: () => {
-        console.log("onTogglePlay");
-        console.log("onTogglePlay");
         return this.componentStore.updateComponent({
           id: component.id,
           state: {
@@ -57,7 +53,6 @@ export class ComponentRendererStore {
         });
       },
       onResize: (size) => {
-        console.log("onResize");
         if (
           size[0] === component.state.layout.size[0] &&
           size[1] === component.state.layout.size[1]
@@ -82,7 +77,6 @@ export class ComponentRendererStore {
         ) {
           return;
         }
-        console.log("onMove");
 
         return this.componentStore.updateComponent({
           id: component.id,
@@ -96,11 +90,9 @@ export class ComponentRendererStore {
       },
       onSelection: (selected) => {
         if (selected === component.state.selected) {
-          console.log("skipping");
           return;
         }
 
-        console.log("onSelection");
         if (selected) {
           this.componentStore.updateAllComponents({
             state: { selected: false },
