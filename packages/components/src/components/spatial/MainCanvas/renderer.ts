@@ -86,9 +86,6 @@ const getScale = ({
 }) => {
   let newScale = scale + deltaScale / (scaleSensitivity / scale);
   newScale = Math.max(minScale, Math.min(newScale, maxScale));
-  console.log("[scale, newScale]");
-  console.log([scale, newScale]);
-  console.log((newScale - scale) / scale);
   return [scale, newScale];
 };
 

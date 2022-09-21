@@ -66,8 +66,10 @@ export const createStreamMachine = <D, U>(props: Props<D, U>) => {
                   {
                     target: "maybeIncrement",
                     cond: (ctx, evt) => {
+                      // Only used for log rendering (ticks up a counter to stagger display)
                       if (!Array.isArray(ctx.data)) return false;
 
+                      // No need to increment if no new records
                       if (ctx.counter >= ctx.data.length) {
                         return false;
                       }
@@ -94,7 +96,7 @@ export const createStreamMachine = <D, U>(props: Props<D, U>) => {
           states: {
             idle: {
               after: {
-                "3000": {
+                "5000": {
                   target: "fetching",
                 },
               },
@@ -165,7 +167,7 @@ export const createStreamMachine = <D, U>(props: Props<D, U>) => {
                   target: "expired",
                   actions: [
                     assign({
-                      authorisation: (_ctx, _evt) => "expired" as AuthStatus,
+                      authorised: (_ctx, _evt) => false,
                     }),
                   ],
                 },
@@ -178,7 +180,7 @@ export const createStreamMachine = <D, U>(props: Props<D, U>) => {
                   target: "authorized",
                   actions: [
                     assign({
-                      authorisation: (_ctx, _evt) => "authorized" as AuthStatus,
+                      authorised: (_ctx, _evt) => true,
                     }),
                   ],
                 },
@@ -211,7 +213,6 @@ export const createStreamMachine = <D, U>(props: Props<D, U>) => {
         }),
         checkIncrement: assign({
           counter: (ctx, evt) => {
-            console.log(`Incremeneting counter (${ctx.counter}) by 1`);
             return ctx.counter + 1;
           },
           errorCount: (_ctx, _evt) => {

@@ -49,6 +49,13 @@ const makeIotAliasStreamer = ({
       const from = new Date(+new Date() - 1000 * 60 * 60);
       const to = new Date();
 
+      console.log({
+        aggregateTypes: ["AVERAGE"],
+        startDate: from,
+        endDate: to,
+        propertyAlias: alias,
+        resolution: "1m",
+      });
       const data = await client.send(
         new GetAssetPropertyAggregatesCommand({
           aggregateTypes: ["AVERAGE"],
@@ -88,9 +95,6 @@ export const makeController = (
     },
     reduce: (current, update) => {
       if (!update) return current;
-
-      console.log("update");
-      console.log(update);
 
       return update;
     },

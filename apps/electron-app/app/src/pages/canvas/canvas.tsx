@@ -69,11 +69,11 @@ const ComponentWrapper = memo(
     );
 
     if (Object.keys(diff).length > 0) {
-      // TODO Don't re-render on zoom change
-      console.log(
-        `Rerendering ${nextProps.definition.state.component.id} as state has changed;`
-      );
-      console.log(diff);
+      // // TODO Don't re-render on zoom change
+      // console.log(
+      //   `Rerendering ${nextProps.definition.state.component.id} as state has changed;`
+      // );
+      // console.log(diff);
     }
 
     const equal = isEqual(

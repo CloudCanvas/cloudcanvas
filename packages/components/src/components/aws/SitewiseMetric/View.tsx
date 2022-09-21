@@ -73,9 +73,6 @@ export default (props: AwsComponentProps<CustomData>) => {
     );
   }
 
-  // console.log("streamState.context.data");
-  // console.log(streamState.context.data);
-
   console.log("Re-rendering sitewise watcher");
 
   return <View data={data} />;
@@ -85,11 +82,24 @@ export type ViewProps = {
   data: Model;
 };
 export const View = React.memo(({ data }: ViewProps) => {
+  const [height, setHeight] = React.useState(0);
   const min = Math.min(...data.values.map((d) => d.y));
   const max = Math.max(...data.values.map((d) => d.y));
 
+  const divRef = React.useRef<HTMLDivElement | null>();
+
+  useEffect(() => {
+    console.log("setting height");
+    if (divRef.current) {
+      setHeight(divRef.current.getBoundingClientRect().height - 30);
+    }
+  });
+
   return (
-    <div style={{ padding: 8, flex: 1, width: "100%", height: "100%" }}>
+    <div
+      style={{ padding: 8, flex: 1, width: "100%", height: "100%" }}
+      ref={(ref) => (divRef.current = ref)}
+    >
       <LineChart
         series={[
           {
@@ -106,14 +116,9 @@ export const View = React.memo(({ data }: ViewProps) => {
             //     : e.toFixed(2);
             // },
           },
-          // {
-          //   title: "Peak hours",
-          //   type: "threshold",
-          //   x: new Date(1600981800000),
-          // },
         ]}
         xDomain={[data.from, data.to]}
-        yDomain={[min > 0 ? 0 : min, max]}
+        yDomain={[min > 0 ? 0 : min, max + 1]}
         i18nStrings={{
           filterLabel: "Filter displayed data",
           filterPlaceholder: "Filter data",
@@ -135,7 +140,7 @@ export const View = React.memo(({ data }: ViewProps) => {
         }}
         ariaLabel="Single data series line chart"
         errorText="Error loading data."
-        height={300}
+        height={height}
         hideFilter
         hideLegend
         loadingText="Loading chart"

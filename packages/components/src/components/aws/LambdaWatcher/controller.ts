@@ -91,9 +91,6 @@ const makeCloudwatchLogStreamManager = ({
         log(sls.logStreamName);
       });
 
-      // Once we've called once we fetch more in future
-      initial = false;
-
       const logStreams = (streamsResponse.logStreams || []).filter(
         (ls) => ls.logStreamName
       );
@@ -189,6 +186,9 @@ const makeCloudwatchLogStreamManager = ({
         }
       }
 
+      console.log("logMessagesResponse.length");
+      console.log(logMessagesResponse.length);
+
       // Now flatten all events returned and order ascending
       const allEventsAscending = logMessagesResponse
         .flatMap((lmr) => lmr.events)
@@ -199,8 +199,22 @@ const makeCloudwatchLogStreamManager = ({
           message: r.message || "",
           id: v4(),
         }))
-        .map((m) => augmentModel(m))
-        .filter((r) => r.at >= startAt);
+        .map((m) => augmentModel(m));
+
+      let finalResults = [];
+
+      if (initial) {
+        // Take only 25 records on first render max (too dizzying otherwise)
+        finalResults = allEventsAscending.slice(-25);
+      } else {
+        finalResults = allEventsAscending;
+      }
+
+      console.log("finalResults.length");
+      console.log(finalResults.length);
+
+      // Once we've called once we fetch more in future
+      initial = false;
 
       return allEventsAscending;
     },
@@ -228,7 +242,14 @@ export const makeLambdaStreamController = (
     },
     reduce: (current, update) => {
       if (!update) return current;
-      return [...current, ...update];
+      const endState = [...current, ...update];
+
+      // Trim to 1000 records
+      if (endState.length > 1000) {
+        return endState.slice(-1000);
+      } else {
+        return endState;
+      }
     },
   };
 };
