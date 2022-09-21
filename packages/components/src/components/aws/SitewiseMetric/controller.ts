@@ -2,7 +2,10 @@ import { AWS } from "@cloudcanvas/types";
 import { TimeSeriesData, Model, Update } from "./model";
 import { DataFetcher } from "../../../ports/DataFetcher";
 import { CustomData } from "../../form";
-import { GetAssetPropertyAggregatesCommand } from "@aws-sdk/client-iotsitewise";
+import {
+  GetAssetPropertyAggregatesCommand,
+  GetAssetPropertyValueHistoryCommand,
+} from "@aws-sdk/client-iotsitewise";
 import { SampleData } from "./sampleData";
 
 const doLog = true;
@@ -57,12 +60,10 @@ const makeIotAliasStreamer = ({
         resolution: "1m",
       });
       const data = await client.send(
-        new GetAssetPropertyAggregatesCommand({
-          aggregateTypes: ["AVERAGE"],
+        new GetAssetPropertyValueHistoryCommand({
           startDate: from,
           endDate: to,
           propertyAlias: alias,
-          resolution: "1m",
         })
       );
 
@@ -70,9 +71,9 @@ const makeIotAliasStreamer = ({
         from,
         to,
         values:
-          data.aggregatedValues?.map((av) => ({
-            x: av.timestamp!,
-            y: av.value?.average!,
+          data.assetPropertyValueHistory?.map((av) => ({
+            x: new Date(av.timestamp?.timeInSeconds! * 1000),
+            y: av.value?.doubleValue ?? av.value?.integerValue! ?? 0,
           })) || [],
       };
     },

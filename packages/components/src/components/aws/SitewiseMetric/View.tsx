@@ -91,13 +91,19 @@ export const View = React.memo(({ data }: ViewProps) => {
   useEffect(() => {
     console.log("setting height");
     if (divRef.current) {
-      setHeight(divRef.current.getBoundingClientRect().height - 30);
+      setHeight(divRef.current.getBoundingClientRect().height - 40);
     }
   });
 
   return (
     <div
-      style={{ padding: 8, flex: 1, width: "100%", height: "100%" }}
+      style={{
+        padding: 8,
+        paddingTop: 16,
+        flex: 1,
+        width: "100%",
+        height: "100%",
+      }}
       ref={(ref) => (divRef.current = ref)}
     >
       <LineChart
