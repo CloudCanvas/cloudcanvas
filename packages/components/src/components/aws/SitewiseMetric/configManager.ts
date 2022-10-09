@@ -3,7 +3,7 @@ import {
   ListTimeSeriesCommand,
   ListTimeSeriesCommandOutput,
 } from "@aws-sdk/client-iotsitewise";
-import { CustomData } from "../../form";
+import { CustomData } from "../../form/v1";
 
 const fetchAllAliases = async (
   aws: AWS,
@@ -19,7 +19,7 @@ const fetchAllAliases = async (
   return (response.TimeSeriesSummaries || []).map((t) => t.alias!);
 };
 
-export const customDataFetcher = async (
+export const resourceFetcher = async (
   aws: AWS,
   prefix?: string
 ): Promise<CustomData[]> => {

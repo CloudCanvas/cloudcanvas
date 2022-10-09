@@ -1,4 +1,5 @@
 import os from "os";
+import { ListTimeSeriesCommand } from "@aws-sdk/client-iotsitewise";
 import {
   makeAwsConfigManager as makeAuthoriserConfigManager,
   makeSsoAuthoriser,
@@ -9,7 +10,6 @@ import {
 } from "@cloudcanvas/aws-sso-global-access-provider";
 import open from "open";
 import { createAWSClient } from "../src/adapters/awsManager";
-import { ListTimeSeriesCommand } from "@aws-sdk/client-iotsitewise";
 
 // This will all happen on ipcMain in an electron app and will be
 // bridged through preload.js to this library in ipcRenderer so as

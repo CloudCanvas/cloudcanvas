@@ -75,26 +75,16 @@ over time and "pop" in.
 
 ## TODO
 
-Sitewise tracker - Need to leave entry as plaintext (too many potential at times)
-Fix the update thing going on
+Cloudwatch metric / alarm
+Dynamo show an error if no streams enabled.
 
 ## Next release
 
-Sitewise tracker
+API Gateway logs
+WAF logs
+Background white around control icons and ellipsis on title
 Auto update - todo -> https://github.com/iffy/electron-updater-example
 Double click to zoom in selected, double click to zoom back out
 Launch browser (disabled if not authenticated)
 Launch a terminal (disabled if not authenticated)
 Edit a component's props
-
-Sometimes you have to build something to see if it works.
-
-The first iteration of Cloud Canvas has a few flaws I learned as I've used.
-
-I have a redesign I feel addresses these but I'll releaser what I have and see if the users have the same issues.
-
-# TODO
-
-Finish up LogEntry
-Web3 jobs
-Sensive AppSync issue

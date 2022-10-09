@@ -1,79 +1,73 @@
 import React, { useEffect, useMemo } from "react";
 import "./View.css";
 import { createStreamMachine } from "../../../machines/dataFetcherMachine";
-import { useInterpret, useMachine, useSelector } from "@xstate/react";
+import { useInterpret, useSelector } from "@xstate/react";
 import EmptyDataPlaceholder from "../../base/EmptyDataPlaceholder/EmptyDataPlaceholder";
 import { Model, Update } from "./model";
 import { makeController } from "./controller";
-import { AwsComponentProps } from "../../../domain";
-import { CustomData } from "../../form";
+import { CustomData } from "../../form/v1";
 import LineChart from "@cloudscape-design/components/line-chart";
 import { Box } from "@cloudscape-design/components";
+import { AWS } from "@cloudcanvas/types";
 
-export default (props: AwsComponentProps<CustomData>) => {
-  const streamMachine = useMemo(
-    () =>
-      createStreamMachine<Model, Update>({
-        dataFetcher:
-          props.dataFetcher ||
-          makeController({
-            config: {
-              customData: props.customProps,
-              initialData: {
-                from: new Date(+new Date() - 1000 * 60 * 60),
-                to: new Date(),
-                values: [],
-              },
-            },
-            ports: {
-              aws: props.awsClient,
-            },
-          }),
-        authorised: props.authorised,
-        playing: props.playing,
-      }),
-    []
-  );
+export default ({ data }: { data: Model }) => {
+  // const streamMachine = useMemo(
+  //   () =>
+  //     createStreamMachine<Model, Update>({
+  //       dataFetcher: makeController({
+  //         customData: customData,
+  //         initialData: {
+  //           from: new Date(+new Date() - 1000 * 60 * 60),
+  //           to: new Date(),
+  //           values: [],
+  //         },
+  //         aws,
+  //       }),
+  //       authorised: true,
+  //       playing: true,
+  //     }),
+  //   []
+  // );
 
-  const service = useInterpret(
-    // @ts-ignore
-    streamMachine,
-    {
-      actions: {} as any,
-    }
-  );
+  // const service = useInterpret(
+  //   // @ts-ignore
+  //   streamMachine,
+  //   {
+  //     actions: {} as any,
+  //   }
+  // );
 
-  const data = useSelector(service, (state) => state.context.data);
+  // const data = useSelector(service, (state) => state.context.data);
 
-  useEffect(() => {
-    if (props.playing) {
-      service.send("PLAYING");
-    } else {
-      service.send("PAUSED");
-    }
-  }, [props.playing]);
+  // useEffect(() => {
+  //   if (props.playing) {
+  //     service.send("PLAYING");
+  //   } else {
+  //     service.send("PAUSED");
+  //   }
+  // }, [props.playing]);
 
-  useEffect(() => {
-    if (props.authorised) {
-      service.send("AUTHORISED");
-    } else {
-      service.send("EXPIRED");
-    }
-  }, [props.authorised]);
+  // useEffect(() => {
+  //   if (props.authorised) {
+  //     service.send("AUTHORISED");
+  //   } else {
+  //     service.send("EXPIRED");
+  //   }
+  // }, [props.authorised]);
 
   const hasData = data && data.values.length > 0;
 
   if (!hasData) {
     return (
       <EmptyDataPlaceholder
-        playing={props.playing}
-        authorised={props.authorised}
+        // playing={props.playing}
+        // authorised={props.authorised}
+        playing={true}
+        authorised={true}
         message="Listening for updates, metrics can take a few seconds to sync to Sitewise.."
       />
     );
   }
-
-  console.log("Re-rendering sitewise watcher");
 
   return <View data={data} />;
 };
@@ -89,11 +83,11 @@ export const View = React.memo(({ data }: ViewProps) => {
   const divRef = React.useRef<HTMLDivElement | null>();
 
   useEffect(() => {
-    console.log("setting height");
+    // TODO Deal with resize
     if (divRef.current) {
       setHeight(divRef.current.getBoundingClientRect().height - 40);
     }
-  });
+  }, []);
 
   return (
     <div

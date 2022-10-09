@@ -1,5 +1,5 @@
-import { S3Entry } from "../domain";
 import { AccessPair } from "@cloudcanvas/types";
+import { S3Entry } from "../domain";
 
 export type DefaultProps = {
   access: AccessPair;

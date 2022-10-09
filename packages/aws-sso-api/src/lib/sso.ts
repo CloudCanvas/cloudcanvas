@@ -1,7 +1,8 @@
+// @ts-ignore
 import fs from "fs";
+import { SSOSession } from "@cloudcanvas/types";
 // @ts-ignore
 import sha1 from "sha-1";
-import { SSOSession } from "@cloudcanvas/types";
 
 export const writeSSOFile = async (
   session: SSOSession,

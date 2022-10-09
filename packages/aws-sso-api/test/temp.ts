@@ -27,4 +27,4 @@ export const exec = async () => {
   return newSession;
 };
 
-exec();
+// exec();

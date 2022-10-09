@@ -29,7 +29,7 @@ export default {
       browser: true,
     }),
     commonjs(),
-    typescript({ useTsconfigDeclarationDir: true }),
+    typescript(),
     scss(), // will output compiled styles to output.css
     svg({
       // process SVG to DOM Node or String. Default: false
@@ -41,6 +41,10 @@ export default {
         {
           src: "src/fonts/CaveatBrush-Regular.ttf",
           dest: "lib/fonts",
+        },
+        {
+          src: "package.json",
+          dest: "lib",
         },
       ],
     }),

@@ -1,6 +1,6 @@
-import { ConfigManager } from "../ports";
 import fs from "fs";
 import { retry } from "ts-retry-promise";
+import { ConfigManager } from "../ports";
 
 type Ports = {
   homeDir: string;

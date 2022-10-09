@@ -27,7 +27,6 @@ const project = new typescript.TypeScriptProject({
     "@types/aws-lambda",
     "@cloudcanvas/aws-sso-api@*",
     "@cloudcanvas/aws-sso-global-access-provider@*",
-    "@cloudcanvas/types@*",
     "open",
   ],
   deps: [
@@ -43,6 +42,7 @@ const project = new typescript.TypeScriptProject({
     "@aws-sdk/smithy-client",
     "@aws-sdk/types",
     "@aws-sdk/s3-request-presigner",
+    "@cloudcanvas/types@*",
     "aws-lambda",
     "aws-sdk",
     "ts-retry-promise",

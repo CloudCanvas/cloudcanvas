@@ -1,9 +1,9 @@
 import fs from "fs";
 // @ts-ignore
+import { SSOSession } from "@cloudcanvas/types";
 import glob from "glob";
 // @ts-ignore
 import sha1 from "sha-1";
-import { SSOSession } from "@cloudcanvas/types";
 import { ConfigManager } from "../ports/configManager";
 
 const defaultSsoLocation = `/.aws/sso/cache/*.json`;

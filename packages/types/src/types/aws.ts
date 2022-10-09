@@ -122,6 +122,21 @@ export type AccessCard = AccessPair & {
   region: AwsRegion;
 };
 
+export type AwsCredentials = {
+  nickname: string;
+  defaultRegion?: AwsRegion;
+  accessKeyId: string;
+  secretAccessKey?: string;
+};
+
+export type AccessCardv2 = {
+  type: "credentials" | "sso";
+  region: string;
+  sso?: AccessPair;
+  // if credentials
+  accessKeyId?: string;
+};
+
 export type PermissionSet = {
   accountId: string;
   name: string;

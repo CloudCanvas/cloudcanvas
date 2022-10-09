@@ -11,11 +11,6 @@
       "type": "build"
     },
     {
-      "name": "@cloudcanvas/types",
-      "version": "*",
-      "type": "build"
-    },
-    {
       "name": "@types/aws-lambda",
       "type": "build"
     },
@@ -123,6 +118,10 @@
       "type": "runtime"
     },
     {
+      "name": "@aws-sdk/client-iotsitewise",
+      "type": "runtime"
+    },
+    {
       "name": "@aws-sdk/client-lambda",
       "type": "runtime"
     },
@@ -148,6 +147,11 @@
     },
     {
       "name": "@aws-sdk/util-dynamodb",
+      "type": "runtime"
+    },
+    {
+      "name": "@cloudcanvas/types",
+      "version": "*",
       "type": "runtime"
     },
     {

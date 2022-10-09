@@ -1,12 +1,8 @@
 import { AWS } from "@cloudcanvas/types";
 import { TimeSeriesData, Model, Update } from "./model";
 import { DataFetcher } from "../../../ports/DataFetcher";
-import { CustomData } from "../../form";
-import {
-  GetAssetPropertyAggregatesCommand,
-  GetAssetPropertyValueHistoryCommand,
-} from "@aws-sdk/client-iotsitewise";
-import { SampleData } from "./sampleData";
+import { CustomData } from "../../form/v1";
+import { GetAssetPropertyValueHistoryCommand } from "@aws-sdk/client-iotsitewise";
 
 const doLog = true;
 
@@ -16,20 +12,10 @@ const log = (msg: any) => {
   }
 };
 
-type Config<M, U> = Pick<DataFetcher<M, U>, "initialData"> & {
+type Props = {
+  initialData: Model;
   customData: CustomData;
-};
-
-type Props<M, U> = {
-  config: Config<M, U>;
-  ports: {
-    aws: AWS;
-  };
-};
-
-type StreamManager = {
-  fetchRecords: () => Promise<TimeSeriesData>;
-  reset: () => Promise<void>;
+  aws: AWS;
 };
 
 type Ports = {
@@ -40,10 +26,7 @@ export type StreamConfig = {
   alias: string;
 };
 
-const makeIotAliasStreamer = ({
-  aws,
-  alias,
-}: Ports & StreamConfig): StreamManager => {
+const makeIotAliasStreamer = ({ aws, alias }: Ports & StreamConfig) => {
   const client = aws.iotsitewise;
 
   return {
@@ -81,16 +64,14 @@ const makeIotAliasStreamer = ({
   };
 };
 
-export const makeController = (
-  props: Props<Model, Update>
-): DataFetcher<Model, Update> => {
+export const makeController = (props: Props): DataFetcher<Model, Update> => {
   const dataManager = makeIotAliasStreamer({
-    alias: props.config.customData.value,
-    aws: props.ports.aws,
+    alias: props.customData.value,
+    aws: props.aws,
   });
 
   return {
-    initialData: props.config.initialData,
+    initialData: props.initialData,
     fetch: async () => {
       return await dataManager.fetchRecords();
     },
