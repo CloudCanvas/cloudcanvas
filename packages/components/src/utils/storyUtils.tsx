@@ -4,7 +4,7 @@ import {
   ComponentStatus,
 } from "../components/layout/BaseComponent/BaseComponent";
 import "bulma/css/bulma.css";
-import { AwsShape, Organisation } from "@cloudcanvas/types";
+import { AwsShape, Organisation } from "cloudcanvas-types";
 
 export const allGoodStatus: ComponentStatus = {
   authorisation: "authorized",

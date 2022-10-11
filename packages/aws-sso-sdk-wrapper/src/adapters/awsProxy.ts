@@ -5,7 +5,7 @@ import { DynamoDBStreamsClient } from "@aws-sdk/client-dynamodb-streams";
 import { IoTSiteWiseClient } from "@aws-sdk/client-iotsitewise";
 import { LambdaClient } from "@aws-sdk/client-lambda";
 import { S3Client } from "@aws-sdk/client-s3";
-import { AccessPair, AccessProvider, AWS } from "@cloudcanvas/types";
+import { AccessPair, AccessProvider, AWS } from "cloudcanvas-types";
 
 type Execution = {
   account?: string;

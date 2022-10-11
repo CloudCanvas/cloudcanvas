@@ -1,6 +1,6 @@
 import fs from "fs";
 // @ts-ignore
-import { SSOSession } from "@cloudcanvas/types";
+import { SSOSession } from "cloudcanvas-types";
 import glob from "glob";
 // @ts-ignore
 import sha1 from "sha-1";

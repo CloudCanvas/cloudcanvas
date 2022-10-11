@@ -1,4 +1,4 @@
-import { AccessProvider, AWS, AwsRegion } from "@cloudcanvas/types";
+import { AccessProvider, AWS, AwsRegion } from "cloudcanvas-types";
 import { createAWSProxy } from "./awsProxy";
 
 type AWSPorts = {

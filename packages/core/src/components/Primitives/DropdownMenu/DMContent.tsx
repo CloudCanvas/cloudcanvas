@@ -4,6 +4,7 @@ import { MenuContent } from "../MenuContent";
 import { stopPropagation } from "../../stopPropagation";
 // import { useContainer } from "~hooks";
 import styled from "stitches.config";
+import { useContainer } from "useCoreApp";
 
 export interface DMContentProps {
   variant?: "menu" | "horizontal";
@@ -26,10 +27,10 @@ export function DMContent({
   overflow = false,
   side = "bottom",
 }: DMContentProps) {
-  // const container = useContainer();
+  const container = useContainer();
 
   return (
-    <DropdownMenu.Portal dir="ltr">
+    <DropdownMenu.Portal container={container.current} dir="ltr">
       <DropdownMenu.Content
         align={align}
         alignOffset={alignOffset}

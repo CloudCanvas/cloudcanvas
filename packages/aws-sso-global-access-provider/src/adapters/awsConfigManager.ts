@@ -1,6 +1,6 @@
 import fs from "fs";
-import { uniq } from "@cloudcanvas/aws-sso-api";
-import { Access, Account, Organisation } from "@cloudcanvas/types";
+import { uniq } from "cloudcanvas-aws-sso-api";
+import { Access, Account, Organisation } from "cloudcanvas-types";
 import { ConfigManager } from "../ports/configManager";
 
 const defaultConfigLocation = `/.aws/config`;

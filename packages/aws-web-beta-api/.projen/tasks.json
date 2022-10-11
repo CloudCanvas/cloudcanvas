@@ -264,7 +264,7 @@
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit json-schema npm-check-updates prettier standard-version ts-jest typescript @aws-sdk/client-dynamodb @aws-sdk/client-lambda @aws-sdk/types aws-sdk yaml"
+          "exec": "yarn upgrade @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit json-schema npm-check-updates prettier standard-version ts-jest typescript @aws-sdk/client-dynamodb @aws-sdk/client-lambda @aws-sdk/client-sts @aws-sdk/types aws-sdk yaml"
         },
         {
           "exec": "npx projen"

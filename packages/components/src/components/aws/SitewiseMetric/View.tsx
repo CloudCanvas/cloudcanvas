@@ -8,7 +8,7 @@ import { makeController } from "./controller";
 import { CustomData } from "../../form/v1";
 import LineChart from "@cloudscape-design/components/line-chart";
 import { Box } from "@cloudscape-design/components";
-import { AWS } from "@cloudcanvas/types";
+import { AWS } from "cloudcanvas-types";
 
 export default ({ data }: { data: Model }) => {
   // const streamMachine = useMemo(

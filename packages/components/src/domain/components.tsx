@@ -1,4 +1,4 @@
-import { AWS } from "@cloudcanvas/types";
+import { AWS } from "cloudcanvas-types";
 // import { DynamoWatcherCatalogComponent } from "../components/aws/DynamoWatcher/catalog";
 // import { LambdaWatcherCatalogComponent } from "../components/aws/LambdaWatcher/catalog";
 import { CustomData } from "../components/form/v1";

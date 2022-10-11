@@ -101,10 +101,10 @@ function PageMenuContent({ onClose }: { onClose: () => void }) {
       <DropdownMenu.RadioGroup dir="ltr" value={"Page 1"}>
         {/* // TODO Pages */}
         {/* {sortedPages.map((page, i) => ( */}
-        {["Page 1"].map((page, i) => (
+        {["Page 1", "More coming soon"].map((page, i) => (
           <ButtonWithOptions
             // key={page.id}
-            key="page"
+            key={page}
             isDropAbove={i === dropIndex && i === 0}
             isDropBelow={dropIndex !== null && i === dropIndex - 1}
           >
@@ -123,19 +123,23 @@ function PageMenuContent({ onClose }: { onClose: () => void }) {
             >
               <PageButton>
                 {/* <span id={page.id}>{page.name || defaultPageName}</span> */}
-                <span>Page 1</span>
-                <DropdownMenu.ItemIndicator>
-                  <SmallIcon>
-                    <CheckIcon />
-                  </SmallIcon>
-                </DropdownMenu.ItemIndicator>
+                <span>{page}</span>
+                {page === "Page 1" && (
+                  <DropdownMenu.ItemIndicator>
+                    <SmallIcon>
+                      <CheckIcon />
+                    </SmallIcon>
+                  </DropdownMenu.ItemIndicator>
+                )}
               </PageButton>
             </DropdownMenu.RadioItem>
             {/* <PageOptionsDialog page={page} onClose={onClose} /> */}
           </ButtonWithOptions>
         ))}
       </DropdownMenu.RadioGroup>
-      <Divider />
+
+      {/* <Divider /> */}
+
       {/* <DropdownMenu.Item onSelect={handleCreatePage} asChild>
         <RowButton>
           <span>

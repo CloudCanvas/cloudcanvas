@@ -1,5 +1,5 @@
-import { SideMenu } from "@cloudcanvas/components";
-import { AccessPair, Organisation } from "@cloudcanvas/types";
+import { SideMenu } from "cloudcanvas-components";
+import { AccessPair, Organisation } from "cloudcanvas-types";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { ssoBridge } from "../../entrypoints/aws";

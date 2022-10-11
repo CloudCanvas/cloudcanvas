@@ -1,4 +1,4 @@
-import { AWS } from "@cloudcanvas/types";
+import { AWS } from "cloudcanvas-types";
 import { ListTablesCommand } from "@aws-sdk/client-dynamodb";
 import { CustomData } from "../../form/v1";
 

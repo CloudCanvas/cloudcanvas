@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import "./BaseComponent.scss";
 import { Rnd } from "react-rnd";
-import { AwsComponent } from "@cloudcanvas/types";
+import { AwsComponent } from "cloudcanvas-types";
 import {
   TbPlugConnected,
   TbPlugConnectedX,

@@ -1,4 +1,4 @@
-import { AWS } from "@cloudcanvas/types";
+import { AWS } from "cloudcanvas-types";
 import { v4 } from "uuid";
 import {
   DescribeLogStreamsCommand,

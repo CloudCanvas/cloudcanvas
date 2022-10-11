@@ -3,6 +3,7 @@ import { Panel } from "../Primitives/Panel";
 import styled from "stitches.config";
 import { PageMenu } from "./PageMenu";
 import { Menu } from "./Menu/Menu";
+import { AccountMenu } from "./AccountMenu";
 
 interface TopPanelProps {
   readOnly: boolean;
@@ -16,6 +17,7 @@ export function _TopPanel({ showPages }: TopPanelProps) {
         {showPages && (
           <Panel side="left" id="TD-MenuPanel">
             <Menu readOnly={false} />
+            <AccountMenu />
             {showPages && <PageMenu />}
           </Panel>
         )}

@@ -1,6 +1,6 @@
 import { makeLambdaStreamController } from "../../../../src/components/aws/LambdaWatcher/controller";
 import { getDevAccessProvider } from "../../../devAccessProvider";
-import { createAWSClient } from "@cloudcanvas/aws-sso-sdk-wrapper";
+import { createAWSClient } from "cloudcanvas-aws-sso-sdk-wrapper";
 
 const exec = async () => {
   const awsClient = createAWSClient({

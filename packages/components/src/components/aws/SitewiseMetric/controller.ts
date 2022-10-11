@@ -1,4 +1,4 @@
-import { AWS } from "@cloudcanvas/types";
+import { AWS } from "cloudcanvas-types";
 import { TimeSeriesData, Model, Update } from "./model";
 import { DataFetcher } from "../../../ports/DataFetcher";
 import { CustomData } from "../../form/v1";

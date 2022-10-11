@@ -2,13 +2,15 @@ const { typescript } = require("projen");
 
 const project = new typescript.TypeScriptProject({
   defaultReleaseBranch: "main",
-  name: "@cloudcanvas/aws-sso-api",
+  version: "0.0.1",
+  name: "cloudcanvas-aws-sso-api",
   releaseToNpm: true,
   majorVersion: 1,
   tsconfig: {
     compilerOptions: {
       strictPropertyInitialization: false,
       noUnusedLocals: false,
+      skipLibCheck: true,
       lib: ["es2019", "dom"],
     },
   },
@@ -28,7 +30,7 @@ const project = new typescript.TypeScriptProject({
     "@aws-sdk/client-sso",
     "@aws-sdk/client-sso-oidc",
     "@aws-sdk/types",
-    "@cloudcanvas/types@*",
+    "cloudcanvas-types@*",
     "aws-sdk",
     "crypto-js",
     "glob",

@@ -1,3 +1,4 @@
+// @ts-ignore
 import os from "os";
 import open from "open";
 import { makeAwsConfigManager } from "../src/adapters/awsConfigManager";

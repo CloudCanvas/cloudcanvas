@@ -1,7 +1,7 @@
-import { BaseComponent } from "@cloudcanvas/components";
-import { BaseComponentProps } from "@cloudcanvas/components/lib/components/layout/BaseComponent";
-import * as Components from "@cloudcanvas/components";
-import { AwsComponent } from "@cloudcanvas/types";
+import { BaseComponent } from "cloudcanvas-components";
+import { BaseComponentProps } from "cloudcanvas-components/lib/components/layout/BaseComponent";
+import * as Components from "cloudcanvas-components";
+import { AwsComponent } from "cloudcanvas-types";
 import { observer } from "mobx-react-lite";
 import React, { memo } from "react";
 import ComponentKeyboardManager from "../../components/managers/ComponentKeyboardManager";
@@ -10,8 +10,8 @@ import { useStores } from "../../store";
 import isEqual from "lodash.isequal";
 import "./canvas.css";
 import { difference } from "../../lib/diff";
-import { DynamoWatcherModel } from "@cloudcanvas/components/lib/components/aws/DynamoWatcher/model";
-import { DynamoWatcherCustomProps } from "@cloudcanvas/components/lib/components/aws/DynamoWatcher/view/DynamoWatcher";
+import { DynamoWatcherModel } from "cloudcanvas-components/lib/components/aws/DynamoWatcher/model";
+import { DynamoWatcherCustomProps } from "cloudcanvas-components/lib/components/aws/DynamoWatcher/view/DynamoWatcher";
 import { aws } from "../../entrypoints/aws";
 
 export default observer(() => {

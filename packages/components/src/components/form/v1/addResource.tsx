@@ -9,7 +9,7 @@ import {
   AwsComponent,
   AwsRegion,
   Organisation,
-} from "@cloudcanvas/types";
+} from "cloudcanvas-types";
 import { regions } from "../../../domain/aws";
 
 export type CustomData = { label: string; value: any };

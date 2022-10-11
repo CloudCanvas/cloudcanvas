@@ -26,12 +26,12 @@ const selfHost = `http://localhost:${port}`;
 const {
   makeAwsConfigManager: makeAccessConfigManager,
   makeSsoAccessProvider,
-} = require("@cloudcanvas/aws-sso-global-access-provider");
+} = require("cloudcanvas-aws-sso-global-access-provider");
 const {
   makeAwsConfigManager: makeAuthoriserConfigManager,
   makeSsoAuthoriser,
-} = require("@cloudcanvas/aws-sso-api");
-const { makeFileConfigManager } = require("@cloudcanvas/configuration-manager");
+} = require("cloudcanvas-aws-sso-api");
+const { makeFileConfigManager } = require("cloudcanvas-configuration-manager");
 
 const configManager = makeFileConfigManager({
   homeDir: os.homedir(),

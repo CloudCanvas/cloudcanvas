@@ -2,7 +2,7 @@ import os from "os";
 import {
   makeSsoAuthoriser,
   makeAwsConfigManager as ssoConfigManager,
-} from "@cloudcanvas/aws-sso-api";
+} from "cloudcanvas-aws-sso-api";
 import open from "open";
 
 import { makeAwsConfigManager } from "../src/adapters/awsConfigManager";

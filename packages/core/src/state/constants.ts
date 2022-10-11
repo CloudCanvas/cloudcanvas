@@ -21,6 +21,7 @@ export interface CustomBinding extends TLBinding {
 
 export interface Account {
   accountId: string;
+  active: boolean;
   regions: string[];
   name: string;
 }

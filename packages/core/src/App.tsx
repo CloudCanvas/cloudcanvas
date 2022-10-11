@@ -7,18 +7,17 @@ import {
   TLPointerEventHandler,
   TLWheelEventHandler,
 } from "@tldraw/core";
-import AddResourceWatcher from "components/AddResourceWatcher";
 import * as React from "react";
 import { Api } from "state/api";
 import styled from "stitches.config";
 import { TitleLinks } from "./components/TitleLinks";
 import { Toolbar } from "./components/Toolbar";
-import { Accounts } from "./components/Accounts";
 import { shapeUtils } from "./shapes";
 import { machine } from "./state/machine";
 import "./styles.css";
-import "@cloudcanvas/components/lib/index.css";
+import "cloudcanvas-components/lib/index.css";
 import { TopPanel } from "components/TopPanel";
+import { ContainerContext } from "useCoreApp";
 
 declare const window: Window & { api: Api };
 
@@ -214,6 +213,7 @@ interface AppProps {
 
 export default function App({ onMount }: AppProps) {
   const appState = useStateDesigner(machine);
+  const rWrapper = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     const api = new Api(appState);
@@ -236,12 +236,8 @@ export default function App({ onMount }: AppProps) {
       shapeUtils[firstShape.type].hideResizeHandles
     : false;
 
-  const generatedShapes = Object.values(appState.data.page.shapes)?.filter(
-    (s) => s.isGenerated
-  );
-
   return (
-    <AppContainer>
+    <AppContainer ref={rWrapper}>
       <Renderer
         shapeUtils={shapeUtils} // Required
         page={appState.data.page} // Required
@@ -274,18 +270,13 @@ export default function App({ onMount }: AppProps) {
         hideIndicators={hideBounds}
         hideBindingHandles={true}
       />
-      <Toolbar activeStates={appState.active} lastEvent={appState.log[0]} />
-      <TitleLinks />
-
-      <TopPanel readOnly={false} showPages={true} />
-
-      {/* <Accounts /> */}
-      {/* <AddResourceWatcher
-        generatedShape={
-          generatedShapes.length > 0 ? generatedShapes[0] : undefined
-        }
-        cancel={onCancel}
-      /> */}
+      <ContainerContext.Provider value={rWrapper}>
+        <div ref={rWrapper}>
+          <TopPanel readOnly={false} showPages={true} />
+          <Toolbar activeStates={appState.active} lastEvent={appState.log[0]} />
+          <TitleLinks />
+        </div>
+      </ContainerContext.Provider>
     </AppContainer>
   );
 }

@@ -1,11 +1,11 @@
-import { createAWSClient } from "@cloudcanvas/aws-sso-sdk-wrapper";
+import { createAWSClient } from "cloudcanvas-aws-sso-sdk-wrapper";
 import {
   Access,
   AccessPair,
   AWSCredentials,
   AwsRegion,
   Organisation,
-} from "@cloudcanvas/types";
+} from "cloudcanvas-types";
 
 /**
  * Injected into the window in preload.js

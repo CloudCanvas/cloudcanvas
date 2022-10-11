@@ -1,4 +1,4 @@
-import { SSOSession } from "@cloudcanvas/types";
+import { SSOSession } from "cloudcanvas-types";
 
 export interface ConfigManager {
   /**

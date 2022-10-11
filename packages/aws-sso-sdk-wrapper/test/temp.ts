@@ -3,11 +3,11 @@ import { ListTimeSeriesCommand } from "@aws-sdk/client-iotsitewise";
 import {
   makeAwsConfigManager as makeAuthoriserConfigManager,
   makeSsoAuthoriser,
-} from "@cloudcanvas/aws-sso-api";
+} from "cloudcanvas-aws-sso-api";
 import {
   makeAwsConfigManager as makeAccessConfigManager,
   makeSsoAccessProvider,
-} from "@cloudcanvas/aws-sso-global-access-provider";
+} from "cloudcanvas-aws-sso-global-access-provider";
 import open from "open";
 import { createAWSClient } from "../src/adapters/awsManager";
 

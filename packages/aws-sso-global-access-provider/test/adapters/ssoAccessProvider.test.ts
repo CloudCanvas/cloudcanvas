@@ -1,5 +1,5 @@
 import os from "os";
-import { SsoAuthoriser } from "@cloudcanvas/aws-sso-api";
+import { SsoAuthoriser } from "cloudcanvas-aws-sso-api";
 import { makeAwsConfigManager } from "../../src/adapters/awsConfigManager";
 import { makeSsoAccessProvider } from "../../src/adapters/ssoAccessProvider";
 import { AccessProvider } from "../../src/ports/accessProvider";

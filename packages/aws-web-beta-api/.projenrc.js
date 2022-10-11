@@ -2,7 +2,7 @@ const { typescript } = require("projen");
 
 const project = new typescript.TypeScriptProject({
   defaultReleaseBranch: "main",
-  name: "@cloudcanvas/aws-web-beta-api",
+  name: "cloudcanvas-aws-web-beta-api",
   releaseToNpm: true,
   majorVersion: 1,
   tsconfig: {
@@ -10,6 +10,7 @@ const project = new typescript.TypeScriptProject({
       strictPropertyInitialization: false,
       noUnusedLocals: false,
       lib: ["es2019", "dom"],
+      skipLibCheck: true,
     },
   },
   eslintOptions: {
@@ -27,6 +28,7 @@ const project = new typescript.TypeScriptProject({
   deps: [
     "@aws-sdk/client-dynamodb",
     "@aws-sdk/client-lambda",
+    "@aws-sdk/client-sts",
     "@aws-sdk/types",
     "aws-sdk",
     "yaml",

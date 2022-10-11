@@ -2,12 +2,12 @@ import os from "os";
 import {
   makeAwsConfigManager as makeAccessConfigManager,
   makeSsoAccessProvider,
-} from "@cloudcanvas/aws-sso-global-access-provider";
+} from "cloudcanvas-aws-sso-global-access-provider";
 import {
   makeAwsConfigManager as makeAuthoriserConfigManager,
   makeSsoAuthoriser,
-} from "@cloudcanvas/aws-sso-api";
-import { AccessProvider } from "@cloudcanvas/types";
+} from "cloudcanvas-aws-sso-api";
+import { AccessProvider } from "cloudcanvas-types";
 
 export const getDevAccessProvider = async (): Promise<AccessProvider> => {
   const accessConfigManager = makeAccessConfigManager({

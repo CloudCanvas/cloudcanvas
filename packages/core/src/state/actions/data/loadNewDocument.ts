@@ -1,19 +1,20 @@
-import { current } from 'immer'
-import { nanoid } from 'nanoid'
-import type { Action, AppData } from 'state/constants'
-import { mutables } from 'state/mutables'
+import { current } from "immer";
+import { nanoid } from "nanoid";
+import type { Action, AppData } from "state/constants";
+import { mutables } from "state/mutables";
 
 export const loadNewDocument: Action = (data) => {
   const newData: AppData = {
     ...data,
     id: nanoid(),
     page: {
-      id: 'page1',
+      accounts: {},
+      id: "page1",
       shapes: {},
       bindings: {},
     },
     pageState: {
-      id: 'page1',
+      id: "page1",
       camera: {
         point: [0, 0],
         zoom: 1,
@@ -28,13 +29,13 @@ export const loadNewDocument: Action = (data) => {
     overlays: {
       snapLines: [],
     },
-  }
+  };
 
-  Object.assign(data, newData)
+  Object.assign(data, newData);
 
-  const snapshot = current(data)
+  const snapshot = current(data);
 
-  mutables.history.reset(snapshot)
+  mutables.history.reset(snapshot);
 
   Object.assign(mutables, {
     snapshot,
@@ -45,5 +46,5 @@ export const loadNewDocument: Action = (data) => {
     pointedBoundsHandleId: undefined,
     initialCommonBounds: undefined,
     snapInfo: undefined,
-  })
-}
+  });
+};

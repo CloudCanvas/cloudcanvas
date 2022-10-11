@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useStores } from "../../store";
-import { MainCanvas } from "@cloudcanvas/components";
+import { MainCanvas } from "cloudcanvas-components";
 
 export const WINDOW_WIDTH = 1400;
 export const WINDOW_HEIGHT = 900;

@@ -1,6 +1,6 @@
 {
   "version": "1.7.7",
-  "name": "@cloudcanvas/core",
+  "name": "cloudcanvas-core",
   "description": "Expands on tldraw core to provide a base canvas where you can add AWS components.",
   "author": "@brianfoody",
   "repository": {
@@ -23,15 +23,19 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
+    "cloudcanvas-components": "*",
+    "@cloudscape-design/components": "^3.0.72",
+    "@cloudscape-design/global-styles": "^1.0.1",
+    "@radix-ui/colors": "^0.1.8",
     "@radix-ui/react-alert-dialog": "^1.0.0",
     "@radix-ui/react-context-menu": "^1.0.0",
     "@radix-ui/react-dialog": "^1.0.0",
     "@radix-ui/react-dropdown-menu": "^1.0.0",
     "@radix-ui/react-icons": "^1.1.1",
     "@radix-ui/react-popover": "^1.0.0",
+    "@radix-ui/react-select": "^1.0.0",
     "@radix-ui/react-tooltip": "^1.0.0",
     "@state-designer/react": "^3.0.0",
-    "@cloudcanvas/components": "*",
     "@stitches/react": "^1.2.8",
     "@tldraw/core": "1.18.4",
     "@tldraw/intersect": "1.7.1",

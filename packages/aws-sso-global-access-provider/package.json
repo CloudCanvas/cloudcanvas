@@ -1,5 +1,5 @@
 {
-  "name": "@cloudcanvas/aws-sso-global-access-provider",
+  "name": "cloudcanvas-aws-sso-global-access-provider",
   "scripts": {
     "build": "npx projen build",
     "bump": "npx projen bump",
@@ -48,9 +48,9 @@
   },
   "dependencies": {
     "@aws-sdk/client-sso": "^3.54.0",
-    "@cloudcanvas/aws-sso-api": "^0.0.0",
-    "@cloudcanvas/types": "^0.0.1",
     "aws-sdk": "^2.1045.0",
+    "cloudcanvas-aws-sso-api": "^0.0.0",
+    "cloudcanvas-types": "^0.0.1",
     "yaml": "^2.0.1"
   },
   "bundledDependencies": [],

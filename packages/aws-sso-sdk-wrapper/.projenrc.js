@@ -2,7 +2,7 @@ const { typescript } = require("projen");
 
 const project = new typescript.TypeScriptProject({
   defaultReleaseBranch: "main",
-  name: "@cloudcanvas/aws-sso-sdk-wrapper",
+  name: "cloudcanvas-aws-sso-sdk-wrapper",
   releaseToNpm: true,
   majorVersion: 1,
   tsconfig: {
@@ -10,6 +10,7 @@ const project = new typescript.TypeScriptProject({
       strictPropertyInitialization: false,
       noUnusedLocals: false,
       lib: ["es2019", "dom"],
+      skipLibCheck: true,
     },
   },
   eslintOptions: {
@@ -25,8 +26,8 @@ const project = new typescript.TypeScriptProject({
   },
   devDeps: [
     "@types/aws-lambda",
-    "@cloudcanvas/aws-sso-api@*",
-    "@cloudcanvas/aws-sso-global-access-provider@*",
+    "cloudcanvas-aws-sso-api@*",
+    "cloudcanvas-aws-sso-global-access-provider@*",
     "open",
   ],
   deps: [
@@ -42,7 +43,7 @@ const project = new typescript.TypeScriptProject({
     "@aws-sdk/smithy-client",
     "@aws-sdk/types",
     "@aws-sdk/s3-request-presigner",
-    "@cloudcanvas/types@*",
+    "cloudcanvas-types@*",
     "aws-lambda",
     "aws-sdk",
     "ts-retry-promise",

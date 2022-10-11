@@ -9,7 +9,7 @@ import {
   AwsRegion,
   Access,
   Organisation,
-} from "@cloudcanvas/types";
+} from "cloudcanvas-types";
 
 export class SSOExpiredError extends Error {
   constructor(msg: string) {

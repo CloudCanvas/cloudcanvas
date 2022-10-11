@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { AccessPair, Account, Organisation } from "@cloudcanvas/types";
+import { AccessPair, Account, Organisation } from "cloudcanvas-types";
 import {
   Alert,
   Button,

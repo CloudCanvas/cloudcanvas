@@ -2,7 +2,8 @@ const { typescript } = require("projen");
 
 const project = new typescript.TypeScriptProject({
   defaultReleaseBranch: "main",
-  name: "@cloudcanvas/aws-sso-global-access-provider",
+  version: "0.0.1",
+  name: "cloudcanvas-aws-sso-global-access-provider",
   releaseToNpm: true,
   majorVersion: 1,
   tsconfig: {
@@ -10,6 +11,7 @@ const project = new typescript.TypeScriptProject({
       strictPropertyInitialization: false,
       noUnusedLocals: false,
       lib: ["es2019", "dom"],
+      skipLibCheck: true,
     },
   },
   eslintOptions: {
@@ -27,8 +29,8 @@ const project = new typescript.TypeScriptProject({
   deps: [
     "@aws-sdk/client-sso",
     "aws-sdk",
-    "@cloudcanvas/aws-sso-api@*",
-    "@cloudcanvas/types@*",
+    "cloudcanvas-aws-sso-api@*",
+    "cloudcanvas-types@*",
     "yaml",
   ],
 });

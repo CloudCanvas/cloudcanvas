@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { AddResource } from "@cloudcanvas/components";
+import { AddResource } from "cloudcanvas-components";
 import styled from "stitches.config";
 import { Shape } from "shapes";
 

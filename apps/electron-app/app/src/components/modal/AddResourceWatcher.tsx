@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React, { useEffect } from "react";
 import { useStores } from "../../store";
-import { AddResource } from "@cloudcanvas/components";
+import { AddResource } from "cloudcanvas-components";
 import "./AddResourceWatcher.css";
 import { aws } from "../../entrypoints/aws";
 

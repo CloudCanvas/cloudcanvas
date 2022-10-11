@@ -1,9 +1,9 @@
-import { createAWSClient } from "@cloudcanvas/aws-sso-sdk-wrapper";
-import { AccessProvider } from "@cloudcanvas/types";
+import { createAWSClient } from "cloudcanvas-aws-sso-sdk-wrapper";
+import { AccessProvider } from "cloudcanvas-types";
 import {
   ConfigManager,
   makeFileConfigManager,
-} from "@cloudcanvas/configuration-manager";
+} from "cloudcanvas-configuration-manager";
 import { LocalAwsBridge } from "../ports/aws";
 import { Config } from "../domain/config";
 

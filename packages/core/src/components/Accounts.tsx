@@ -1,12 +1,11 @@
 import * as React from "react";
 import { ArrowUpRight, Edit2, MousePointer, Square, X } from "react-feather";
-import { Button, TextContent } from "@cloudcanvas/components";
+import { Button, TextContent } from "cloudcanvas-components";
 import { Account } from "state/constants";
 import { machine } from "state/machine";
 import styled from "stitches.config";
 
 interface AccountProps {}
-
 
 const onAddAccount = (account: Account) => {
   machine.send("ADD_ACCOUNT", { account });
@@ -19,7 +18,6 @@ export function Accounts() {
         <h2>
           <TextContent>Accounts</TextContent>
         </h2>
-        
       </AccountList>
       <Line />
       <Line />
@@ -30,7 +28,6 @@ export function Accounts() {
         </p>
 
         <Button>Add account</Button>
-        
       </AddAccount>
     </AccountContainer>
   );

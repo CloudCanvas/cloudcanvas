@@ -9,7 +9,7 @@ import {
   Organisation,
   AWS,
   AwsRegion,
-} from "@cloudcanvas/types";
+} from "cloudcanvas-types";
 import { regions } from "../../../domain/aws";
 import { ComponentCatalogEntry } from "../../../domain";
 

@@ -3,7 +3,7 @@ import {
   ListAccountsCommand,
   SSOClient,
 } from "@aws-sdk/client-sso";
-import { SsoAuthoriser, uniq } from "@cloudcanvas/aws-sso-api";
+import { SsoAuthoriser, uniq } from "cloudcanvas-aws-sso-api";
 import {
   Access,
   Account,
@@ -12,7 +12,7 @@ import {
   PermissionSet,
   AwsRegion,
   SSOSession,
-} from "@cloudcanvas/types";
+} from "cloudcanvas-types";
 import { AccessProvider, SSOExpiredError } from "../ports/accessProvider";
 import { ConfigManager } from "../ports/configManager";
 
@@ -149,7 +149,7 @@ export const makeSsoAccessProvider = ({
     const federatedAccess = await authoriser.getFederatedAccessToken(
       org.ssoStartUrl,
       org.ssoRegion,
-      true
+      false
     );
 
     const details = await fetchAllAccountsAndRoles(federatedAccess);
@@ -340,7 +340,7 @@ export const makeSsoAccessProvider = ({
       const federatedAccess = await authoriser.getFederatedAccessToken(
         authOrg.ssoStartUrl,
         authOrg.ssoRegion,
-        true
+        false
       );
 
       if (!federatedAccess) {

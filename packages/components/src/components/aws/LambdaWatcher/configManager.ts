@@ -1,4 +1,4 @@
-import { AWS } from "@cloudcanvas/types";
+import { AWS } from "cloudcanvas-types";
 import { ListFunctionsCommand } from "@aws-sdk/client-lambda";
 import { CustomData } from "../../form";
 

@@ -1,9 +1,9 @@
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 // @ts-ignore
 import { v4 } from "uuid";
-import { AwsComponent } from "@cloudcanvas/types";
+import { AwsComponent } from "cloudcanvas-types";
 import { CANVAS_CENTER } from "../components/spatial/MainCanvasWrapper";
-import { ConfigManager } from "@cloudcanvas/configuration-manager";
+import { ConfigManager } from "cloudcanvas-configuration-manager";
 import { Config } from "../domain/config";
 
 type Update = {

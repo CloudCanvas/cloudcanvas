@@ -1,5 +1,5 @@
 {
-  "name": "@cloudcanvas/components",
+  "name": "cloudcanvas-components",
   "version": "1.0.27",
   "main": "lib/index.js",
   "module": "lib/index.esm.js",
@@ -52,8 +52,8 @@
     "@aws-sdk/smithy-client": "^3.55.0",
     "@aws-sdk/types": "^3.40.0",
     "@aws-sdk/util-dynamodb": "^3.44.0",
-    "@cloudcanvas/aws-sso-sdk-wrapper": "*",
-    "@cloudcanvas/types": "*",
+    "cloudcanvas-aws-sso-sdk-wrapper": "*",
+    "cloudcanvas-types": "*",
     "@react-spring/web": "^9.5.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",

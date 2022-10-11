@@ -92,6 +92,10 @@
       "type": "runtime"
     },
     {
+      "name": "@aws-sdk/client-sts",
+      "type": "runtime"
+    },
+    {
       "name": "@aws-sdk/types",
       "type": "runtime"
     },
