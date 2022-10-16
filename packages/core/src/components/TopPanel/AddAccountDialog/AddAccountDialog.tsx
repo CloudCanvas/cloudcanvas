@@ -1,17 +1,22 @@
-import * as Dialog from "@radix-ui/react-alert-dialog";
-import { Pencil1Icon, PlusIcon } from "@radix-ui/react-icons";
-import * as React from "react";
+/**
+ * Bit of an ugly component now that could do with some love post beta.
+ */
 import { Divider } from "../../Primitives/Divider";
 import { RowButton, RowButtonProps } from "../../Primitives/RowButton";
 import { TextField } from "../../Primitives/TextField";
-import styled from "stitches.config";
+import { isValidCredentials } from "./CredentialsParser";
+import { Autosuggest } from "@cloudscape-design/components";
+import * as Dialog from "@radix-ui/react-alert-dialog";
+import { Pencil1Icon, PlusIcon } from "@radix-ui/react-icons";
+import { TextArea } from "components/Primitives/TextArea";
+import * as React from "react";
+import { Api } from "state/api";
 import { Account } from "state/constants";
 import { machine } from "state/machine";
-import { TextArea } from "components/Primitives/TextArea";
+import styled from "stitches.config";
 import { useContainer } from "useCoreApp";
-import { isValidCredentials } from "./CredentialsParser";
-import { Autosuggest, Multiselect } from "@cloudscape-design/components";
-import { OptionDefinition } from "@cloudscape-design/components/internal/components/option/interfaces";
+
+declare const window: Window & { api: Api };
 
 export const regions = [
   "us-east-1",
@@ -62,7 +67,10 @@ export function AddAccountDialog({
     onClose();
   }, []);
 
-  const handleAddAccount = React.useCallback(() => {
+  const canAdd =
+    !!accountName && isValidCredentials(accountCredentials) && !!selectedRegion;
+
+  const handleAddAccount = React.useCallback(async () => {
     if (!accountName) {
       // Weird workaround for now
       window.alert("Add an account name");
@@ -84,14 +92,24 @@ export function AddAccountDialog({
       return null;
     }
 
-    const accountToAdd: Account = {
-      name: accountName,
-      active: true,
-      regions: [selectedRegion],
-      accountId: "TODO GET ACCOUNT ID",
-    };
+    try {
+      const accountId = await window.api.trySaveCredentials(accountCredentials);
 
-    // machine.send("ADD_ACCOUNT", { account: accountToAdd });
+      const accountToAdd: Account = {
+        name: accountName,
+        active: true,
+        regions: [selectedRegion],
+        accountId,
+      };
+
+      machine.send("ADD_ACCOUNT", { account: accountToAdd });
+
+      window.alert("Account addeed, you can now draw components from it.");
+    } catch (err) {
+      console.log(err);
+      window.alert("Credentials were invalid");
+      return;
+    }
   }, [machine, accountName, selectedRegion, accountCredentials]);
 
   const handleOpenChange = React.useCallback((isOpen: boolean) => {
@@ -176,9 +194,21 @@ export function AddAccountDialog({
             icon={<Pencil1Icon />}
           />
           <Divider />
+          <BorderlessInput className="borderless-input">
+            <Autosuggest
+              onChange={({ detail }) => setSelectedRegion(detail.value)}
+              value={selectedRegion}
+              options={regions.map((r) => ({ value: r }))}
+              enteredTextLabel={(value) => `Use: "${value}"`}
+              ariaLabel="Autosuggest for region"
+              placeholder="Select a region"
+              empty="No matching region found"
+            />
+          </BorderlessInput>
+          <Divider />
           <TextArea
             ref={rArea}
-            placeholder={`export AWS_ACCESS_KEY_ID="ASIA********"\nexport AWS_SECRET_ACCESS_KEY="***********"\nexport AWS_SESSION_TOKEN="*******"`}
+            placeholder={`Enter temporary credentials\nexport AWS_ACCESS_KEY_ID="ASIA********"\nexport AWS_SECRET_ACCESS_KEY="***********"\nexport AWS_SESSION_TOKEN="*******"`}
             value={accountCredentials}
             onChange={handleTextAreaChange}
             onKeyDown={handleTextFieldKeyDown}
@@ -186,16 +216,7 @@ export function AddAccountDialog({
           />
           <Divider />
           {/* TODO Div class and remove border on child input */}
-          <Autosuggest
-            onChange={({ detail }) => setSelectedRegion(detail.value)}
-            value={selectedRegion}
-            options={regions.map((r) => ({ value: r }))}
-            enteredTextLabel={(value) => `Use: "${value}"`}
-            ariaLabel="Autosuggest for region"
-            placeholder="Select a region"
-            empty="No matching region found"
-          />
-          <Divider />
+
           {/* <DialogAction onSelect={handleDuplicate}>
             <FormattedMessage id="duplicate" />
           </DialogAction>
@@ -203,7 +224,9 @@ export function AddAccountDialog({
             <FormattedMessage id="delete" />
           </DialogAction>
           <Divider /> */}
-          <DialogAction onSelect={handleAddAccount}>Add</DialogAction>
+          <DialogAction onSelect={handleAddAccount} disabled={!canAdd}>
+            Add
+          </DialogAction>
           <Divider />
           <Dialog.Cancel asChild>
             <RowButton>Cancel</RowButton>
@@ -258,3 +281,15 @@ function DialogAction({
     </Dialog.Action>
   );
 }
+const BorderlessInput = styled("div", {
+  "& input": {
+    border: "none !important",
+    backgroundColor: "transparent",
+    fontFamily: "Inter !important",
+    fontSize: "12px !important",
+    fontStyle: "none !important",
+  },
+  "& input::placeholder": {
+    fontStyle: "none !important",
+  },
+});

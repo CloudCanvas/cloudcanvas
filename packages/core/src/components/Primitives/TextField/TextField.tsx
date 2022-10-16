@@ -27,7 +27,9 @@ const StyledInput = styled("input", {
   color: "$text",
   border: "none",
   textAlign: "left",
-  width: "100%",
+  width: "calc(100% - 32px)",
+  position: "relative",
+  left: "28px",
   paddingLeft: "$3",
   paddingRight: "$6",
   backgroundColor: "$background",
@@ -36,14 +38,14 @@ const StyledInput = styled("input", {
   fontFamily: "$ui",
   fontSize: "$1",
   "&:focus": {
-    backgroundColor: "$hover",
+    // backgroundColor: "$hover",
   },
   borderRadius: "$2",
 });
 
 const StyledInputIcon = styled(SmallIcon, {
   top: 0,
-  right: 0,
+  left: 0,
   position: "absolute",
   paddingLeft: "$3",
   paddingRight: "$3",

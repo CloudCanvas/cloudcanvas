@@ -1,3 +1,8 @@
+import { TitleLinks } from "./components/TitleLinks";
+import { Toolbar } from "./components/Toolbar";
+import { shapeUtils } from "./shapes";
+import { machine } from "./state/machine";
+import "./styles.css";
 import { useStateDesigner } from "@state-designer/react";
 import {
   Renderer,
@@ -7,16 +12,12 @@ import {
   TLPointerEventHandler,
   TLWheelEventHandler,
 } from "@tldraw/core";
+import { AwsApi } from "awsApi";
+import "cloudcanvas-components/lib/index.css";
+import { TopPanel } from "components/TopPanel";
 import * as React from "react";
 import { Api } from "state/api";
 import styled from "stitches.config";
-import { TitleLinks } from "./components/TitleLinks";
-import { Toolbar } from "./components/Toolbar";
-import { shapeUtils } from "./shapes";
-import { machine } from "./state/machine";
-import "./styles.css";
-import "cloudcanvas-components/lib/index.css";
-import { TopPanel } from "components/TopPanel";
 import { ContainerContext } from "useCoreApp";
 
 declare const window: Window & { api: Api };
@@ -216,7 +217,7 @@ export default function App({ onMount }: AppProps) {
   const rWrapper = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
-    const api = new Api(appState);
+    const api = new Api(appState, new AwsApi());
     onMount?.(api);
     window["api"] = api;
   }, []);

@@ -77,3 +77,7 @@ Anywway it's fucking great now that it's all wired. Finally I'm back to the poin
 Getting there,
 
 ---
+
+Right I have pivoted this to not use a desktop app and instead use SSO to securely launch a tab where you can sketch an account.
+
+We should then be able to save these and relaunch them so that people can check them into source control with their microservices.

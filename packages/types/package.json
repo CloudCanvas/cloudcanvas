@@ -13,7 +13,5 @@
     "lint": "TIMING=1 eslint src/ --ext .ts,.tsx",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
-  "devDependencies": {
-    "@tldraw/lfg": "latest"
-  }
+  "devDependencies": {}
 }

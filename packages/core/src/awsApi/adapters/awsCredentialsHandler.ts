@@ -1,11 +1,12 @@
+import { CredentialsHandler } from "../ports";
 import { STSClient, GetCallerIdentityCommand } from "@aws-sdk/client-sts";
-import { Credentials } from "aws-sdk";
-import { CredentialsHandler, Resource, ResourceIndexer } from "../ports";
+import { Credentials } from "@aws-sdk/types";
 
-const getAccountId = async (
-  credentialsInput?: string
-): Promise<string | undefined> => {
+const getCredentialsDetail = async (credentialsInput?: string) => {
   const credentials = createCredentials(credentialsInput);
+
+  console.log("credentials");
+  console.log(credentials);
   if (!credentials) return undefined;
 
   const stsClient = new STSClient({
@@ -15,7 +16,13 @@ const getAccountId = async (
 
   const identity = await stsClient.send(new GetCallerIdentityCommand({}));
 
-  return identity.Account;
+  console.log("identity");
+  console.log(identity);
+
+  return {
+    credentials,
+    accountId: identity.Account,
+  };
 };
 
 /**
@@ -37,7 +44,7 @@ const parseCredentialsInput = (
     const awsIndex = line.indexOf("AWS_");
     if (!awsIndex) continue;
     const [key, value] = line.substring(awsIndex, line.length).split("=");
-    checks[key] = value;
+    checks[key] = value.replaceAll('"', "");
   }
 
   return checks;
@@ -70,22 +77,42 @@ const createCredentials = (input?: string): Credentials | undefined => {
 
   const parsed = parseCredentialsInput(input);
 
-  return new Credentials({
+  return {
     accessKeyId: parsed.AWS_ACCESS_KEY_ID!,
     secretAccessKey: parsed.AWS_SECRET_ACCESS_KEY!,
     sessionToken: parsed.AWS_SESSION_TOKEN,
-  });
+  } as Credentials;
 };
 
 export const makeCredentialsHandler = (): CredentialsHandler => {
   return {
     isValidCredentials: isValidCredentials,
-    getAccountIdFromCredentials: getAccountId,
+    getAccountIdFromCredentials: async (creds) => {
+      const detail = await getCredentialsDetail(creds);
+      return detail?.accountId;
+    },
     securelyStoreCredentials: async (credentialsInput?: string) => {
-      const accountId = getAccountId(credentialsInput);
-      if (!accountId) throw new Error("Invalid credentials");
+      const detail = await getCredentialsDetail(credentialsInput);
+      if (!detail?.accountId) throw new Error("Invalid credentials");
 
-      // window.localStorage.setItem(accountId, JSON.stringify());
+      // TODO Improve
+      window.localStorage.setItem(
+        detail.accountId,
+        JSON.stringify(detail.credentials)
+      );
+
+      return { accountId: detail.accountId };
+    },
+    securelyFetchCredentials: async (accountId: string) => {
+      const detail = window.localStorage.getItem(accountId);
+      if (!detail) return undefined;
+
+      const obj = JSON.parse(detail);
+      return {
+        accessKeyId: obj.accessKeyId,
+        secretAccessKey: obj.secretAccessKey,
+        sessionToken: obj.sessionToken,
+      } as Credentials;
     },
   };
 };

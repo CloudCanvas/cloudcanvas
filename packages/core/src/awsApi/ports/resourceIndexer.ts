@@ -1,4 +1,4 @@
-import { Credentials } from "aws-sdk";
+import { Credentials } from "@aws-sdk/types";
 
 export interface Resource {
   resourceId: string;

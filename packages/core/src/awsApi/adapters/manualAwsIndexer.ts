@@ -1,11 +1,14 @@
-import { DynamoDBClient, ListTablesCommand } from "@aws-sdk/client-dynamodb";
+import {
+  DynamoDBClient,
+  ListTablesCommand,
+  ListTablesOutput,
+} from "@aws-sdk/client-dynamodb";
 import {
   LambdaClient,
   ListFunctionsCommand,
   ListFunctionsCommandOutput,
 } from "@aws-sdk/client-lambda";
-import { Credentials } from "aws-sdk";
-import { ListTablesOutput } from "aws-sdk/clients/dynamodb";
+
 import { Resource, ResourceIndexer } from "../ports";
 
 const fetchAllFunctions = async (client: LambdaClient): Promise<Resource[]> => {

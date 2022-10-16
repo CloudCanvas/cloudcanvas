@@ -18,7 +18,7 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
           spellCheck={"false"}
           style={{
             background: valid ? "#d7eddb" : undefined,
-            color: valid ? "#d7eddb" : undefined,
+            color: valid ? "gray" : undefined,
           }}
         />
         {icon ? <StyledInputIcon>{icon}</StyledInputIcon> : null}
@@ -41,13 +41,13 @@ const StyledTextArea = styled("textarea", {
   paddingLeft: "$3",
   paddingRight: "$6",
   backgroundColor: "$background",
-  height: "54px",
+  height: "60px",
   outline: "none",
   fontFamily: "$ui",
   fontSize: "$1",
-  "&:focus": {
-    backgroundColor: "$hover",
-  },
+  // "&:focus": {
+  //   backgroundColor: "$hover",
+  // },
   borderRadius: "$2",
 });
 

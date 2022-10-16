@@ -1,7 +1,8 @@
-import { nanoid } from "nanoid";
-import type { Shape } from "shapes";
 import type { Account, CustomBinding } from "./constants";
 import type { machine } from "./machine";
+import { AwsApi } from "awsApi";
+import { nanoid } from "nanoid";
+import type { Shape } from "shapes";
 
 /*
 Example API
@@ -26,7 +27,7 @@ api.getShape('myBox')
 */
 
 export class Api {
-  constructor(private _machine: typeof machine) {
+  constructor(private _machine: typeof machine, private awsApi: AwsApi) {
     this.send = _machine.send;
     this.isIn = _machine.isIn;
     this.isInAny = _machine.isInAny;
@@ -106,6 +107,11 @@ export class Api {
   deleteShapes = (...ids: string[]) => {
     this.machine.send("DELETED_SHAPES", { ids });
     return this;
+  };
+
+  trySaveCredentials = async (credentialsInput: string) => {
+    const accountId = await this.awsApi.saveCredentials(credentialsInput);
+    return accountId;
   };
 
   addAccount = (account: Account) => {
