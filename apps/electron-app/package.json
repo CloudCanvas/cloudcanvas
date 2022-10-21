@@ -123,10 +123,6 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
-    "cloudcanvas-aws-sso-api": "*",
-    "cloudcanvas-aws-sso-global-access-provider": "*",
-    "cloudcanvas-aws-sso-sdk-wrapper": "*",
-    "cloudcanvas-components": "*",
     "@cloudscape-design/components": "^3.0.18",
     "@cloudscape-design/global-styles": "^1.0.1",
     "@loadable/component": "^5.15.2",
@@ -134,6 +130,10 @@
     "@tldraw/tldraw": "^1.20.0",
     "@xstate/react": "^3.0.0",
     "bulma": "^0.9.4",
+    "cloudcanvas-aws-sso-api": "*",
+    "cloudcanvas-aws-sso-global-access-provider": "*",
+    "cloudcanvas-aws-sso-sdk-wrapper": "*",
+    "cloudcanvas-components": "*",
     "debounce": "^1.2.1",
     "electron-devtools-installer": "^3.2.0",
     "electron-updater": "^5.2.1",
