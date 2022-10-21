@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useRef } from "react";
+import "./BaseComponent.scss";
 import { Rnd } from "react-rnd";
-import { useMachine } from "@xstate/react";
-import { AwsComponent, Component } from "../../../domain/core";
+import { AwsComponent } from "cloudcanvas-types";
 import {
   TbPlugConnected,
   TbPlugConnectedX,
@@ -9,40 +9,30 @@ import {
   TbPlayerPause,
   TbInfoCircle,
 } from "react-icons/tb";
-import { centered, centeredRow, spacedRow } from "../../../utils/layoutUtils";
+import { centeredRow, spacedRow } from "../../../utils/layoutUtils";
 import Popover from "@cloudscape-design/components/popover";
 import Button from "@cloudscape-design/components/button";
 import TextContent from "@cloudscape-design/components/text-content";
 import StatusIndicator from "@cloudscape-design/components/status-indicator";
 import "../../../base.css";
-import { createStreamMachine } from "../../../machines/dataFetcherMachine";
 import ChildComponentWrapper from "./ChildComponentWrapper";
+import { componentCatalog } from "../../../domain";
 
 export const BASE_TAB_HGT = 40;
 export const BASE_FOOTER_HGT = 20;
 
 export interface ComponentStatus {
-  authorisation: BaseComponentProps<unknown, unknown>["state"]["authorisation"];
-  network?: BaseComponentProps<unknown, unknown>["state"]["network"];
-  playing: Component["playing"];
-}
-
-export interface DataFetcher<T, U> {
-  delay: number;
-  initialData: T;
-  fetch: () => Promise<U>;
-  update: (current: T, update: U) => T;
+  authorisation: BaseComponentProps["state"]["authorisation"];
+  network?: BaseComponentProps["state"]["network"];
+  playing: boolean;
 }
 
 export type AuthStatus = "authorized" | "expired";
 export type NetworkStatus = "connected" | "disconnected";
 
-export interface BaseComponentProps<T, U> {
-  ports: {
-    dataFetcher: DataFetcher<T, U>;
-  };
+export interface BaseComponentProps {
   state: {
-    component: Component;
+    component: AwsComponent<unknown, unknown>;
     authorisation: AuthStatus;
     network?: NetworkStatus;
     scale?: number;
@@ -54,42 +44,29 @@ export interface BaseComponentProps<T, U> {
     onMove: (size: number[]) => void;
     onSelection: (selected: boolean) => void;
   };
-  ContentComponent?: (data: any) => JSX.Element;
+  children: React.ReactNode;
 }
 
-const BaseComponent = <T, U>({
-  ports,
-  state,
-  dispatch,
-  ContentComponent,
-}: BaseComponentProps<T, U>) => {
+const BaseComponent = ({ state, dispatch, children }: BaseComponentProps) => {
+  const { component: c } = state;
+
+  const dragTime = useRef(+new Date());
+  const hasDragged = useRef(false);
+
   const [location, setLocation] = React.useState<number[] | undefined>();
   const [size, setSize] = React.useState<number[] | undefined>();
 
-  // Create the machine to manage streaming data.
-  const streamMachine = useMemo(
-    () =>
-      createStreamMachine<T, U>({
-        dataFetcher: ports.dataFetcher,
-        authorisation: state.authorisation,
-        playing: state.component.playing,
-      }),
-    []
-  );
-  const [streamState, streamSend] = useMachine(streamMachine, {
-    // @ts-ignore
-    actions: {},
-  });
+  const catalogEntry = componentCatalog.find(
+    (c) => c.type === state.component.type
+  )!;
 
-  const { component: c } = state;
-
-  const icon = c.def.icon;
+  const icon = catalogEntry.icon;
 
   // We use the props to set the initial location and size but after that we ignore it and control
   // it with internal state to avoid any jitter. The side effects are dispatched to update for next open.
   useEffect(() => {
-    setLocation(c.layout.location);
-    setSize(c.layout.size);
+    setLocation(c.state.layout.location);
+    setSize(c.state.layout.size);
   }, []);
 
   // Dispatch location side effect
@@ -106,46 +83,37 @@ const BaseComponent = <T, U>({
     dispatch.onResize(size);
   }, [size]);
 
-  useEffect(() => {
-    if (state.component.playing) {
-      streamSend("PLAYING");
-    } else {
-      streamSend("PAUSED");
-    }
-  }, [state.component.playing]);
-
-  useEffect(() => {
-    if (state.authorisation === "authorized") {
-      streamSend("AUTHORISED");
-    } else {
-      streamSend("EXPIRED");
-    }
-  }, [state.authorisation]);
-
   if (!location || !size) return null;
-
-  const hasData =
-    streamState.context.data instanceof Array
-      ? (streamState.context.data?.length || 0) > 0
-      : !!streamState.context.data;
 
   return (
     <Rnd
-      style={{
-        borderColor: c.selected ? "#0972d3" : "black",
-        borderWidth: 3,
-        borderStyle: "solid",
-        borderRadius: 5,
-      }}
+      className={`base-component lined thick ${
+        c.state.selected ? "selected" : "unselected"
+      }`}
       scale={state.scale || 1}
       position={{ x: location[0], y: location[1] }}
       size={{ width: size[0], height: size[1] }}
       onDragStop={(e, d) => {
         setLocation([d.x, d.y]);
+
+        // onDragStop always happens even if no drag happened
+        // The user may have dragged and waited before letting go so
+        // we need to know if there was a drag to set the time and then not trigger a click event
+        if (hasDragged.current) {
+          dragTime.current = +new Date();
+        }
+        hasDragged.current = false;
       }}
-      onResizeStop={(_e, _direction, ref, _delta, position) => {
+      onDrag={(e, data) => {
+        if (Math.max(Math.abs(data.deltaX), Math.abs(data.deltaY)) > 5) {
+          hasDragged.current = true;
+        }
+        dragTime.current = +new Date();
+      }}
+      onResizeStop={(e, _direction, ref, _delta, position) => {
         setSize([parseFloat(ref.style.width), parseFloat(ref.style.height)]);
         setLocation([position.x, position.y]);
+        // e.stopPropagation();
       }}
       cancel=".componentBody"
       allowAnyClick={false}
@@ -166,12 +134,16 @@ const BaseComponent = <T, U>({
             width: "100%",
             borderBottomWidth: 3,
             borderBottomStyle: "solid",
-            borderBottomColor: c.selected ? "#0972d3" : "black",
+            borderBottomColor: c.state.selected ? "#0972d3" : "black",
             ...spacedRow,
           }}
           onClick={(evt) => {
             evt.stopPropagation();
-            dispatch.onSelection(!c.selected);
+
+            // Only send click if a drag did no just hapen
+            if (Math.abs(+new Date() - dragTime.current) > 50) {
+              dispatch.onSelection(!c.state.selected);
+            }
           }}
         >
           <div style={centeredRow}>
@@ -198,7 +170,7 @@ const BaseComponent = <T, U>({
               status={{
                 authorisation: state.authorisation,
                 network: state.network,
-                playing: c.playing,
+                playing: c.state.playing,
               }}
               component={c}
               togglePlay={() => dispatch.onTogglePlay()}
@@ -207,12 +179,8 @@ const BaseComponent = <T, U>({
           </div>
         </div>
 
-        <ChildComponentWrapper selected={state.component.selected}>
-          {!hasData && <Placeholder state={state} />}
-
-          {hasData && ContentComponent && (
-            <ContentComponent data={streamState.context.data as any} />
-          )}
+        <ChildComponentWrapper selected={state.component.state.selected}>
+          {children}
         </ChildComponentWrapper>
       </div>
     </Rnd>
@@ -221,7 +189,7 @@ const BaseComponent = <T, U>({
 
 const Icons = (props: {
   status: ComponentStatus;
-  component: Component;
+  component: AwsComponent<unknown, unknown>;
   togglePlay: () => void;
   authorise: () => void;
 }) => {
@@ -247,11 +215,14 @@ const Icons = (props: {
 
 const InformationIcon = (props: {
   status: ComponentStatus;
-  component: Component;
+  component: AwsComponent<unknown, unknown>;
 }) => {
   // Test for AWS Component as we only show for them
-  const awsComponent = props.component as AwsComponent<any>;
-  if (!awsComponent?.config?.accountId) return null;
+  if (!props.component?.config?.accountId) return null;
+
+  const catalogEntry = componentCatalog.find(
+    (c) => c.type === props.component.type
+  );
 
   return (
     <Popover
@@ -262,9 +233,9 @@ const InformationIcon = (props: {
       triggerType="custom"
       content={
         <TextContent>
-          {awsComponent.def.name} in account {awsComponent.config.accountId} (
-          {awsComponent.config.region}) using{" "}
-          {awsComponent.config.permissionSet} permission set.
+          {catalogEntry?.title} in account {props.component.config.accountId} (
+          {props.component.config.region}) using{" "}
+          {props.component.config.permissionSet} permission set.
         </TextContent>
       }
     >
@@ -316,12 +287,12 @@ const PlayIcon = ({
   togglePlay: () => void;
 }) => {
   if (status.playing && status.authorisation === "authorized") {
-    return <TbPlayerPause color="green" onClick={togglePlay} />;
+    return <TbPlayerPlay color="green" onClick={togglePlay} />;
   }
   if (status.playing && status.authorisation === "expired") {
-    return <TbPlayerPause color="orange" onClick={togglePlay} />;
+    return <TbPlayerPlay color="orange" onClick={togglePlay} />;
   } else {
-    return <TbPlayerPlay color="black" onClick={togglePlay} />;
+    return <TbPlayerPause color="black" onClick={togglePlay} />;
   }
 };
 
@@ -390,21 +361,5 @@ const Pointer = ({
     {children}
   </div>
 );
-
-const Placeholder = <T, U>(props: Pick<BaseComponentProps<T, U>, "state">) => {
-  return (
-    <div style={{ ...centered, flex: 1 }}>
-      <TextContent>
-        {props.state.authorisation === "expired" && (
-          <p>Authorisation has expired, refresh to view</p>
-        )}
-        {props.state.authorisation === "authorized" &&
-          !props.state.component.playing && <p>Paused</p>}
-        {props.state.authorisation === "authorized" &&
-          props.state.component.playing && <p>Listening for updates...</p>}
-      </TextContent>
-    </div>
-  );
-};
 
 export default BaseComponent;

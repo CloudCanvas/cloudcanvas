@@ -1,9 +1,17 @@
 {
   "$schema": "https://turborepo.org/schema.json",
   "pipeline": {
+    "installDeps": {
+      "dependsOn": ["^installDeps"],
+      "outputs": ["lib/**"]
+    },
+    "projen": {
+      "dependsOn": ["^projen"],
+      "outputs": ["lib/**"]
+    },
     "compile": {
       "dependsOn": ["^compile"],
-      "outputs": ["dist/**"]
+      "outputs": ["lib/**"]
     },
     "build": {
       "dependsOn": ["^build"],
@@ -13,6 +21,9 @@
       "outputs": []
     },
     "dev": {
+      "cache": false
+    },
+    "clean": {
       "cache": false
     }
   }

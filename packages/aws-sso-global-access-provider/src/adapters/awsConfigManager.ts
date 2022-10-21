@@ -1,7 +1,7 @@
-import fs from "fs";
-import { uniq } from "@cloudcanvas/aws-sso-api";
-import { Access, Account, Organisation } from "../domain/aws";
+import { uniq } from "cloudcanvas-aws-sso-api";
 import { ConfigManager } from "../ports/configManager";
+import { Access, Account, Organisation } from "cloudcanvas-types";
+import fs from "fs";
 
 const defaultConfigLocation = `/.aws/config`;
 const s3oCacheDir = `/.cloudcanvas/cache/`;

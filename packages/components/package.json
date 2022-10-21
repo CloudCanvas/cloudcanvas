@@ -1,9 +1,9 @@
 {
-  "name": "@cloudcanvas/components",
+  "name": "cloudcanvas-components",
   "version": "1.0.27",
   "main": "lib/index.js",
   "module": "lib/index.esm.js",
-  "types": "lib/index.d.ts",
+  "types": "lib/src/index.d.ts",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.18.10",
@@ -11,7 +11,10 @@
     "@cloudscape-design/global-styles": "^1.0.1",
     "@ladle/react": "^2.1.0",
     "@rollup/plugin-commonjs": "^22.0.2",
+    "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.3.0",
+    "@types/react-transition-group": "^4.4.5",
+    "@types/uuid": "^8.3.4",
     "babel-loader": "^8.2.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -23,11 +26,13 @@
     "rollup-plugin-svg-import": "^1.6.0",
     "rollup-plugin-typescript2": "^0.32.1",
     "sass": "^1.54.3",
-    "typescript": "^4.7.4"
+    "typescript": "^4.5.2"
   },
   "scripts": {
     "ladle": "ladle serve",
+    "installDeps": "yarn",
     "build": "rollup -c --context window",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf lib",
     "compile": "rollup -c --context window"
   },
   "peerDependencies": {
@@ -37,19 +42,37 @@
     "react-dom": "^16.8 || ^17 || ^18"
   },
   "dependencies": {
-    "@cloudcanvas/aws-sso-sdk-wrapper": "*",
+    "@aws-sdk/client-dynamodb": "^3.44.0",
+    "@aws-sdk/client-dynamodb-streams": "^3.137.0",
+    "@aws-sdk/client-lambda": "^3.137.0",
+    "@aws-sdk/client-iotsitewise": "^3.137.0",
+    "@aws-sdk/client-s3": "^3.44.0",
+    "@aws-sdk/lib-dynamodb": "^3.44.0",
+    "@aws-sdk/s3-request-presigner": "^3.44.0",
+    "@aws-sdk/smithy-client": "^3.55.0",
+    "@aws-sdk/types": "^3.40.0",
+    "@aws-sdk/util-dynamodb": "^3.44.0",
+    "cloudcanvas-aws-sso-sdk-wrapper": "*",
+    "cloudcanvas-types": "*",
+    "@react-spring/web": "^9.5.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
     "@xstate/react": "^3.0.1",
+    "aws-crt": "^1.14.1",
     "aws-svg-icons": "^3.0.0-2021-07-30",
     "bulma": "^0.9.4",
     "cmdk": "^0.1.18",
     "date-fns": "^2.29.1",
+    "intersection-observer": "^0.12.2",
     "react-icons": "^4.4.0",
     "react-inspector": "^6.0.1",
+    "react-is-visible": "^1.2.0",
     "react-rnd": "^10.3.7",
     "react-scripts": "5.0.1",
+    "react-transition-group": "^4.4.5",
+    "ts-node": "^10.9.1",
+    "uuid": "^8.3.2",
     "web-vitals": "^2.1.4",
     "xstate": "^4.33.0"
   }

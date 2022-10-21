@@ -1,14 +1,10 @@
-import { Organisation } from "@cloudcanvas/aws-sso-sdk-wrapper";
 import React from "react";
-
 import {
   BaseComponentProps,
   ComponentStatus,
 } from "../components/layout/BaseComponent/BaseComponent";
-import { DynamoWatcherComponentDef } from "../domain";
-import { AwsComponent, Component } from "../domain/core";
-
 import "bulma/css/bulma.css";
+import { AwsShape, Organisation } from "cloudcanvas-types";
 
 export const allGoodStatus: ComponentStatus = {
   authorisation: "authorized",
@@ -30,38 +26,58 @@ export const pausedStatus: ComponentStatus = {
   playing: false,
 };
 
-export const baseComponent: Component = {
-  id: "base-component",
-  def: DynamoWatcherComponentDef,
-  playing: allGoodStatus.playing,
-  selected: false,
-  title: "Feedback",
-  layout: {
-    location: [51000, 50500],
-    lastLocation: [0, 0],
-    size: [500, 300],
-  },
-  props: {},
-};
-
-export const baseAwsComponent: AwsComponent<any> = {
-  ...baseComponent,
-  config: {
-    ssoUrl: "https://myUrl.com",
+export const baseComponent: AwsShape = {
+  type: "sso",
+  sso: {
     accountId: "123456789",
-    region: "us-east-1",
-    permissionSet: "AdministratorAccess",
+    permissionSet: "PowerUser",
   },
-  props: {},
+  region: "us-east-1",
+  cloudprovider: "aws",
+  resources: [
+    {
+      resourceId: "Users",
+    },
+  ],
+  title: "Sample component",
 };
 
-export const baseDispatch: BaseComponentProps<unknown, unknown>["dispatch"] = {
+export const baseDispatch: BaseComponentProps["dispatch"] = {
   onAuthorise: () => console.log("AUTHORISE"),
   onSelection: (selected) => console.log(`selected ${selected}`),
   onTogglePlay: () => console.log("TOGGLE"),
   onResize: (size) => console.log("RESIZE", size),
   onMove: (size) => console.log("MOVE", size),
 };
+
+// export const dcp: BaseComponentProps = {
+//   state: {
+//     component: {
+//       ...baseComponent,
+//       state: {
+//         ...baseComponent.state,
+//         layout: {
+//           ...baseComponent.state.layout,
+//         },
+//       },
+//     },
+//     authorisation: allGoodStatus.authorisation,
+//     scale: 1,
+//   },
+//   dispatch: baseDispatch,
+//   children: <div />,
+// };
+
+// export const dcpZeroed: BaseComponentProps = {
+//   ...dcp,
+//   state: {
+//     component: baseComponentZeroed,
+//     authorisation: allGoodStatus.authorisation,
+//     scale: 1,
+//   },
+//   dispatch: baseDispatch,
+//   children: <div />,
+// };
 
 export const BaseStory = ({ children }: { children: React.ReactNode }) => (
   <div style={{ padding: 20 }}>{children}</div>

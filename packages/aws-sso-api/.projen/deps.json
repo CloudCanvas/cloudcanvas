@@ -112,6 +112,11 @@
       "type": "runtime"
     },
     {
+      "name": "cloudcanvas-types",
+      "version": "*",
+      "type": "runtime"
+    },
+    {
       "name": "crypto-js",
       "type": "runtime"
     },

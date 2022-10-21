@@ -1,9 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  AccessPair,
-  Account,
-  Organisation,
-} from "@cloudcanvas/aws-sso-sdk-wrapper";
+import { AccessPair, Account, Organisation } from "cloudcanvas-types";
 import {
   Alert,
   Button,
@@ -17,6 +13,7 @@ import {
 
 import "./SideMenu.css";
 import { centered } from "../../../utils/layoutUtils";
+import { useInterval } from "../../../hooks/useInterval";
 
 export type SideMenuProps = {
   state: {
@@ -65,32 +62,23 @@ export default (props: SideMenuProps) => {
       {props.state.expanded && <ExpandedMenu {...props} />}
       {!props.state.expanded && <LittleMenu {...props} />}
 
-      <div
-        style={{
-          position: "absolute",
-          right: -15,
-          top: height / 2,
-          width: 30,
-          height: 30,
-          borderRadius: 15,
-          background: "#4263eb",
-          cursor: "pointer",
-          ...centered,
-        }}
-        onClick={() => props.dispatch.onChangeExpanded(!props.state.expanded)}
-      >
-        <Icon
-          variant="inverted"
-          name={
-            props.state.expanded ? "caret-left-filled" : "caret-right-filled"
-          }
-        />
-      </div>
+      <Expando
+        height={height}
+        expanded={props.state.expanded}
+        onChangeExpanded={props.dispatch.onChangeExpanded}
+      />
     </div>
   );
 };
 
 const LittleMenu = (props: SideMenuProps) => {
+  const [_random, setRandom] = React.useState(0);
+
+  useInterval(() => {
+    // Keep ticking every once in a while to check auth status
+    setRandom(Math.random());
+  }, 5000);
+
   return (
     <div style={{ padding: 8, overflow: "scroll" }}>
       <div style={{ paddingLeft: 16, opacity: 0 }}>
@@ -162,6 +150,13 @@ const LittleMenu = (props: SideMenuProps) => {
 
 const ExpandedMenu = (props: SideMenuProps) => {
   const [displayAlert, setDisplayAlert] = React.useState(false);
+
+  const [_random, setRandom] = React.useState(0);
+
+  useInterval(() => {
+    // Keep ticking every once in a while to check auth status
+    setRandom(Math.random());
+  }, 5000);
 
   useEffect(() => {
     const set = window.localStorage.getItem("GLOBAL_AWS_WARNING");
@@ -346,8 +341,8 @@ const Role = ({
           {role}{" "}
           {org.authorisedUntil && +org.authorisedUntil > +new Date() && (
             <SpaceBetween direction="horizontal" size="xs">
-              <a>Launch terminal</a>
-              <a>Launch browser</a>
+              <a>Launch terminal (coming soon)</a>
+              <a>Launch browser (coming soon)</a>
             </SpaceBetween>
           )}
         </p>
@@ -366,7 +361,9 @@ const OrgDropdown = ({
   small?: boolean;
 }) => {
   const authorised = org.authorisedUntil && +org.authorisedUntil > +new Date();
-  const items: any[] = [];
+  const items: any[] = [
+    { text: org.nickname || org.ssoStartUrl, id: "org", disabled: true },
+  ];
 
   if (!authorised) {
     items.push({
@@ -443,6 +440,36 @@ const OrgDropdown = ({
     ></ButtonDropdown>
   );
 };
+
+const Expando = ({
+  height,
+  expanded,
+  onChangeExpanded,
+}: {
+  height: number;
+  expanded: SideMenuProps["state"]["expanded"];
+  onChangeExpanded: SideMenuProps["dispatch"]["onChangeExpanded"];
+}) => (
+  <div
+    style={{
+      position: "absolute",
+      right: -15,
+      top: height / 2,
+      width: 30,
+      height: 30,
+      borderRadius: 15,
+      background: "#4263eb",
+      cursor: "pointer",
+      ...centered,
+    }}
+    onClick={() => onChangeExpanded(!expanded)}
+  >
+    <Icon
+      variant="inverted"
+      name={expanded ? "caret-left-filled" : "caret-right-filled"}
+    />
+  </div>
+);
 
 const Separator = () => (
   <div style={{ height: 2, margin: "8px 0px", background: "#e9ebed" }} />

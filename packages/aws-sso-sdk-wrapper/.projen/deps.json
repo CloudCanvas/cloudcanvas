@@ -1,16 +1,6 @@
 {
   "dependencies": [
     {
-      "name": "@cloudcanvas/aws-sso-api",
-      "version": "*",
-      "type": "build"
-    },
-    {
-      "name": "@cloudcanvas/aws-sso-global-access-provider",
-      "version": "*",
-      "type": "build"
-    },
-    {
       "name": "@types/aws-lambda",
       "type": "build"
     },
@@ -31,6 +21,16 @@
     {
       "name": "@typescript-eslint/parser",
       "version": "^5",
+      "type": "build"
+    },
+    {
+      "name": "cloudcanvas-aws-sso-api",
+      "version": "*",
+      "type": "build"
+    },
+    {
+      "name": "cloudcanvas-aws-sso-global-access-provider",
+      "version": "*",
       "type": "build"
     },
     {
@@ -102,11 +102,27 @@
       "type": "build"
     },
     {
+      "name": "@aws-sdk/client-cloudwatch",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-sdk/client-cloudwatch-logs",
+      "type": "runtime"
+    },
+    {
       "name": "@aws-sdk/client-dynamodb",
       "type": "runtime"
     },
     {
       "name": "@aws-sdk/client-dynamodb-streams",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-sdk/client-iotsitewise",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-sdk/client-lambda",
       "type": "runtime"
     },
     {
@@ -139,6 +155,11 @@
     },
     {
       "name": "aws-sdk",
+      "type": "runtime"
+    },
+    {
+      "name": "cloudcanvas-types",
+      "version": "*",
       "type": "runtime"
     },
     {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useStores } from "../../store";
-import { MainCanvas } from "@cloudcanvas/components";
+import { MainCanvas } from "cloudcanvas-components";
 
 export const WINDOW_WIDTH = 1400;
 export const WINDOW_HEIGHT = 900;
@@ -31,44 +31,36 @@ export default observer((props: MainProps) => {
   }
 
   return (
-    <div
-      id="canvasContainer"
-      style={{
-        width: `${CANVAS_WIDTH}px`,
-        height: `${CANVAS_HEIGHT}px`,
-        background: "white",
-      }}>
-      <MainCanvas
-        state={{
-          location: location,
-        }}
-        dispatch={{
-          onCmdk: async (cmdkProps) => {
-            const channel = new BroadcastChannel("app-data");
-            channel.postMessage({
-              type: "add-resource",
-              location: {
-                actualLocationX: cmdkProps.x,
-                actualLocationY: cmdkProps.y,
-              },
+    <MainCanvas
+      state={{
+        location: location,
+      }}
+      dispatch={{
+        onCmdk: async (cmdkProps) => {
+          const channel = new BroadcastChannel("app-data");
+          channel.postMessage({
+            type: "add-resource",
+            location: {
+              actualLocationX: cmdkProps.x,
+              actualLocationY: cmdkProps.y,
+            },
+          });
+        },
+        setScale: async (scale) => {
+          scale && layout.setScale(scale);
+        },
+        setLocation: async (location) => {
+          layout.setLocation(location);
+        },
+        unselectAllComponents: async () => {
+          if (component.selected) {
+            component.updateAllComponents({
+              state: { selected: false },
             });
-          },
-          setScale: async (scale) => {
-            scale && layout.setScale(scale);
-          },
-          setLocation: async (location) => {
-            layout.setLocation(location);
-          },
-          unselectAllComponents: async () => {
-            if (component.selected) {
-              component.updateAllComponents({
-                selected: false,
-              });
-            }
-          },
-        }}>
-        {props.children}
-      </MainCanvas>
-    </div>
+          }
+        },
+      }}>
+      {props.children}
+    </MainCanvas>
   );
 });

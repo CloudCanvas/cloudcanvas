@@ -1,6 +1,7 @@
-import { makeAutoObservable } from "mobx";
-import { AwsComponent } from "@cloudcanvas/components/lib/domain/core";
-import { BaseComponentProps } from "@cloudcanvas/components/lib/components/layout/BaseComponent";
+import { makeAutoObservable, toJS } from "mobx";
+import * as Component from "cloudcanvas-components";
+import { AwsComponent } from "cloudcanvas-types";
+import { BaseComponentProps } from "cloudcanvas-components/lib/components/layout/BaseComponent";
 import { AwsStore } from "./AwsStore";
 import { ComponentStore } from "./ComponentStore";
 import { LayoutStore } from "./LayoutStore";
@@ -16,8 +17,8 @@ export class ComponentRendererStore {
   }
 
   generateState = (
-    component: AwsComponent<any>
-  ): BaseComponentProps<unknown, unknown>["state"] => {
+    component: AwsComponent<any, any>
+  ): BaseComponentProps["state"] => {
     const org = this.awsStore.orgForAcc(component.config.accountId);
     return {
       component,
@@ -30,14 +31,12 @@ export class ComponentRendererStore {
   };
 
   generateDispatch = (
-    component: AwsComponent<any>
-  ): BaseComponentProps<unknown, unknown>["dispatch"] => {
-    const org = this.awsStore.orgForUrl(component.config.ssoUrl);
+    component: AwsComponent<any, any>
+  ): BaseComponentProps["dispatch"] => {
+    const org = this.awsStore.orgForAcc(component.config.accountId);
 
     return {
       onAuthorise: () => {
-        console.log("onAuthorise");
-        console.log("onAuthorise");
         if (!org) {
           window.alert("Authorisation not available, please restart");
           return;
@@ -46,78 +45,79 @@ export class ComponentRendererStore {
         this.awsStore.authoriseOrg(org);
       },
       onTogglePlay: () => {
-        console.log("onTogglePlay");
-        console.log("onTogglePlay");
         return this.componentStore.updateComponent({
           id: component.id,
-          playing: !component.playing,
+          state: {
+            playing: !component.state.playing,
+          },
         });
       },
       onResize: (size) => {
-        console.log("onResize");
         if (
-          size[0] === component.layout.size[0] &&
-          size[1] === component.layout.size[1]
+          size[0] === component.state.layout.size[0] &&
+          size[1] === component.state.layout.size[1]
         ) {
           return;
         }
 
         return this.componentStore.updateComponent({
           id: component.id,
-          layout: {
-            ...component.layout,
-            size: size,
+          state: {
+            layout: {
+              ...component.state.layout,
+              size: size,
+            },
           },
         });
       },
       onMove: (location) => {
         if (
-          location[0] === component.layout.location[0] &&
-          location[1] === component.layout.location[1]
+          location[0] === component.state.layout.location[0] &&
+          location[1] === component.state.layout.location[1]
         ) {
           return;
         }
-        console.log("onMove");
 
         return this.componentStore.updateComponent({
           id: component.id,
-          layout: {
-            ...component.layout,
-            lastLocation: location,
+          state: {
+            layout: {
+              ...component.state.layout,
+              lastLocation: location,
+            },
           },
         });
       },
       onSelection: (selected) => {
-        if (selected === component.selected) {
-          console.log("skipping");
+        if (selected === component.state.selected) {
           return;
         }
 
-        console.log("onSelection");
         if (selected) {
           this.componentStore.updateAllComponents({
-            selected: false,
+            state: { selected: false },
           });
         }
 
         setTimeout(() => {
           this.componentStore.updateComponent({
             id: component.id,
-            selected: selected,
+            state: { selected: selected },
           });
         }, 5);
       },
     };
   };
 
-  get wiredComponents(): BaseComponentProps<unknown, unknown>[] {
-    const components = this.componentStore.components as AwsComponent<any>[];
+  get wiredComponents(): BaseComponentProps[] {
+    const components = this.componentStore
+      .components as Component.Core.AwsComponent<unknown, unknown>[];
 
     const wiredComponents = components.map((component) => {
       return {
         dispatch: this.generateDispatch(component),
         state: this.generateState(component),
-      } as BaseComponentProps<unknown, unknown>;
+      } as BaseComponentProps;
     });
 
     return wiredComponents;

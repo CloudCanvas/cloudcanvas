@@ -11,8 +11,8 @@ import {
 import { observer } from "mobx-react-lite";
 import { regions } from "../../domain/aws";
 import { useStores } from "../../store";
-import { AwsRegion } from "@cloudcanvas/aws-sso-sdk-wrapper";
-import * as Components from "@cloudcanvas/components/";
+import { AwsRegion } from "cloudcanvas-types";
+import * as Components from "cloudcanvas-components/";
 
 // Eeek should not have called the same thing
 

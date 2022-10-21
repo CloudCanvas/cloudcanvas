@@ -1,13 +1,14 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction, toJS } from "mobx";
 // @ts-ignore
 import { v4 } from "uuid";
-import {
-  AwsComponent,
-  Component,
-} from "@cloudcanvas/components/lib/domain/core";
+import { AwsComponent } from "cloudcanvas-types";
 import { CANVAS_CENTER } from "../components/spatial/MainCanvasWrapper";
+import { ConfigManager } from "cloudcanvas-configuration-manager";
+import { Config } from "../domain/config";
 
-type Update = Partial<Component> & Required<Pick<Component, "id">>;
+type Update = {
+  state: Partial<AwsComponent<any, any>["state"]>;
+} & { id: string };
 /**
  * As we move an element around the canvas it get's translated.
  * This means we should never re-update the component and re-render the x,y as if the translate persists we double jump.
@@ -16,26 +17,26 @@ type Update = Partial<Component> & Required<Pick<Component, "id">>;
  * Then when savng we place the lastX and lastY back into the x and y
  */
 export class ComponentStore {
-  components: Component[] = [];
-  copied?: Component;
+  components: AwsComponent<any, any>[] = [];
+  copied?: AwsComponent<any, any>;
 
   locationToAdd?: [number, number] = undefined;
 
-  constructor() {
+  constructor(private configManager: ConfigManager) {
     makeAutoObservable(this);
 
-    // window.localStorage.removeItem("components");
-
-    try {
-      this.components = JSON.parse(
-        window.localStorage.getItem("components") || "[]"
-      );
-    } catch (err) {
-      console.error(err);
-    }
+    this.init();
   }
 
-  addComponentFromModal = (component: AwsComponent<any>) => {
+  init = async () => {
+    const config = await this.configManager.fetchConfig();
+
+    if (config) {
+      runInAction(() => (this.components = JSON.parse(config).components));
+    }
+  };
+
+  addComponentFromModal = (component: AwsComponent<any, any>) => {
     const x = this.locationToAdd
       ? this.locationToAdd[0]
       : CANVAS_CENTER.x + 800;
@@ -45,19 +46,20 @@ export class ComponentStore {
 
     const location = [x, y];
 
-    console.log(location);
-
     this.addComponent({
       ...component,
-      layout: {
-        ...component.layout,
-        lastLocation: location,
-        location,
+      state: {
+        ...component.state,
+        layout: {
+          ...component.state.layout,
+          lastLocation: location,
+          location,
+        },
       },
     });
   };
 
-  addComponent = (component: Omit<Component, "id">) => {
+  addComponent = (component: Omit<AwsComponent<any, any>, "id">) => {
     this.components.push({ ...component, id: v4() });
 
     this.saveComponents();
@@ -66,30 +68,33 @@ export class ComponentStore {
   copySelectedComponent = () => {
     if (!this.selected) return;
 
-    console.log("setting copied");
     this.copied = this.selected;
   };
 
   pasteSelectedComponent = () => {
     if (!this.copied) return;
 
-    console.log("setting pasted");
-
     this.components = [
       ...this.components,
       {
         ...this.copied,
         id: v4(),
-        selected: false,
-        title: `Copy of ${this.copied.title}`,
-        playing: false,
-        layout: {
-          ...this.copied.layout,
-          location: [
-            this.copied.layout.location[0] + this.copied.layout.size[0] + 50,
-            this.copied.layout.location[1],
-          ],
+        state: {
+          ...this.copied.state,
+          selected: false,
+          playing: false,
+          layout: {
+            ...this.copied.state.layout,
+            location: [
+              this.copied.state.layout.location[0] +
+                this.copied.state.layout.size[0] +
+                50,
+              this.copied.state.layout.location[1],
+            ],
+          },
         },
+        // TODO Allow title to overriddens
+        // title: `Copy of ${this.copied.title}`,
       },
     ];
   };
@@ -116,10 +121,14 @@ export class ComponentStore {
           ...update,
           // Ensure we retain current X and Y as the drag component uses offsets
           // Only last location should be updated
-          layout: {
-            ...c.layout,
-            ...update.layout,
-            location: [...c.layout.location],
+          state: {
+            ...c.state,
+            ...update.state,
+            layout: {
+              ...c.state.layout,
+              ...update.state!.layout,
+              location: [...c.state.layout.location],
+            },
           },
         };
       }
@@ -131,11 +140,11 @@ export class ComponentStore {
     this.saveComponents();
   };
 
-  updateAllComponents = (update: Partial<Component>) => {
+  updateAllComponents = (update: Omit<Update, "id">) => {
     for (const component of this.components) {
       this.updateComponent({
-        id: component.id,
         ...update,
+        id: component.id,
       });
     }
   };
@@ -148,23 +157,30 @@ export class ComponentStore {
     this.locationToAdd = undefined;
   };
 
-  saveComponents = () => {
-    window.localStorage.setItem(
-      "components",
-      JSON.stringify(
-        this.components.map((c) => ({
-          ...c,
-          selected: false,
-          layout: {
-            ...c.layout,
-            location: c.layout.lastLocation || c.layout.location,
-          },
-        }))
-      )
+  saveComponents = async () => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const update = this.components.map((c) => ({
+      ...c,
+      state: {
+        ...c.state,
+        selected: false,
+        layout: {
+          ...c.state.layout,
+          // Pop last location into location (we don't update location as translate manages it once the app is loaded)
+          location: c.state.layout.lastLocation || c.state.layout.location,
+        },
+      },
+    }));
+
+    await this.configManager.saveConfig(
+      JSON.stringify({
+        components: update,
+      })
     );
   };
 
   get selected() {
-    return this.components.find((c) => c.selected);
+    return this.components.find((c) => c.state.selected);
   }
 }

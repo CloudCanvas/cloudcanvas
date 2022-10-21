@@ -1,4 +1,4 @@
-import { SSOSession } from "../domain/aws";
+import { SSOSession } from "cloudcanvas-types";
 
 export interface ConfigManager {
   /**

@@ -20,16 +20,28 @@ const fs = require("fs");
 const crypto = require("crypto");
 const isDev = process.env.NODE_ENV === "development";
 const { clipboard } = require("electron");
+const { autoUpdater } = require("electron-updater");
 const port = 40992; // Hardcoded; needs to match webpack.development.js and package.json
 const selfHost = `http://localhost:${port}`;
 const {
   makeAwsConfigManager: makeAccessConfigManager,
   makeSsoAccessProvider,
-} = require("@cloudcanvas/aws-sso-global-access-provider");
+} = require("cloudcanvas-aws-sso-global-access-provider");
 const {
   makeAwsConfigManager: makeAuthoriserConfigManager,
   makeSsoAuthoriser,
-} = require("@cloudcanvas/aws-sso-api");
+} = require("cloudcanvas-aws-sso-api");
+const { makeFileConfigManager } = require("cloudcanvas-configuration-manager");
+
+const configManager = makeFileConfigManager({
+  homeDir: os.homedir(),
+});
+
+// TODO Put baclconst isDevLocal = isDev;
+const isDevLocal = true;
+
+autoUpdater.logger = console;
+// autoUpdater.logger.transports.file.level = "info";
 
 let awsClient;
 
@@ -64,6 +76,42 @@ const getAccessProvider = async () => {
   return awsClient;
 };
 
+/**
+ * Auto update
+ */
+
+function sendStatusToWindow(text) {
+  logger.info(text);
+  win.webContents.send("message", text);
+}
+autoUpdater.on("checking-for-update", () => {
+  sendStatusToWindow("Checking for update...");
+});
+autoUpdater.on("update-available", (info) => {
+  sendStatusToWindow("Update available.");
+});
+autoUpdater.on("update-not-available", (info) => {
+  sendStatusToWindow("Update not available.");
+});
+autoUpdater.on("error", (err) => {
+  sendStatusToWindow("Error in auto-updater. " + err);
+});
+autoUpdater.on("download-progress", (progressObj) => {
+  let log_message = "Download speed: " + progressObj.bytesPerSecond;
+  log_message = log_message + " - Downloaded " + progressObj.percent + "%";
+  log_message =
+    log_message +
+    " (" +
+    progressObj.transferred +
+    "/" +
+    progressObj.total +
+    ")";
+  sendStatusToWindow(log_message);
+});
+autoUpdater.on("update-downloaded", (info) => {
+  sendStatusToWindow("Update downloaded");
+});
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
@@ -73,7 +121,7 @@ async function createWindow() {
   // If you'd like to set up auto-updating for your app,
   // I'd recommend looking at https://github.com/iffy/electron-updater-example
   // to use the method most suitable for you.
-  // eg. autoUpdater.checkForUpdatesAndNotify();
+  autoUpdater.checkForUpdatesAndNotify();
 
   if (!isDev) {
     // Needs to happen before creating/loading the browser window;
@@ -100,7 +148,8 @@ async function createWindow() {
     height: 900,
     title: "Loading AWS Profiles...",
     webPreferences: {
-      devTools: isDev,
+      devTools: isDevLocal,
+      devTools: true,
       nodeIntegration: false,
       nodeIntegrationInWorker: false,
       nodeIntegrationInSubFrames: false,
@@ -130,7 +179,7 @@ async function createWindow() {
   store.mainBindings(ipcMain, win, fs, callback);
 
   // Sets up bindings for our custom context menu
-  ContextMenu.mainBindings(ipcMain, win, Menu, isDev, {
+  ContextMenu.mainBindings(ipcMain, win, Menu, isDevLocal, {
     loudAlertTemplate: [
       {
         id: "loudAlert",
@@ -184,7 +233,7 @@ async function createWindow() {
   }
 
   win.webContents.on("did-finish-load", () => {
-    win.setTitle(`s3o(v${app.getVersion()})`);
+    win.setTitle(`CloudCanvas (v${app.getVersion()})`);
   });
 
   // Only do these things when in development
@@ -401,9 +450,6 @@ ipcMain.handle("app:aws-deleteOrganisation", async (_event, ssoStartUrl) => {
 
 ipcMain.handle("app:aws-lightAuthorise", async (_event, accessPair) => {
   try {
-    console.log("Light authorise");
-    console.log(accessPair);
-
     const accessProvider = await getAccessProvider();
 
     const organisation = await accessProvider.lightAuthorise(accessPair);
@@ -416,9 +462,6 @@ ipcMain.handle("app:aws-authoriseOrg", async (_event, ssoUrl) => {
   const accessProvider = await getAccessProvider();
 
   const access = await accessProvider.authoriseOrg(ssoUrl);
-
-  console.log("mainjs");
-  console.log(access);
 
   return access;
 });
@@ -437,6 +480,17 @@ ipcMain.handle("app:aws-provideNickname", async (_event, nickname, ssoUrl) => {
   const access = await accessProvider.provideNickname(nickname, ssoUrl);
 
   return access;
+});
+
+/**
+ * Save config
+ */
+ipcMain.handle("app:config-fetch", async (_event) => {
+  return await configManager.fetchConfig();
+});
+
+ipcMain.handle("app:config-save", async (_event, config) => {
+  await configManager.saveConfig(config);
 });
 
 /**
@@ -481,7 +535,7 @@ ipcMain.on("show-context-menu", (event, args) => {
     });
   }
 
-  if (isDev) {
+  if (isDevLocal) {
     template.push({
       label: "Inspect",
       click: () => {

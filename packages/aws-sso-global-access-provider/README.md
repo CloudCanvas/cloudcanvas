@@ -29,3 +29,8 @@ const ssoUrls = access.organisations.map(o => o.ssoStartUrl)
 const ssoProviders = access.organisations.map(o => o.name)
 const accounts = access.organisations.flatMap((o) => o.accounts);
 ```
+
+# Deploy
+
+npx projen release
+npm run publish:npm

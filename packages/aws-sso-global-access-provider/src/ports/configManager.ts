@@ -1,4 +1,4 @@
-import { Access } from "../domain";
+import { Access } from "cloudcanvas-types";
 
 export interface ConfigManager {
   /**

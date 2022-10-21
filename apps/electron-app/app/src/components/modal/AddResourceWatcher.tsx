@@ -1,11 +1,12 @@
 import { observer } from "mobx-react-lite";
 import React, { useEffect } from "react";
 import { useStores } from "../../store";
-import { AddResource } from "@cloudcanvas/components";
+import { AddResource } from "cloudcanvas-components";
 import "./AddResourceWatcher.css";
+import { aws } from "../../entrypoints/aws";
 
 export default observer(() => {
-  const { aws, component, dynamo } = useStores();
+  const { aws: awsStore, component } = useStores();
 
   const [visible, setVisible] = React.useState(false);
 
@@ -14,12 +15,12 @@ export default observer(() => {
     channel.addEventListener("message", (event) => {
       setVisible(true);
       component.updateAllComponents({
-        selected: false,
+        state: { selected: false },
       });
 
       component.registerLocationToAdd([
-        event.data.location.actualLocationX,
-        event.data.location.actualLocationY,
+        event.data.location.actualLocationX + 100,
+        event.data.location.actualLocationY + 100,
       ]);
     });
   }, []);
@@ -40,23 +41,16 @@ export default observer(() => {
         onClick={(e) => e.stopPropagation()}
         style={{ width: 800, height: 500 }}>
         <AddResource
-          organisations={aws.organisations}
-          dataFetcher={async (component, accessCard) => {
-            if (component.type === "dynamoDbWatcher") {
-              const tables = await dynamo.fetchTables(accessCard);
+          organisations={awsStore.organisations}
+          dataFetcher={async (component, accessCard, prefix) => {
+            component.defaultSize;
+            // Okay where do I get the AWS config for the actual data fetchiunfg dynamically?
+            const awsClient = aws.aws
+              .account(accessCard.accountId)
+              .region(accessCard.region)
+              .role(accessCard.permissionSet);
 
-              return tables.map((table) => ({
-                label: table,
-                value: table,
-              }));
-            } else if (component.type === "lambdaWatcher") {
-              return [];
-            } else {
-              window.alert(
-                "Ooops it seems like we don't know how to handle that resource yet."
-              );
-              return [];
-            }
+            return await component.customDataFetcher(awsClient, prefix);
           }}
           onAddComponent={(resource) => {
             component.addComponentFromModal(resource);

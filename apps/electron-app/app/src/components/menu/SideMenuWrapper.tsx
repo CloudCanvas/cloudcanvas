@@ -1,13 +1,12 @@
-import { SideMenu } from "@cloudcanvas/components";
-import { AccessPair, Organisation } from "@cloudcanvas/aws-sso-sdk-wrapper";
-import { toJS } from "mobx";
+import { SideMenu } from "cloudcanvas-components";
+import { AccessPair, Organisation } from "cloudcanvas-types";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { ssoBridge } from "../../entrypoints/aws";
 import { useStores } from "../../store";
 
 export default observer(() => {
-  const { aws, component } = useStores();
+  const { aws } = useStores();
   const [expanded, setExpanded] = React.useState<boolean | undefined>(
     undefined
   );

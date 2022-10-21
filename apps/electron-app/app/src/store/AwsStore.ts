@@ -1,9 +1,4 @@
-import {
-  Access,
-  AccessPair,
-  Account,
-  Organisation,
-} from "@cloudcanvas/aws-sso-sdk-wrapper";
+import { Access, AccessPair, Account, Organisation } from "cloudcanvas-types";
 import { makeAutoObservable, runInAction } from "mobx";
 import { LocalAwsBridge } from "../ports/aws";
 import Clipboard from "../ports/clipboard";

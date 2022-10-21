@@ -1,22 +1,21 @@
 import React from "react";
-import { BaseComponentProps, DataFetcher } from "../layout/BaseComponent";
-import DynamoWatcher from "../aws/DynamoWatcher";
-import { DynamoRecord, DynamoWatcherModel } from "../aws/model";
-import { DynamoWatcherComponentDef } from "../../domain";
+import { BaseComponentProps } from "../layout/BaseComponent";
+import { DynamoRecord, Model } from "../aws/DynamoWatcher/model";
 import BaseComponent from "../layout/BaseComponent/BaseComponent";
+import DynamoWatcher from "../aws/DynamoWatcher/View";
+import { DataFetcher } from "../../ports/DataFetcher";
+import { generateComponenEntry } from "../../domain";
+import { DynamoWatcherCatalogComponent } from "../aws/DynamoWatcher/catalog";
 
 export default () => {
-  const [state, setState] = React.useState<
-    BaseComponentProps<DynamoWatcherModel, DynamoWatcherModel>["state"]
-  >({
-    component: DynamoWatcherComponentDef.generateComponent({
-      title: "Sample Watcher",
-      config: {
-        accountId: "1234567",
-        region: "ap-southeast-2",
-        permissionSet: "Admin",
+  const [state, setState] = React.useState<BaseComponentProps["state"]>({
+    component: generateComponenEntry({
+      type: DynamoWatcherCatalogComponent.type,
+      accessCard: {} as any,
+      title: "Sample table",
+      customData: {
+        tableName: "TestTable",
       },
-      customData: { label: "table", value: "Users" },
     }),
     network: "connected",
     scale: 1,
@@ -32,7 +31,10 @@ export default () => {
             ...state,
             component: {
               ...state.component,
-              playing: !state.component.playing,
+              state: {
+                ...state.component.state,
+                playing: !state.component.state.playing,
+              },
             },
           });
         },
@@ -45,36 +47,64 @@ export default () => {
             ...state,
             component: {
               ...state.component,
-              selected: !state.component.selected,
+              state: {
+                ...state.component.state,
+                selected: !state.component.state.selected,
+              },
             },
           });
         },
       }}
       state={state}
-      ContentComponent={DynamoWatcher}
-      ports={{
-        dataFetcher: {
-          delay: 1000,
-          update: (data, update) => {
-            const updatedModel = [...data, ...update];
-            return updatedModel;
-          },
-          initialData: [],
-          fetch: async () => {
-            return [
-              {
-                id: Math.random() + "",
-                at: new Date(),
-                type: "INSERT",
-                key: {
-                  id: "e0db8e08-e089-42a8-a11e-8dc0c42024ac",
-                  ts: +new Date(),
-                },
-              } as DynamoRecord,
-            ];
-          },
-        } as DataFetcher<DynamoWatcherModel, DynamoWatcherModel>,
-      }}
-    />
+    >
+      <DynamoWatcher
+        playing={state.component.state.playing}
+        setSelected={(isSelected) => {
+          setState({
+            ...state,
+            component: {
+              ...state.component,
+              state: {
+                ...state.component.state,
+                selected: isSelected,
+              },
+            },
+          });
+        }}
+        selected={state.component.state.selected}
+        authorised={state.authorisation === "authorized"}
+        awsClient={{} as any}
+        customProps={{ label: "TestTableName", value: "TestTableName" }}
+        dataFetcher={
+          {
+            delay: 1000,
+            reduce: (data, update) => {
+              const updatedModel = [...data, ...update];
+              return updatedModel;
+            },
+            initialData: [],
+            fetch: async () => {
+              return [
+                {
+                  id: Math.random() + "",
+                  at: +new Date(),
+                  dType: "INSERT",
+                  key: {
+                    id: "e0db8e08-e089-42a8-a11e-8dc0c42024ac",
+                    ts: +new Date(),
+                  },
+                  message: JSON.stringify({
+                    id: "e0db8e08-e089-42a8-a11e-8dc0c42024ac",
+                    ts: +new Date(),
+                  }),
+                  type: "okay",
+                  highlightText: "INSERT",
+                } as DynamoRecord,
+              ];
+            },
+          } as DataFetcher<Model, Model>
+        }
+      />
+    </BaseComponent>
   );
 };

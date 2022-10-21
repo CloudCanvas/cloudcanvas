@@ -1,8 +1,9 @@
 {
-  "name": "@cloudcanvas/aws-sso-sdk-wrapper",
+  "name": "cloudcanvas-aws-sso-sdk-wrapper",
   "scripts": {
     "build": "npx projen build",
     "bump": "npx projen bump",
+    "clean": "npx projen clean",
     "clobber": "npx projen clobber",
     "compile": "npx projen compile",
     "default": "npx projen default",
@@ -24,13 +25,13 @@
     "projen": "npx projen"
   },
   "devDependencies": {
-    "@cloudcanvas/aws-sso-api": "^0.0.0",
-    "@cloudcanvas/aws-sso-global-access-provider": "^0.0.0",
     "@types/aws-lambda": "^8.10.86",
     "@types/jest": "^27.0.3",
     "@types/node": "^14.17.0",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
+    "cloudcanvas-aws-sso-api": "^0.0.0",
+    "cloudcanvas-aws-sso-global-access-provider": "^0.0.0",
     "eslint": "^8",
     "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-node": "^0.3.6",
@@ -46,11 +47,15 @@
     "projen": "^0.39.4",
     "standard-version": "^9",
     "ts-jest": "^27.1.1",
-    "typescript": "^4.5.2"
+    "typescript": "^4.7.4"
   },
   "dependencies": {
+    "@aws-sdk/client-cloudwatch": "^3.159.0",
+    "@aws-sdk/client-cloudwatch-logs": "^3.160.0",
     "@aws-sdk/client-dynamodb": "^3.44.0",
     "@aws-sdk/client-dynamodb-streams": "^3.137.0",
+    "@aws-sdk/client-iotsitewise": "^3.183.0",
+    "@aws-sdk/client-lambda": "^3.44.0",
     "@aws-sdk/client-s3": "^3.44.0",
     "@aws-sdk/lib-dynamodb": "^3.44.0",
     "@aws-sdk/s3-request-presigner": "^3.44.0",
@@ -59,6 +64,7 @@
     "@aws-sdk/util-dynamodb": "^3.44.0",
     "aws-lambda": "^1.0.7",
     "aws-sdk": "^2.1045.0",
+    "cloudcanvas-types": "^0.0.1",
     "ts-retry-promise": "^0.6.0"
   },
   "bundledDependencies": [],

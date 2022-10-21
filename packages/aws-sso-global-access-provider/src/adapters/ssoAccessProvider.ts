@@ -1,23 +1,20 @@
+import { ConfigManager } from "../ports/configManager";
 import {
   ListAccountRolesCommand,
   ListAccountsCommand,
   SSOClient,
 } from "@aws-sdk/client-sso";
-import {
-  AwsRegion,
-  SsoAuthoriser,
-  SSOSession,
-  uniq,
-} from "@cloudcanvas/aws-sso-api";
+import { SsoAuthoriser, uniq } from "cloudcanvas-aws-sso-api";
 import {
   Access,
   Account,
   InvalidConfigurationError,
   Organisation,
   PermissionSet,
-} from "../domain/aws";
+  AwsRegion,
+  SSOSession,
+} from "cloudcanvas-types";
 import { AccessProvider, SSOExpiredError } from "../ports/accessProvider";
-import { ConfigManager } from "../ports/configManager";
 
 type Config = {
   cachedFile?: string;
@@ -104,7 +101,10 @@ export const makeSsoAccessProvider = ({
   };
 
   const refreshOrgs = async (): Promise<Access> => {
+    // Fetch orgs from Cloud Canvas cache file
     const cachedOrgs = await configManager.readAccessCacheFile(cachedFile);
+
+    // Fetch orgs from ~/.aws/config
     const awsConfigOrgs = await configManager.readYamlConfigFile(configFile);
 
     // Ensure we pickup any new additions to the config file
@@ -115,7 +115,7 @@ export const makeSsoAccessProvider = ({
           s.ssoStartUrl === cachedOrg.ssoStartUrl && !cachedOrg.logicallyDeleted
       );
 
-      const existingAccs = matchingOrg?.accounts || [];
+      const existingAccs = cachedOrg?.accounts || [];
 
       // The ones that are in matching org not in cachedOrg
       const missingRoles = (matchingOrg?.roles || []).filter(
@@ -148,7 +148,8 @@ export const makeSsoAccessProvider = ({
   const refreshOrg = async (org: Organisation) => {
     const federatedAccess = await authoriser.getFederatedAccessToken(
       org.ssoStartUrl,
-      org.ssoRegion
+      org.ssoRegion,
+      false
     );
 
     const details = await fetchAllAccountsAndRoles(federatedAccess);
@@ -338,7 +339,8 @@ export const makeSsoAccessProvider = ({
       // Ensure we have a valid session
       const federatedAccess = await authoriser.getFederatedAccessToken(
         authOrg.ssoStartUrl,
-        authOrg.ssoRegion
+        authOrg.ssoRegion,
+        false
       );
 
       if (!federatedAccess) {

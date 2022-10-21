@@ -1,5 +1,6 @@
 import React from "react";
 import CanvasWithScrollableComponent from "./CanvasWithScrollableComponent";
+import "bulma/css/bulma.css";
 
 export default {
   title: "components/examples/CanvasWithScrollableComponent",
@@ -12,7 +13,7 @@ export default {
 // Create a master template for mapping args to render the DynamoWatcher component
 const Template = () => () =>
   (
-    <div style={{ position: "relative", width: 1000, height: 1000 }}>
+    <div style={{ position: "relative", width: 1200, height: 1000 }}>
       <CanvasWithScrollableComponent />
     </div>
   );

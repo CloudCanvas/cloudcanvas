@@ -92,12 +92,17 @@
       "type": "runtime"
     },
     {
-      "name": "@cloudcanvas/aws-sso-api",
+      "name": "aws-sdk",
+      "type": "runtime"
+    },
+    {
+      "name": "cloudcanvas-aws-sso-api",
       "version": "*",
       "type": "runtime"
     },
     {
-      "name": "aws-sdk",
+      "name": "cloudcanvas-types",
+      "version": "*",
       "type": "runtime"
     },
     {

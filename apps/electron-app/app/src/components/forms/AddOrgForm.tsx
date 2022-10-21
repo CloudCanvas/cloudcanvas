@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Autosuggest,
   Box,
@@ -6,12 +6,11 @@ import {
   Form,
   FormField,
   Input,
-  Select,
   SpaceBetween,
 } from "@cloudscape-design/components";
 import { observer } from "mobx-react-lite";
-import { regions } from "../../domain/aws";
 import { useStores } from "../../store";
+import { regions } from "../../domain/aws";
 
 type Props = {
   onClose: () => void;

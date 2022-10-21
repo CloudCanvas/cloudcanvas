@@ -15,9 +15,8 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
     "jsx": "react"
   },
-  "include": ["src"],
+  "include": ["src", "test"],
   "exclude": ["node_modules", "lib"]
 }

@@ -1,7 +1,11 @@
+import { CloudWatchClient } from "@aws-sdk/client-cloudwatch";
+import { CloudWatchLogsClient } from "@aws-sdk/client-cloudwatch-logs";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBStreamsClient } from "@aws-sdk/client-dynamodb-streams";
+import { IoTSiteWiseClient } from "@aws-sdk/client-iotsitewise";
+import { LambdaClient } from "@aws-sdk/client-lambda";
 import { S3Client } from "@aws-sdk/client-s3";
-import { AccessPair, AccessProvider, AWS } from "../domain";
+import { AccessPair, AccessProvider, AWS } from "cloudcanvas-types";
 
 type Execution = {
   account?: string;
@@ -14,6 +18,17 @@ type Execution = {
   command?: any;
   ssoUrl?: string;
 };
+
+const awsServiceCatalog = [
+  { service: "s3", client: S3Client },
+  { service: "cloudwatch", client: CloudWatchClient },
+  { service: "cloudwatchLogs", client: CloudWatchLogsClient },
+  { service: "dynamodb", client: DynamoDBClient },
+  { service: "dynamodbstreams", client: DynamoDBStreamsClient },
+  { service: "lambda", client: LambdaClient },
+  { service: "iotsitewise", client: IoTSiteWiseClient },
+];
+const awsServiceList = awsServiceCatalog.map((a) => a.service);
 
 export const createAWSProxy = (accessProvider: AccessProvider): AWS => {
   const execution: any = (
@@ -71,17 +86,14 @@ export const createAWSProxy = (accessProvider: AccessProvider): AWS => {
   return execution({}) as any;
 };
 
-const awsServiceList = ["s3", "dynamodb", "dynamodbstreams"];
-
 const clientForService = (service: string, props: any): any => {
-  switch (service) {
-    case "s3":
-      return new S3Client(props);
-    case "dynamodb":
-      return new DynamoDBClient(props);
-    case "dynamodbstreams":
-      return new DynamoDBStreamsClient(props);
-    default:
-      throw new Error("Unsupported client: " + service);
+  const serviceCatalog = awsServiceCatalog.find(
+    (asc) => asc.service === service
+  );
+
+  if (!serviceCatalog) {
+    throw new Error("Unsupported client: " + service);
   }
+
+  return new serviceCatalog.client(props);
 };

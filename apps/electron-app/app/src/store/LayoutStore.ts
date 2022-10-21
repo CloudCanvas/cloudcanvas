@@ -17,8 +17,6 @@ export class LayoutStore {
     if (!layout) return;
 
     this.location = layout.location;
-
-    console.log("new location", layout.location);
   }
 
   setScale = debounce((scale: number) => {

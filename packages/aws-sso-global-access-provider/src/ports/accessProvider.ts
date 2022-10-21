@@ -7,8 +7,9 @@ import {
   AccessPair,
   AWSCredentials,
   AwsRegion,
-} from "@cloudcanvas/aws-sso-api";
-import { Access, Organisation } from "../domain/aws";
+  Access,
+  Organisation,
+} from "cloudcanvas-types";
 
 export class SSOExpiredError extends Error {
   constructor(msg: string) {

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
 import renderer, { ZoomRenderer } from "./renderer";
+import React, { useEffect, useState } from "react";
 
 export const WINDOW_WIDTH = 1400;
 export const WINDOW_HEIGHT = 900;
@@ -37,7 +37,7 @@ export default (props: MainCanvasProps) => {
     if (isCmdk) {
       props.dispatch.onCmdk({
         x: (panSurface.current?.getState().transformation.translateX || 0) * -1,
-        y: (panSurface.current?.getState().transformation.translateX || 0) * -1,
+        y: (panSurface.current?.getState().transformation.translateY || 0) * -1,
       });
     }
   });
@@ -49,7 +49,7 @@ export default (props: MainCanvasProps) => {
 
     if (!panSurface.current) {
       panSurface.current = renderer({
-        scaleSensitivity: 20,
+        scaleSensitivity: 35,
         initialScale: 1,
         minScale: 0.1,
         maxScale: 100,
@@ -129,6 +129,7 @@ export default (props: MainCanvasProps) => {
         width: "100%",
         position: "absolute",
         background: "#f6f4f4",
+        overflow: "hidden",
       }}
     >
       <div
@@ -139,6 +140,7 @@ export default (props: MainCanvasProps) => {
           background: "white",
           border: "2px dashed black",
           position: "absolute",
+          overflow: "hidden",
         }}
         onClick={() => {
           props.dispatch.unselectAllComponents();

@@ -1,6 +1,6 @@
 import React from "react";
-import { DynamoWatcherProps } from "../aws";
 import LiveDynamoWatcher from "./LiveDynamoWatcher";
+import "bulma/css/bulma.css";
 
 export default {
   title: "components/examples/LiveDynamoWatcher",
@@ -15,11 +15,8 @@ const Template = () => () =>
   (
     <div
       style={{
-        width: 600,
-        height: 400,
-        borderRadius: 3,
-        borderWidth: 3,
-        borderStyle: "solid",
+        width: 1000,
+        height: 100,
         overflow: "scroll",
       }}
     >

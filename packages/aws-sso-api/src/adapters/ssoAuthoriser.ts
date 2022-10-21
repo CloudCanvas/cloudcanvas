@@ -1,3 +1,6 @@
+import { Browser } from "../ports/browser";
+import { ConfigManager } from "../ports/configManager";
+import { SsoAuthoriser } from "../ports/ssoAuthoriser";
 import { GetRoleCredentialsCommand, SSOClient } from "@aws-sdk/client-sso";
 import {
   CreateTokenCommand,
@@ -6,10 +9,7 @@ import {
   SSOOIDCClient,
   StartDeviceAuthorizationCommand,
 } from "@aws-sdk/client-sso-oidc";
-import { AccessPair, AWSCredentials, SSOSession } from "../domain/aws";
-import { Browser } from "../ports/browser";
-import { ConfigManager } from "../ports/configManager";
-import { SsoAuthoriser } from "../ports/ssoAuthoriser";
+import { AccessPair, AWSCredentials, SSOSession } from "cloudcanvas-types";
 
 type Ports = {
   configManager: ConfigManager;
@@ -62,7 +62,11 @@ export const makeSsoAuthoriser = (ports: Ports): SsoAuthoriser => {
         return undefined;
       }
     },
-    getFederatedAccessToken: async (federatedUrl, region) => {
+    getFederatedAccessToken: async (federatedUrl, region, force) => {
+      if (force) {
+        federatedAccessDict[federatedUrl] = undefined;
+      }
+
       const existing = federatedAccessDict[federatedUrl];
 
       if (existing !== undefined && sessionIsValid(await existing)) {

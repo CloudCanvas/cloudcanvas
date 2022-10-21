@@ -1,7 +1,8 @@
-import os from "os";
-import open from "open";
+// @ts-ignore
 import { makeAwsConfigManager } from "../src/adapters/awsConfigManager";
 import { makeSsoAuthoriser } from "../src/adapters/ssoAuthoriser";
+import open from "open";
+import os from "os";
 
 export const exec = async () => {
   const authoriser = makeSsoAuthoriser({
@@ -21,6 +22,8 @@ export const exec = async () => {
     existingSessions[0].startUrl,
     "us-east-1"
   );
+
+  console.log("New session");
 
   return newSession;
 };
