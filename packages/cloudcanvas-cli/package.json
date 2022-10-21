@@ -17,11 +17,12 @@
     "/oclif.manifest.json"
   ],
   "dependencies": {
-    "cloudcanvas-aws-sso-api": "*",
-    "cloudcanvas-aws-sso-global-access-provider": "*",
     "@oclif/core": "^1.16.5",
     "@oclif/plugin-help": "^5",
     "@oclif/plugin-plugins": "^2.1.1",
+    "cloudcanvas-aws-sso-api": "*",
+    "cloudcanvas-aws-sso-global-access-provider": "*",
+    "minimist": "1.2.6",
     "open": "^8.4.0",
     "prompt-list": "^3.2.0"
   },
