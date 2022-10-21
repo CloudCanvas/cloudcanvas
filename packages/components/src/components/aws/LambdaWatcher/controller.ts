@@ -1,12 +1,12 @@
-import { AWS } from "cloudcanvas-types";
-import { v4 } from "uuid";
+import { DataFetcher } from "../../../ports/DataFetcher";
+import { CustomData } from "../../form/v1";
+import { LogEntry, Model, Update } from "./model";
 import {
   DescribeLogStreamsCommand,
   GetLogEventsCommand,
 } from "@aws-sdk/client-cloudwatch-logs";
-import { LogEntry, Model, Update } from "./model";
-import { DataFetcher } from "../../../ports/DataFetcher";
-import { CustomData } from "../../form";
+import { AWS } from "cloudcanvas-types";
+import { v4 } from "uuid";
 
 /**
  * TODO This code is pretty nasty for now just to get working, would prefer to use
@@ -186,9 +186,6 @@ const makeCloudwatchLogStreamManager = ({
         }
       }
 
-      console.log("logMessagesResponse.length");
-      console.log(logMessagesResponse.length);
-
       // Now flatten all events returned and order ascending
       const allEventsAscending = logMessagesResponse
         .flatMap((lmr) => lmr.events)
@@ -209,9 +206,6 @@ const makeCloudwatchLogStreamManager = ({
       } else {
         finalResults = allEventsAscending;
       }
-
-      console.log("finalResults.length");
-      console.log(finalResults.length);
 
       // Once we've called once we fetch more in future
       initial = false;

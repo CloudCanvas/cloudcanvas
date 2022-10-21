@@ -14,9 +14,11 @@ import {
 } from "@tldraw/core";
 import { AwsApi } from "awsApi";
 import "cloudcanvas-components/lib/index.css";
+import { AwsRegion } from "cloudcanvas-types";
 import { TopPanel } from "components/TopPanel";
 import * as React from "react";
 import { Api } from "state/api";
+import { Account } from "state/constants";
 import styled from "stitches.config";
 import { ContainerContext } from "useCoreApp";
 
@@ -220,6 +222,42 @@ export default function App({ onMount }: AppProps) {
     const api = new Api(appState, new AwsApi());
     onMount?.(api);
     window["api"] = api;
+  }, []);
+
+  React.useEffect(() => {
+    // Get the query params
+    const params = new URLSearchParams(window.location.search);
+    const accessKeyId = params.get("accessKeyId");
+    const secretAccessKey = params.get("secretAccessKey");
+    const sessionToken = params.get("sessionToken");
+    const region = params.get("region");
+    const name = params.get("name");
+
+    // Clear query parms
+    window.history.replaceState({}, document.title, "/");
+
+    if (accessKeyId && secretAccessKey && region) {
+      (async () => {
+        const accountId = await window.api.trySaveCredentials({
+          accessKeyId,
+          secretAccessKey,
+          sessionToken: sessionToken || undefined,
+        });
+
+        const accountToAdd: Account = {
+          name: name || accountId,
+          active: true,
+          regions: [region],
+          accountId,
+        };
+
+        machine.send("ADD_ACCOUNT", { account: accountToAdd });
+
+        window.alert("Account detected, indexing...");
+
+        await window.api.indexAccount(accountId, region as AwsRegion);
+      })();
+    }
   }, []);
 
   const hideBounds = appState.isInAny(

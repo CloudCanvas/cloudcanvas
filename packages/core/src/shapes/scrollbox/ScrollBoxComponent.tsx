@@ -1,6 +1,6 @@
+import type { ScrollBoxShape } from "./ScrollBoxShape";
 import { HTMLContainer, TLShapeUtil } from "@tldraw/core";
 import * as React from "react";
-import type { ScrollBoxShape } from "./ScrollBoxShape";
 
 export const ScrollBoxComponent = TLShapeUtil.Component<
   ScrollBoxShape,
@@ -8,7 +8,6 @@ export const ScrollBoxComponent = TLShapeUtil.Component<
 >(({ shape, events, isGhost, meta, isEditing }, ref) => {
   const color = meta.isDarkMode ? "white" : "black";
 
-  console.log("scrool");
   return (
     <HTMLContainer ref={ref} {...events}>
       <div
@@ -25,11 +24,9 @@ export const ScrollBoxComponent = TLShapeUtil.Component<
           overflow: "scroll",
         }}
         onWheel={(e) => {
-          console.log("Wheeling child");
           e.stopPropagation();
         }}
         onScroll={(e) => {
-          console.log("Scrolling child");
           e.stopPropagation();
         }}
       >

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
 import renderer, { ZoomRenderer } from "./renderer";
+import React, { useEffect, useState } from "react";
 
 export const WINDOW_WIDTH = 1400;
 export const WINDOW_HEIGHT = 900;
@@ -35,10 +35,6 @@ export default (props: MainCanvasProps) => {
     const isCmdk = e.key === "k" && isCtrled;
 
     if (isCmdk) {
-      console.log({
-        x: (panSurface.current?.getState().transformation.translateX || 0) * -1,
-        y: (panSurface.current?.getState().transformation.translateY || 0) * -1,
-      });
       props.dispatch.onCmdk({
         x: (panSurface.current?.getState().transformation.translateX || 0) * -1,
         y: (panSurface.current?.getState().transformation.translateY || 0) * -1,

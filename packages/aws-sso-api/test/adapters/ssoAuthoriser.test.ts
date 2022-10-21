@@ -1,7 +1,7 @@
-import os from "os";
 import { makeAwsConfigManager } from "../../src/adapters/awsConfigManager";
 import { makeSsoAuthoriser } from "../../src/adapters/ssoAuthoriser";
 import { SsoAuthoriser } from "../../src/ports/ssoAuthoriser";
+import os from "os";
 
 describe("ssoAccessProvider", () => {
   let authoriser: SsoAuthoriser;

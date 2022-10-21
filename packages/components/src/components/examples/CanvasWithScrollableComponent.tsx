@@ -1,12 +1,12 @@
-import React from "react";
-import { BaseComponentProps } from "../layout/BaseComponent";
+import { generateComponenEntry } from "../../domain";
+import { DataFetcher } from "../../ports/DataFetcher";
 import DynamoWatcher from "../aws/DynamoWatcher/View";
+import { DynamoWatcherCatalogComponent } from "../aws/DynamoWatcher/catalog";
 import { DynamoRecord, Model } from "../aws/DynamoWatcher/model";
+import { BaseComponentProps } from "../layout/BaseComponent";
 import BaseComponent from "../layout/BaseComponent/BaseComponent";
 import MainCanvas, { CANVAS_CENTER } from "../spatial/MainCanvas/MainCanvas";
-import { DataFetcher } from "../../ports/DataFetcher";
-import { DynamoWatcherCatalogComponent } from "../aws/DynamoWatcher/catalog";
-import { generateComponenEntry } from "../../domain";
+import React from "react";
 import { v4 } from "uuid";
 
 let count = 30;

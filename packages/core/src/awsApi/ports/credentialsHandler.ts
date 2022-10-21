@@ -5,8 +5,9 @@ export interface CredentialsHandler {
   getAccountIdFromCredentials: (
     credentialsInput?: string
   ) => Promise<string | undefined>;
+  valdiateCredentials: (credentialsInput?: string) => Credentials | undefined;
   securelyStoreCredentials: (
-    credentialsInput?: string
+    credentials: Credentials
   ) => Promise<{ accountId: string }>;
   securelyFetchCredentials: (id: string) => Promise<Credentials | undefined>;
 }

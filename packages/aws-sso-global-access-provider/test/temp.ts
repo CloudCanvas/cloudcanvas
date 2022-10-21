@@ -1,12 +1,11 @@
-import os from "os";
 import {
   makeSsoAuthoriser,
   makeAwsConfigManager as ssoConfigManager,
 } from "cloudcanvas-aws-sso-api";
-import open from "open";
-
 import { makeAwsConfigManager } from "../src/adapters/awsConfigManager";
 import { makeSsoAccessProvider } from "../src/adapters/ssoAccessProvider";
+import open from "open";
+import os from "os";
 
 export const exec = async () => {
   const accessProvider = makeSsoAccessProvider({

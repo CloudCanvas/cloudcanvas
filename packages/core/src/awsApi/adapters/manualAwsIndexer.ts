@@ -1,3 +1,4 @@
+import { Resource, ResourceIndexer } from "../ports";
 import {
   DynamoDBClient,
   ListTablesCommand,
@@ -8,8 +9,6 @@ import {
   ListFunctionsCommand,
   ListFunctionsCommandOutput,
 } from "@aws-sdk/client-lambda";
-
-import { Resource, ResourceIndexer } from "../ports";
 
 const fetchAllFunctions = async (client: LambdaClient): Promise<Resource[]> => {
   const results: string[] = [];
@@ -61,7 +60,7 @@ const fetchAllTables = async (client: DynamoDBClient): Promise<Resource[]> => {
   }));
 };
 
-export const makeResourceGroupsTagManager = (): ResourceIndexer => {
+export const makeAwsResourceIndexer = (): ResourceIndexer => {
   return {
     index: async (credentials, region) => {
       const functions = await fetchAllFunctions(
@@ -83,7 +82,7 @@ export const makeResourceGroupsTagManager = (): ResourceIndexer => {
 };
 
 // const exec = async () => {
-//   const manager = makeResourceGroupsTagManager();
+//   const manager = makeAwsResourceIndexer();
 
 //   const credentials = new Credentials({
 //     accessKeyId: "ASIA2GJOLN27ISVVHHV3",

@@ -1,5 +1,5 @@
 import React from "react";
-import LambdaWatcher, { ViewProps } from "./View";
+import LambdaWatcher, { View, ViewProps } from "./View";
 import "bulma/css/bulma.css";
 
 export default {
@@ -22,7 +22,7 @@ const Template = (args: Pick<ViewProps, "data">) => () =>
         borderStyle: "solid",
       }}
     >
-      <LambdaWatcher {...args} selected={false} />
+      <View {...args} selected={false} setSelected={() => {}} />
     </div>
   );
 

@@ -1,3 +1,4 @@
+import { ConfigManager } from "../ports/configManager";
 import {
   ListAccountRolesCommand,
   ListAccountsCommand,
@@ -14,7 +15,6 @@ import {
   SSOSession,
 } from "cloudcanvas-types";
 import { AccessProvider, SSOExpiredError } from "../ports/accessProvider";
-import { ConfigManager } from "../ports/configManager";
 
 type Config = {
   cachedFile?: string;

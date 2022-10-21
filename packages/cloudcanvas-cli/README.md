@@ -29,8 +29,6 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`cloudcanvas hello PERSON`](#cloudcanvas-hello-person)
-* [`cloudcanvas hello world`](#cloudcanvas-hello-world)
 * [`cloudcanvas help [COMMAND]`](#cloudcanvas-help-command)
 * [`cloudcanvas plugins`](#cloudcanvas-plugins)
 * [`cloudcanvas plugins:install PLUGIN...`](#cloudcanvas-pluginsinstall-plugin)
@@ -42,46 +40,6 @@ USAGE
 * [`cloudcanvas plugins:uninstall PLUGIN...`](#cloudcanvas-pluginsuninstall-plugin-2)
 * [`cloudcanvas plugins update`](#cloudcanvas-plugins-update)
 * [`cloudcanvas sketch [FILE]`](#cloudcanvas-sketch-file)
-
-## `cloudcanvas hello PERSON`
-
-Say hello
-
-```
-USAGE
-  $ cloudcanvas hello [PERSON] -f <value>
-
-ARGUMENTS
-  PERSON  Person to say hello to
-
-FLAGS
-  -f, --from=<value>  (required) Who is saying hello
-
-DESCRIPTION
-  Say hello
-
-EXAMPLES
-  $ oex hello friend --from oclif
-  hello friend from oclif! (./src/commands/hello/index.ts)
-```
-
-_See code: [dist/commands/hello/index.ts](https://github.com/brianfoody/cloucanvs-cli/blob/v0.0.1/dist/commands/hello/index.ts)_
-
-## `cloudcanvas hello world`
-
-Say hello world
-
-```
-USAGE
-  $ cloudcanvas hello world
-
-DESCRIPTION
-  Say hello world
-
-EXAMPLES
-  $ cloudcanvas hello world
-  hello world! (./src/commands/hello/world.ts)
-```
 
 ## `cloudcanvas help [COMMAND]`
 

@@ -1,5 +1,5 @@
 import React from "react";
-import SitewiseMetric, { ViewProps } from "./View";
+import SitewiseMetric, { View, ViewProps } from "./View";
 import "bulma/css/bulma.css";
 import { SampleData } from "./sampleData";
 
@@ -23,7 +23,7 @@ const Template = (args: Pick<ViewProps, "data">) => () =>
         borderStyle: "solid",
       }}
     >
-      <SitewiseMetric {...args} />
+      <View {...args} selected={false} setSelected={() => {}} />
     </div>
   );
 

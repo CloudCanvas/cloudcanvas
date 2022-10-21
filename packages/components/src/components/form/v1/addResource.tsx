@@ -1,8 +1,7 @@
-import React from "react";
-import { Command } from "cmdk";
 import "../../../base.css";
+import { componentCatalog, generateComponenEntry } from "../../../domain";
+import { regions } from "../../../domain/aws";
 import "./addResource.scss";
-import { componentCatalog } from "../../../domain";
 import {
   AccessCard,
   Account,
@@ -10,7 +9,8 @@ import {
   AwsRegion,
   Organisation,
 } from "cloudcanvas-types";
-import { regions } from "../../../domain/aws";
+import { Command } from "cmdk";
+import React from "react";
 
 export type CustomData = { label: string; value: any };
 
@@ -251,18 +251,18 @@ export default (props: AddResourceProps) => {
                       setSelectedCustomData(data);
                       setInputValue("");
 
-                      // const generatedResource = generateComponenEntry({
-                      //   type: component!.type,
-                      //   title: data.label,
-                      //   accessCard: {
-                      //     accountId: account!.accountId,
-                      //     permissionSet: permissionSet,
-                      //     region: region as AwsRegion,
-                      //   },
-                      //   customData: data,
-                      // });
+                      const generatedResource = generateComponenEntry({
+                        type: component!.type,
+                        title: data.label,
+                        accessCard: {
+                          accountId: account!.accountId,
+                          permissionSet: permissionSet,
+                          region: region as AwsRegion,
+                        },
+                        customData: data,
+                      });
 
-                      // props.onAddComponent(generatedResource);
+                      props.onAddComponent(generatedResource);
                     }}
                   />
                 )}
@@ -312,7 +312,7 @@ const ExampleFrame = ({
             .map((c) => {
               return (
                 <div key={c.title}>
-                  {/* {c.render({
+                  {c.component({
                     awsClient: {} as any,
                     playing: true,
                     setSelected: () => {},
@@ -328,7 +328,7 @@ const ExampleFrame = ({
                         return [...current, ...update];
                       },
                     },
-                  })} */}
+                  })}
                 </div>
               );
             })}

@@ -1,6 +1,6 @@
-import { AWS } from "cloudcanvas-types";
-import { ListTablesCommand } from "@aws-sdk/client-dynamodb";
 import { CustomData } from "../../form/v1";
+import { ListTablesCommand } from "@aws-sdk/client-dynamodb";
+import { AWS } from "cloudcanvas-types";
 
 // TODO Cache the results
 const fetchAllTables = async (aws: AWS): Promise<string[]> => {
@@ -23,7 +23,7 @@ const fetchAllTables = async (aws: AWS): Promise<string[]> => {
   return tables;
 };
 
-export const resourceFetcher = async (aws: AWS): Promise<CustomData[]> => {
+export const customDataFetcher = async (aws: AWS): Promise<CustomData[]> => {
   const tables = await fetchAllTables(aws);
 
   return tables.map((table) => ({

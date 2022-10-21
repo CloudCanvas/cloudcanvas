@@ -1,8 +1,8 @@
 // @ts-ignore
-import os from "os";
-import open from "open";
 import { makeAwsConfigManager } from "../src/adapters/awsConfigManager";
 import { makeSsoAuthoriser } from "../src/adapters/ssoAuthoriser";
+import open from "open";
+import os from "os";
 
 export const exec = async () => {
   const authoriser = makeSsoAuthoriser({

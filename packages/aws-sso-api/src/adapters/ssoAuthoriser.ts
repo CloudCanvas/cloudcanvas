@@ -1,3 +1,6 @@
+import { Browser } from "../ports/browser";
+import { ConfigManager } from "../ports/configManager";
+import { SsoAuthoriser } from "../ports/ssoAuthoriser";
 import { GetRoleCredentialsCommand, SSOClient } from "@aws-sdk/client-sso";
 import {
   CreateTokenCommand,
@@ -7,9 +10,6 @@ import {
   StartDeviceAuthorizationCommand,
 } from "@aws-sdk/client-sso-oidc";
 import { AccessPair, AWSCredentials, SSOSession } from "cloudcanvas-types";
-import { Browser } from "../ports/browser";
-import { ConfigManager } from "../ports/configManager";
-import { SsoAuthoriser } from "../ports/ssoAuthoriser";
 
 type Ports = {
   configManager: ConfigManager;

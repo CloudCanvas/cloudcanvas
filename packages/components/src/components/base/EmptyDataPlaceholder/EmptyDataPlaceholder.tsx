@@ -1,6 +1,6 @@
+import { centered } from "../../../utils/layoutUtils";
 import { TextContent } from "@cloudscape-design/components";
 import React from "react";
-import { centered } from "../../../utils/layoutUtils";
 
 export default ({
   authorised,
@@ -12,7 +12,7 @@ export default ({
   message?: string;
 }) => {
   return (
-    <div style={{ ...centered, flex: 1 }}>
+    <div style={{ ...centered, flex: 1, padding: 16 }}>
       <TextContent>
         {!authorised && <p>Authorisation has expired, refresh to view</p>}
         {authorised && !playing && <p>Paused</p>}

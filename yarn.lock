@@ -7378,6 +7378,11 @@
   resolved "https://registry.npmjs.org/@types/aria-query/-/aria-query-5.0.0.tgz"
   integrity sha512-P+dkdFu0n08PDIvw+9nT9ByQnd+Udc8DaWPb9HKfaPwCvWvQpC5XaMRx2xLWECm9x1VKNps6vEAlirjA6+uNrQ==
 
+"@types/aws-lambda@^8.10.104":
+  version "8.10.108"
+  resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-8.10.108.tgz#ddadf0d9182f2f5e689ce5fc05b5f711fad6d115"
+  integrity sha512-1yh1W1WoqK3lGHy+V/Fi55zobxrDHUUsluCWdMlOXkCvtsCmHPXOG+CQ2STIL4B1g6xi6I6XzxaF8V9+zeIFLA==
+
 "@types/aws-lambda@^8.10.86":
   version "8.10.102"
   resolved "https://registry.npmjs.org/@types/aws-lambda/-/aws-lambda-8.10.102.tgz"
@@ -7617,6 +7622,14 @@
     jest-matcher-utils "^27.0.0"
     pretty-format "^27.0.0"
 
+"@types/jest@^28.1.7":
+  version "28.1.8"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-28.1.8.tgz#6936409f3c9724ea431efd412ea0238a0f03b09b"
+  integrity sha512-8TJkV++s7B6XqnDrzR1m/TT0A0h948Pnl/097veySPN67VRAgQ4gZ7n2KfJo2rVq6njQjdxU3GCCyDvAeuHoiw==
+  dependencies:
+    expect "^28.0.0"
+    pretty-format "^28.0.0"
+
 "@types/json-buffer@~3.0.0":
   version "3.0.0"
   resolved "https://registry.npmjs.org/@types/json-buffer/-/json-buffer-3.0.0.tgz"
@@ -7706,6 +7719,11 @@
   version "18.7.9"
   resolved "https://registry.npmjs.org/@types/node/-/node-18.7.9.tgz"
   integrity sha512-0N5Y1XAdcl865nDdjbO0m3T6FdmQ4ijE89/urOHLREyTXbpMWbSafx9y7XIsgWGtwUP2iYTinLyyW3FatAxBLQ==
+
+"@types/node@^14.17.0":
+  version "14.18.32"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.18.32.tgz#8074f7106731f1a12ba993fe8bad86ee73905014"
+  integrity sha512-Y6S38pFr04yb13qqHf8uk1nHE3lXgQ30WZbv1mLliV9pt0NjvqdWttLcrOYLnXbOafknVYRHZGoMSpR9UwfYow==
 
 "@types/node@^15.6.1":
   version "15.14.9"
@@ -22482,6 +22500,11 @@ ts-retry-promise@^0.6.0:
   version "0.6.2"
   resolved "https://registry.npmjs.org/ts-retry-promise/-/ts-retry-promise-0.6.2.tgz"
   integrity sha512-QFnm3RuFivgkQGKm8XX7F7sAMQEI7pzVkfSlcWMYH+MoIRy7BI3sE8135YPapP8Fra5KgAuOq2QFT969N14cAw==
+
+ts-retry-promise@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/ts-retry-promise/-/ts-retry-promise-0.7.0.tgz#08f2dcbbf5d2981495841cb63389a268324e8147"
+  integrity sha512-x6yWZXC4BfXy4UyMweOFvbS1yJ/Y5biSz/mEPiILtJZLrqD3ZxIpzVOGGgifHHdaSe3WxzFRtsRbychI6zofOg==
 
 tsconfig-paths@^3.12.0, tsconfig-paths@^3.14.1:
   version "3.14.1"

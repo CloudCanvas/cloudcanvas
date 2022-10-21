@@ -1,9 +1,9 @@
-import { assign, createMachine } from "xstate";
 import {
   AuthStatus,
   BaseComponentProps,
 } from "../components/layout/BaseComponent";
 import { DataFetcher } from "../ports/DataFetcher";
+import { assign, createMachine } from "xstate";
 
 interface Context<D, U> {
   dataFetcher: DataFetcher<D, U>;

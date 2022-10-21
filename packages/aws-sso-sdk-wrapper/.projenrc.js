@@ -14,6 +14,7 @@ const project = new typescript.TypeScriptProject({
     },
   },
   eslintOptions: {
+    ignorePatterns: ["*"],
     prettier: true,
   },
   prettierOptions: {},

@@ -1,6 +1,6 @@
-import { AWS } from "cloudcanvas-types";
+import { CustomData } from "../../form/v1";
 import { ListFunctionsCommand } from "@aws-sdk/client-lambda";
-import { CustomData } from "../../form";
+import { AWS } from "cloudcanvas-types";
 
 // TODO Cache the results
 const fetchAllFunctions = async (aws: AWS): Promise<string[]> => {
@@ -23,7 +23,7 @@ const fetchAllFunctions = async (aws: AWS): Promise<string[]> => {
   return functions;
 };
 
-export const resourceFetcher = async (aws: AWS): Promise<CustomData[]> => {
+export const customDataFetcher = async (aws: AWS): Promise<CustomData[]> => {
   const functions = await fetchAllFunctions(aws);
 
   const sortedNames = functions.sort((a, b) => a.localeCompare(b));

@@ -1,6 +1,8 @@
 import type { Account, CustomBinding } from "./constants";
 import type { machine } from "./machine";
 import { AwsApi } from "awsApi";
+import { AwsRegion } from "cloudcanvas-types";
+import { Credentials } from "components/TopPanel/AddAccountDialog";
 import { nanoid } from "nanoid";
 import type { Shape } from "shapes";
 
@@ -109,9 +111,18 @@ export class Api {
     return this;
   };
 
-  trySaveCredentials = async (credentialsInput: string) => {
-    const accountId = await this.awsApi.saveCredentials(credentialsInput);
+  trySaveCredentialsString = async (credentialsInput: string) => {
+    const accountId = await this.awsApi.saveCredentialsString(credentialsInput);
     return accountId;
+  };
+
+  trySaveCredentials = async (credentials: Credentials) => {
+    const accountId = await this.awsApi.saveCredentials(credentials);
+    return accountId;
+  };
+
+  indexAccount = async (accountId: string, region: AwsRegion) => {
+    await this.awsApi.indexAccount(accountId, region);
   };
 
   addAccount = (account: Account) => {

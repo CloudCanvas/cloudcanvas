@@ -11,8 +11,6 @@ const exec = async () => {
     .region("eu-central-1");
 
   const data = await customDataFetcher(awsClient);
-
-  console.log(data);
 };
 
 exec();

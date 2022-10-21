@@ -2,13 +2,7 @@ import { CredentialsHandler } from "../ports";
 import { STSClient, GetCallerIdentityCommand } from "@aws-sdk/client-sts";
 import { Credentials } from "@aws-sdk/types";
 
-const getCredentialsDetail = async (credentialsInput?: string) => {
-  const credentials = createCredentials(credentialsInput);
-
-  console.log("credentials");
-  console.log(credentials);
-  if (!credentials) return undefined;
-
+const getAccountIdForCredentials = async (credentials: Credentials) => {
   const stsClient = new STSClient({
     credentials,
     region: "us-east-1",
@@ -16,12 +10,18 @@ const getCredentialsDetail = async (credentialsInput?: string) => {
 
   const identity = await stsClient.send(new GetCallerIdentityCommand({}));
 
-  console.log("identity");
-  console.log(identity);
+  return identity.Account;
+};
+const getCredentialsDetail = async (credentialsInput?: string) => {
+  const credentials = createCredentials(credentialsInput);
+
+  if (!credentials) return undefined;
+
+  const accountId = await getAccountIdForCredentials(credentials);
 
   return {
     credentials,
-    accountId: identity.Account,
+    accountId,
   };
 };
 
@@ -91,17 +91,16 @@ export const makeCredentialsHandler = (): CredentialsHandler => {
       const detail = await getCredentialsDetail(creds);
       return detail?.accountId;
     },
-    securelyStoreCredentials: async (credentialsInput?: string) => {
-      const detail = await getCredentialsDetail(credentialsInput);
-      if (!detail?.accountId) throw new Error("Invalid credentials");
+    valdiateCredentials: createCredentials,
+    securelyStoreCredentials: async (credentials: Credentials) => {
+      const accountId = await getAccountIdForCredentials(credentials);
+
+      if (!accountId) throw new Error("Invalid credentials");
 
       // TODO Improve
-      window.localStorage.setItem(
-        detail.accountId,
-        JSON.stringify(detail.credentials)
-      );
+      window.localStorage.setItem(accountId, JSON.stringify(credentials));
 
-      return { accountId: detail.accountId };
+      return { accountId: accountId };
     },
     securelyFetchCredentials: async (accountId: string) => {
       const detail = window.localStorage.getItem(accountId);

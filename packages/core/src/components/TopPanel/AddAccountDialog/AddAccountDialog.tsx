@@ -8,6 +8,7 @@ import { isValidCredentials } from "./CredentialsParser";
 import { Autosuggest } from "@cloudscape-design/components";
 import * as Dialog from "@radix-ui/react-alert-dialog";
 import { Pencil1Icon, PlusIcon } from "@radix-ui/react-icons";
+import { AwsRegion } from "cloudcanvas-types";
 import { TextArea } from "components/Primitives/TextArea";
 import * as React from "react";
 import { Api } from "state/api";
@@ -93,7 +94,18 @@ export function AddAccountDialog({
     }
 
     try {
-      const accountId = await window.api.trySaveCredentials(accountCredentials);
+      const accountId = await window.api.trySaveCredentialsString(
+        accountCredentials
+      );
+
+      if (!accountId) {
+        window.alert("Invalid credentials");
+        return;
+      }
+
+      (async () => {
+        await window.api.indexAccount(accountId, selectedRegion as AwsRegion);
+      })();
 
       const accountToAdd: Account = {
         name: accountName,

@@ -1,39 +1,41 @@
-import { Command, CliUx, Flags } from "@oclif/core";
-import {
-  makeAwsConfigManager,
-  makeSsoAccessProvider,
-} from "cloudcanvas-aws-sso-global-access-provider";
+import { Command, Flags, CliUx } from "@oclif/core";
 import {
   makeSsoAuthoriser,
   makeAwsConfigManager as ssoConfigManager,
 } from "cloudcanvas-aws-sso-api";
-import * as os from "os";
+import {
+  makeAwsConfigManager,
+  makeSsoAccessProvider,
+} from "cloudcanvas-aws-sso-global-access-provider";
+import * as os from "node:os";
 import open from "open";
 
-const LCERROR = "\x1b[31m%s\x1b[0m"; //red
-const LCWARN = "\x1b[33m%s\x1b[0m"; //yellow
-const LCINFO = "\x1b[36m%s\x1b[0m"; //cyan
-const LCSUCCESS = "\x1b[32m%s\x1b[0m"; //green
+const LCERROR = "\x1b[31m%s\x1b[0m"; // red
+const LCWARN = "\x1b[33m%s\x1b[0m"; // yellow
+const LCINFO = "\x1b[36m%s\x1b[0m"; // cyan
+const LCSUCCESS = "\x1b[32m%s\x1b[0m"; // green
 
+// eslint-disable-next-line unicorn/no-static-only-class
 const logger = class {
   static error(message: string) {
     console.error(LCERROR, message);
   }
+
   static warn(message: string) {
     console.warn(LCWARN, message);
   }
+
   static info(message: string) {
     console.info(LCINFO, message);
   }
+
   static success(message: string) {
     console.info(LCSUCCESS, message);
   }
 };
 
-import { Organisation } from "cloudcanvas-types";
-
 // inquirier gave me shit so this will do
-var List = require("prompt-list");
+const List = require("prompt-list");
 
 const regions = [
   "us-east-1",
@@ -55,7 +57,7 @@ const regions = [
   "eu-west-2",
 ];
 
-var orgList = (orgs: string[]) =>
+const orgList = (orgs: string[]) =>
   new List({
     name: "organisation",
     message: "Choose your organisation",
@@ -64,7 +66,8 @@ var orgList = (orgs: string[]) =>
       value: o,
     })),
   });
-var accountList = (accs: string[]) =>
+
+const accountList = (accs: string[]) =>
   new List({
     name: "account",
     message: "Choose your account",
@@ -74,12 +77,27 @@ var accountList = (accs: string[]) =>
     })),
   });
 
-var regionList = (selectedRegion?: string) =>
+const perrmissionList = (permissions: string[]) =>
+  new List({
+    name: "permission",
+    message: "Choose which permission set to use",
+    choices: permissions.map((p) => ({
+      name: p,
+      value: p,
+    })),
+  });
+
+const regionList = (selectedRegion?: string) =>
   new List({
     name: "region",
     message: "Choose your region",
     choices: (selectedRegion
-      ? [selectedRegion, ...regions.filter((r) => r !== selectedRegion)]
+      ? [
+          selectedRegion,
+          ...regions
+            .sort((a, b) => a.localeCompare(b))
+            .filter((r) => r !== selectedRegion),
+        ]
       : regions
     ).map((r) => ({
       name: r,
@@ -112,20 +130,22 @@ export default class Sketch extends Command {
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(Sketch);
 
+    const authoriser = makeSsoAuthoriser({
+      configManager: ssoConfigManager({
+        homeDir: os.homedir(),
+      }),
+      browser: {
+        open: async (url) => {
+          open(url);
+        },
+      },
+    });
+
     const accessProvider = makeSsoAccessProvider({
       configManager: makeAwsConfigManager({
         homeDir: os.homedir(),
       }),
-      authoriser: makeSsoAuthoriser({
-        configManager: ssoConfigManager({
-          homeDir: os.homedir(),
-        }),
-        browser: {
-          open: async (url) => {
-            open(url);
-          },
-        },
-      }),
+      authoriser,
     });
 
     let access = await accessProvider.init();
@@ -144,7 +164,6 @@ export default class Sketch extends Command {
       logger.info("Launching an SSO verification...");
 
       await new Promise((res) => setTimeout(res, 500));
-      await accessProvider.authoriseOrg(selectedOrg);
     }
 
     access = await accessProvider.refreshOrg(selectedOrg);
@@ -153,26 +172,53 @@ export default class Sketch extends Command {
       (o) => o.ssoStartUrl === selectedOrg
     );
 
-    const accounts = selectedOrgDetail!.accounts;
+    const accounts = selectedOrgDetail!.accounts.sort((a, b) =>
+      a.name!.localeCompare(b.name!)
+    );
 
     const accountAliases = accounts
       .map((a) => a.name || a.accountId)
       .sort((a, b) => a.localeCompare(b));
 
-    const selectedAcc = await askList(accountList(accountAliases));
+    const selectedAccName = await askList(accountList(accountAliases));
+    const selectedAcc = accounts.find((a) => a.name === selectedAccName)!;
 
-    const region = await askList(regionList(selectedOrgDetail?.defaultRegion));
+    const selectedPermissionSet = await askList(
+      perrmissionList(selectedAcc.roles.sort((a, b) => a.localeCompare(b)))
+    );
+
+    const selectedRegion = await askList(
+      regionList(selectedAcc?.defaultRegion || selectedOrgDetail?.ssoRegion)
+    );
+
+    const session = await authoriser.getFederatedAccessToken(
+      selectedOrg,
+      selectedRegion
+    );
+
+    const credentials = await authoriser.getAccountAccessToken(session, {
+      accountId: selectedAcc.accountId,
+      permissionSet: selectedPermissionSet,
+    });
 
     // Why do none of these damn tools work. Exits after a single character
     // const name = await CliUx.ux.prompt("Let's give your sketch a name");
-    const name = selectedAcc;
 
-    // TODO Launch the Url with the encoded credentials, region and name
+    const params = new URLSearchParams();
+    params.append("accessKeyId", credentials.accessKeyId);
+    params.append("secretAccessKey", credentials.secretAccessKey);
+    if (credentials.sessionToken) {
+      params.append("sessionToken", credentials.sessionToken);
+    }
+    params.append("region", selectedRegion);
+    params.append("name", selectedAccName);
+
+    await open(`http://127.0.0.1:5421?${params.toString()}`);
 
     console.log(`
     ${selectedOrg}
     ${selectedAcc}
-    ${region}
+    ${selectedRegion}
     ${name}
     `);
   }

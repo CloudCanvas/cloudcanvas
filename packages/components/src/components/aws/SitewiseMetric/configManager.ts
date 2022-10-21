@@ -1,9 +1,9 @@
-import { AWS } from "cloudcanvas-types";
+import { CustomData } from "../../form/v1";
 import {
   ListTimeSeriesCommand,
   ListTimeSeriesCommandOutput,
 } from "@aws-sdk/client-iotsitewise";
-import { CustomData } from "../../form/v1";
+import { AWS } from "cloudcanvas-types";
 
 const fetchAllAliases = async (
   aws: AWS,
@@ -19,7 +19,7 @@ const fetchAllAliases = async (
   return (response.TimeSeriesSummaries || []).map((t) => t.alias!);
 };
 
-export const resourceFetcher = async (
+export const customDataFetcher = async (
   aws: AWS,
   prefix?: string
 ): Promise<CustomData[]> => {

@@ -1,4 +1,7 @@
-import { AWS } from "cloudcanvas-types";
+import { DataFetcher } from "../../../ports/DataFetcher";
+import { CustomData } from "../../form/v1";
+import BaseLogModel from "../shared/BaseModel";
+import { DynamoRecord, Model, Update } from "./model";
 import {
   ListStreamsCommand,
   GetShardIteratorCommand,
@@ -9,10 +12,7 @@ import {
 } from "@aws-sdk/client-dynamodb-streams";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { ShardIterator } from "aws-sdk/clients/dynamodbstreams";
-import { DynamoRecord, Model, Update } from "./model";
-import { DataFetcher } from "../../../ports/DataFetcher";
-import { CustomData } from "../../form";
-import BaseLogModel from "../shared/BaseModel";
+import { AWS } from "cloudcanvas-types";
 
 const doLog = false;
 
@@ -74,7 +74,6 @@ const makeDynamoDbStreamManager = ({
 
     for (const shardId of shardIds) {
       if (!shardDict[shardId].shardIterator) {
-        console.log("deleting shard");
         deletedShards[shardId] = {};
         delete shardDict[shardId];
       }
@@ -137,7 +136,6 @@ const makeDynamoDbStreamManager = ({
         if (shardDict[shardId]) continue;
         if (deletedShards[shardId]) continue;
 
-        console.log(`Adding new shard`);
         shardDict[shardId] = {};
       }
 

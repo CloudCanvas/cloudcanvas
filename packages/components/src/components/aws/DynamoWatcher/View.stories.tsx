@@ -1,5 +1,5 @@
 import React from "react";
-import DynamoWatcher, { ViewProps } from "./View";
+import DynamoWatcher, { View, ViewProps } from "./View";
 import { DynamoRecord } from "./model";
 import { id } from "../../../utils/generalUtils";
 import "bulma/css/bulma.css";
@@ -24,7 +24,7 @@ const Template = (args: ViewProps) => () =>
         borderStyle: "solid",
       }}
     >
-      <DynamoWatcher {...args} />
+      <View {...args} />
     </div>
   );
 
@@ -32,6 +32,7 @@ const Template = (args: ViewProps) => () =>
 export const NoRecords = Template({
   data: [],
   selected: false,
+  setSelected: () => {},
 });
 
 export const RecordsKeyOnly = Template({
@@ -64,6 +65,7 @@ export const RecordsKeyOnly = Template({
     } as DynamoRecord,
   ],
   selected: false,
+  setSelected: () => {},
 });
 
 export const RecordsNewImage = Template({
@@ -112,6 +114,7 @@ export const RecordsNewImage = Template({
     } as DynamoRecord,
   ],
   selected: false,
+  setSelected: () => {},
 });
 
 export const RecordsNewAndOldImage = Template({
@@ -165,6 +168,7 @@ export const RecordsNewAndOldImage = Template({
     } as DynamoRecord,
   ],
   selected: false,
+  setSelected: () => {},
 });
 
 const lotsOfRecords: DynamoRecord[] = [];
@@ -195,4 +199,5 @@ for (let i = 0; i < 100; i++) {
 export const LotsOfRecords = Template({
   data: lotsOfRecords,
   selected: false,
+  setSelected: () => {},
 });
