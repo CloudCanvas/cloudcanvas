@@ -270,6 +270,16 @@ const augmentModel = (entry: LogEntry): LogEntry => {
       highlightText: "REPORT",
       message: entry.message.replace("REPORT RequestId: ", ""),
     };
+  } else if (
+    entry?.message.startsWith("[ERROR]") ||
+    entry?.message.startsWith("ERROR")
+  ) {
+    return {
+      ...entry,
+      type: "error",
+      highlightText: "ERROR",
+      message: entry.message.replace("[ERROR]", "").replace("ERROR", ""),
+    };
   } else {
     return entry;
   }

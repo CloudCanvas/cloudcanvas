@@ -195,12 +195,31 @@ const makeDynamoDbStreamManager = ({
           } as Omit<DynamoRecord, "message">)
       );
 
-      const withMessage = mapped.map((m) => ({
-        ...m,
-        message: JSON.stringify(m.newImage || m.oldImage || m.key),
-      }));
+      const withMessage = mapped.map((m) => {
+        const records: DynamoRecord[] = [];
 
-      const sorted = withMessage.sort((a, b) => +b.at - +a.at);
+        if (m.oldImage) {
+          records.push({
+            ...m,
+            type: "info",
+            highlightText: "OLD",
+            message: JSON.stringify(m.oldImage || m.key),
+          });
+        }
+
+        records.push({
+          ...m,
+          type: "okay",
+          highlightText: "NEW",
+          message: JSON.stringify(m.newImage || m.key),
+        });
+
+        return records;
+      });
+
+      const sorted = withMessage
+        .sort((a, b) => +b.at - +a.at)
+        .flatMap((m) => m);
 
       initialCall = false;
 

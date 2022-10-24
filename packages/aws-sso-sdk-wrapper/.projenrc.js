@@ -32,6 +32,7 @@ const project = new typescript.TypeScriptProject({
     "open",
   ],
   deps: [
+    "@aws-sdk/client-cloudtrail",
     "@aws-sdk/client-cloudwatch",
     "@aws-sdk/client-cloudwatch-logs",
     "@aws-sdk/client-dynamodb",

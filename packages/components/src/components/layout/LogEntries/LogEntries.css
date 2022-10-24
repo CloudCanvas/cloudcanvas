@@ -121,6 +121,6 @@
 }
 
 .error-pill {
-  background-color: #f0e4dc;
-  color: #cca387;
+  background-color: red;
+  color: white;
 }

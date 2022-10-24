@@ -1,3 +1,4 @@
+import { CloudTrailClient } from "@aws-sdk/client-cloudtrail";
 import { CloudWatchClient } from "@aws-sdk/client-cloudwatch";
 import { CloudWatchLogsClient } from "@aws-sdk/client-cloudwatch-logs";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
@@ -27,6 +28,7 @@ const awsServiceCatalog = [
   { service: "dynamodbstreams", client: DynamoDBStreamsClient },
   { service: "lambda", client: LambdaClient },
   { service: "iotsitewise", client: IoTSiteWiseClient },
+  { service: "cloudtrail", client: CloudTrailClient },
 ];
 const awsServiceList = awsServiceCatalog.map((a) => a.service);
 

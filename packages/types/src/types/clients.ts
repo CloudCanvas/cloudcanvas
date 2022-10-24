@@ -1,4 +1,5 @@
 import { AccessProvider, AwsRegion } from "./aws";
+import { CloudTrailClient } from "@aws-sdk/client-cloudtrail";
 import { CloudWatchClient } from "@aws-sdk/client-cloudwatch";
 import { CloudWatchLogsClient } from "@aws-sdk/client-cloudwatch-logs";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
@@ -20,6 +21,7 @@ export type AWS = {
   dynamodbstreams: DynamoDBStreamsClient;
   lambda: LambdaClient;
   iotsitewise: IoTSiteWiseClient;
+  cloudtrail: CloudTrailClient;
 };
 
 export class UnauthorisedError extends Error {

@@ -1,3 +1,4 @@
+import { CloudTrailCatalogComponent } from "../components/aws/CloudTrail/catalog";
 import { DynamoWatcherCatalogComponent } from "../components/aws/DynamoWatcher/catalog";
 import { LambdaWatcherCatalogComponent } from "../components/aws/LambdaWatcher/catalog";
 import { SitewiseMetricCatalogComponent } from "../components/aws/SitewiseMetric/catalog";
@@ -63,6 +64,7 @@ export const generateComponenEntry = ({
 };
 
 export const componentCatalog = [
+  // CloudTrailCatalogComponent,
   DynamoWatcherCatalogComponent,
   LambdaWatcherCatalogComponent,
   SitewiseMetricCatalogComponent,

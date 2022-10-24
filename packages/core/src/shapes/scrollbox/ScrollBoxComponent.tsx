@@ -9,7 +9,7 @@ export const ScrollBoxComponent = TLShapeUtil.Component<
   const color = meta.isDarkMode ? "white" : "black";
 
   return (
-    <HTMLContainer ref={ref} {...events}>
+    <HTMLContainer ref={ref} {...events} contentEditable={true}>
       <div
         style={{
           width: shape.size[0],
