@@ -1,10 +1,11 @@
+import { AccessProvider, SSOExpiredError } from "../ports/accessProvider";
 import { ConfigManager } from "../ports/configManager";
 import {
   ListAccountRolesCommand,
   ListAccountsCommand,
   SSOClient,
 } from "@aws-sdk/client-sso";
-import { SsoAuthoriser, uniq } from "cloudcanvas-aws-sso-api";
+import { Browser, SsoAuthoriser, uniq } from "cloudcanvas-aws-sso-api";
 import {
   Access,
   Account,
@@ -13,8 +14,9 @@ import {
   PermissionSet,
   AwsRegion,
   SSOSession,
+  AccessPair,
 } from "cloudcanvas-types";
-import { AccessProvider, SSOExpiredError } from "../ports/accessProvider";
+import "isomorphic-fetch";
 
 type Config = {
   cachedFile?: string;
@@ -25,6 +27,7 @@ type Config = {
 type Ports = {
   authoriser: SsoAuthoriser;
   configManager: ConfigManager;
+  browser: Browser;
 };
 
 const fetchAllAccountsAndRoles = async (session: SSOSession) => {
@@ -90,6 +93,7 @@ export const makeSsoAccessProvider = ({
   cachedFile,
   configFile,
   configManager,
+  browser,
 }: Ports & Config): AccessProvider => {
   let accessScope: Access = { organisations: [] };
 
@@ -107,38 +111,16 @@ export const makeSsoAccessProvider = ({
     // Fetch orgs from ~/.aws/config
     const awsConfigOrgs = await configManager.readYamlConfigFile(configFile);
 
-    // Ensure we pickup any new additions to the config file
-    const withNewDataAdded = cachedOrgs.organisations.map((cachedOrg) => {
-      // Pickup the org in credentials if it has not been deleted.
-      const matchingOrg = awsConfigOrgs.organisations.find(
-        (s) =>
-          s.ssoStartUrl === cachedOrg.ssoStartUrl && !cachedOrg.logicallyDeleted
-      );
-
-      const existingAccs = cachedOrg?.accounts || [];
-
-      // The ones that are in matching org not in cachedOrg
-      const missingRoles = (matchingOrg?.roles || []).filter(
-        (r) => !cachedOrg.roles.some((x) => x === r)
-      );
-      const missingAccs = existingAccs.filter(
-        (r) => !cachedOrg.accounts.some((x) => x.accountId === r.accountId)
-      );
-
-      return {
-        ...cachedOrg,
-        accounts: [...existingAccs, ...missingAccs],
-        roles: [...cachedOrg.roles, ...missingRoles],
-      } as Organisation;
-    });
-
     // And any new orgs
     const missingOrgs = awsConfigOrgs.organisations.filter(
       (s) =>
         !cachedOrgs.organisations.some((c) => c.ssoStartUrl === s.ssoStartUrl)
     );
 
-    const blendedCacheAndConfigScope = [...withNewDataAdded, ...missingOrgs];
+    const blendedCacheAndConfigScope = [
+      ...cachedOrgs.organisations,
+      ...missingOrgs,
+    ];
 
     return {
       organisations: blendedCacheAndConfigScope,
@@ -177,6 +159,43 @@ export const makeSsoAccessProvider = ({
       access: await updateAccessScope({
         organisations: newAccess,
       }),
+    };
+  };
+
+  const getAccess = async (access: AccessPair) => {
+    const authOrg = accessScope?.organisations.find((o) =>
+      o.accounts.some((a) => a.accountId === access?.accountId)
+    );
+
+    if (!access?.permissionSet || !access?.accountId || !authOrg) {
+      throw new InvalidConfigurationError(
+        `Invalid AWS Configuration. Account: ${access?.accountId}, Role: ${access?.permissionSet}.`
+      );
+    }
+
+    /**
+     * The authoriser should manage caching these so we always call and let it handle that complexity.
+     */
+    const federatedAccess = await authoriser.getFederatedAccessTokenIfExists(
+      authOrg.ssoStartUrl
+    );
+
+    if (!federatedAccess) {
+      throw new SSOExpiredError("SSO credentials have expired.");
+    }
+
+    const accountAccess = await authoriser.getAccountAccessToken(
+      federatedAccess,
+      {
+        accountId: access?.accountId,
+        permissionSet: access?.permissionSet,
+      }
+    );
+
+    return {
+      accountAccess,
+      authOrg,
+      expiration: federatedAccess.expiresAt,
     };
   };
 
@@ -241,31 +260,7 @@ export const makeSsoAccessProvider = ({
       return accessScope!;
     },
     authorise: async (access) => {
-      const authOrg = accessScope?.organisations.find((o) =>
-        o.accounts.some((a) => a.accountId === access.accountId)
-      );
-
-      if (!authOrg) {
-        throw new InvalidConfigurationError(
-          `Invalid AWS Configuration. Account: ${access.accountId}, Role: ${access.permissionSet}.`
-        );
-      }
-
-      /**
-       * The authoriser should manage caching these so we always call and let it handle that complexity.
-       */
-      const federatedAccess = await authoriser.getFederatedAccessToken(
-        authOrg.ssoStartUrl,
-        authOrg.ssoRegion
-      );
-
-      const accountAccess = await authoriser.getAccountAccessToken(
-        federatedAccess,
-        {
-          accountId: access.accountId,
-          permissionSet: access.permissionSet,
-        }
-      );
+      const { accountAccess, authOrg, expiration } = await getAccess(access);
 
       const defaultRegion = (authOrg.accounts.find(
         (a) => a.accountId === access.accountId
@@ -274,7 +269,7 @@ export const makeSsoAccessProvider = ({
       await updateAccessScope({
         organisations: accessScope.organisations.map((o) => {
           if (o.ssoStartUrl === authOrg.ssoStartUrl) {
-            return { ...o, authorisedUntil: federatedAccess.expiresAt };
+            return { ...o, authorisedUntil: expiration };
           }
 
           return o;
@@ -287,34 +282,7 @@ export const makeSsoAccessProvider = ({
       };
     },
     lightAuthorise: async (access) => {
-      const authOrg = accessScope?.organisations.find((o) =>
-        o.accounts.some((a) => a.accountId === access?.accountId)
-      );
-
-      if (!access?.permissionSet || !access?.accountId || !authOrg) {
-        throw new InvalidConfigurationError(
-          `Invalid AWS Configuration. Account: ${access?.accountId}, Role: ${access?.permissionSet}.`
-        );
-      }
-
-      /**
-       * The authoriser should manage caching these so we always call and let it handle that complexity.
-       */
-      const federatedAccess = await authoriser.getFederatedAccessTokenIfExists(
-        authOrg.ssoStartUrl
-      );
-
-      if (!federatedAccess) {
-        throw new SSOExpiredError("SSO credentials have expired.");
-      }
-
-      const accountAccess = await authoriser.getAccountAccessToken(
-        federatedAccess,
-        {
-          accountId: access?.accountId,
-          permissionSet: access?.permissionSet,
-        }
-      );
+      const { accountAccess, authOrg } = await getAccess(access);
 
       const defaultRegion = (authOrg.accounts.find(
         (a) => a.accountId === access?.accountId
@@ -397,6 +365,34 @@ export const makeSsoAccessProvider = ({
       });
 
       return updateAccessScope({ organisations: updatedOrgs });
+    },
+    navigateTo: async (destUrl, access) => {
+      const { accountAccess } = await getAccess(access);
+
+      const accessObj = {
+        sessionId: accountAccess.accessKeyId,
+        sessionKey: accountAccess.secretAccessKey,
+        sessionToken: accountAccess.sessionToken,
+      };
+
+      const session = encodeURIComponent(JSON.stringify(accessObj));
+
+      const result = await fetch(
+        `https://signin.aws.amazon.com/federation?Action=getSigninToken&Session=${session}`
+      ).then((x) => x.json());
+
+      const dest = encodeURIComponent(destUrl);
+
+      console.log("result.SigninToken");
+      console.log(result.SigninToken);
+
+      const loginUrl = `https://signin.aws.amazon.com/federation?Action=login&Destination=${dest}&Issuer=&SigninToken=${result.SigninToken}`;
+      // const logoutAndLoginUrl = `https://signin.aws.amazon.com/federation?Action=logout&redirect_uri=${encodeURIComponent(
+      //   loginUrl
+      // )}&Issuer=&SigninToken=${result.SigninToken}`;
+      const logoutAndLoginUrl = `https://signin.aws.amazon.com/federation?Action=logout`;
+
+      browser.open(logoutAndLoginUrl);
     },
   };
 };

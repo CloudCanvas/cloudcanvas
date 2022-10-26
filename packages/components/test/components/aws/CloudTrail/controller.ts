@@ -6,7 +6,7 @@ const exec = async () => {
   const awsClient = createAWSClient({
     accessProvider: await getDevAccessProvider(),
   })
-    .aws.account("356937276118")
+    .aws.account("<accountId>")
     .role("AWSAdministratorAccess")
     .region("ap-southeast-2");
 
@@ -25,4 +25,4 @@ const exec = async () => {
   console.log(logs.length + " logs found");
 };
 
-exec();
+// exec();

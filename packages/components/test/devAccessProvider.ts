@@ -1,13 +1,14 @@
-import os from "os";
+import {
+  Browser,
+  makeAwsConfigManager as makeAuthoriserConfigManager,
+  makeSsoAuthoriser,
+} from "cloudcanvas-aws-sso-api";
 import {
   makeAwsConfigManager as makeAccessConfigManager,
   makeSsoAccessProvider,
 } from "cloudcanvas-aws-sso-global-access-provider";
-import {
-  makeAwsConfigManager as makeAuthoriserConfigManager,
-  makeSsoAuthoriser,
-} from "cloudcanvas-aws-sso-api";
 import { AccessProvider } from "cloudcanvas-types";
+import os from "os";
 
 export const getDevAccessProvider = async (): Promise<AccessProvider> => {
   const accessConfigManager = makeAccessConfigManager({
@@ -17,18 +18,20 @@ export const getDevAccessProvider = async (): Promise<AccessProvider> => {
     homeDir: os.homedir(),
   });
 
-  const ssoAuthoriser = makeSsoAuthoriser({
-    browser: {
-      open: async (path) => {
-        open(path);
-      },
+  const browser: Browser = {
+    open: async (path) => {
+      open(path);
     },
+  };
+  const ssoAuthoriser = makeSsoAuthoriser({
+    browser: browser,
     configManager: authConfigManager,
   });
 
   const provider = makeSsoAccessProvider({
     authoriser: ssoAuthoriser,
     configManager: accessConfigManager,
+    browser,
   });
 
   await provider.init();

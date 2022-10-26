@@ -1,6 +1,7 @@
 import { createAWSClient } from "cloudcanvas-aws-sso-sdk-wrapper";
 import {
   Access,
+  AccessCard,
   AccessPair,
   AWSCredentials,
   AwsRegion,
@@ -27,6 +28,11 @@ export interface LocalAwsBridge {
   provideNickname: (nickname: string, ssoStartUrl: string) => Promise<Access>;
   addOrganisation: (organisation: Organisation) => Promise<Access>;
   deleteOrganisation: (ssoStartUrl: string) => Promise<Access>;
+  navigateTo: (
+    destUrl: string,
+    accountId: string,
+    permissionSet: string
+  ) => Promise<void>;
 }
 
 export type AwsClient = ReturnType<typeof createAWSClient>;

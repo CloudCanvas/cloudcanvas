@@ -102,10 +102,6 @@
       "type": "build"
     },
     {
-      "name": "@aws-sdk/client-cloudtrail",
-      "type": "runtime"
-    },
-    {
       "name": "@aws-sdk/client-cloudwatch",
       "type": "runtime"
     },
@@ -130,7 +126,7 @@
       "type": "runtime"
     },
     {
-      "name": "@aws-sdk/client-s3",
+      "name": "@aws-sdk/client-sqs",
       "type": "runtime"
     },
     {

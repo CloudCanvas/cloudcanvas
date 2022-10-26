@@ -311,11 +311,17 @@ const ExampleFrame = ({
             .filter((c) => c.title.toLowerCase() === selectedValue)
             .map((c) => {
               return (
-                <div key={c.title}>
+                <div key={c.title} style={{ width: "100%", height: "100%" }}>
                   {c.component({
                     awsClient: {} as any,
                     playing: true,
+                    access: {
+                      accountId: "",
+                      permissionSet: "",
+                      region: "ap-southeast-2",
+                    },
                     setSelected: () => {},
+                    navigateTo: () => {},
                     authorised: true,
                     selected: false,
                     customProps: {} as any,

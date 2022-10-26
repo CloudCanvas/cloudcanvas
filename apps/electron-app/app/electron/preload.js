@@ -111,6 +111,14 @@ contextBridge.exposeInMainWorld("api", {
     deleteOrganisation: async (ssoUrl) => {
       return await ipcRenderer.invoke("app:aws-deleteOrganisation", ssoUrl);
     },
+    navigateTo: async (destUrl, accountId, permissionSet) => {
+      await ipcRenderer.invoke(
+        "app:aws-navigateTo",
+        destUrl,
+        accountId,
+        permissionSet
+      );
+    },
     // dynamo: {
     //   listTables: async (access) => {
     //     return await ipcRenderer.invoke("app:aws-dynamo-list-tables", access);

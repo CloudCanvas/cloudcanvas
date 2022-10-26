@@ -2,6 +2,7 @@ import { Command, Flags, CliUx } from "@oclif/core";
 import {
   makeSsoAuthoriser,
   makeAwsConfigManager as ssoConfigManager,
+  Browser,
 } from "cloudcanvas-aws-sso-api";
 import {
   makeAwsConfigManager,
@@ -130,15 +131,16 @@ export default class Sketch extends Command {
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(Sketch);
 
+    const browser: Browser = {
+      open: async (url) => {
+        open(url);
+      },
+    };
     const authoriser = makeSsoAuthoriser({
       configManager: ssoConfigManager({
         homeDir: os.homedir(),
       }),
-      browser: {
-        open: async (url) => {
-          open(url);
-        },
-      },
+      browser: browser,
     });
 
     const accessProvider = makeSsoAccessProvider({
@@ -146,6 +148,7 @@ export default class Sketch extends Command {
         homeDir: os.homedir(),
       }),
       authoriser,
+      browser,
     });
 
     let access = await accessProvider.init();

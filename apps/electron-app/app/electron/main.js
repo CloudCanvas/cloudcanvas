@@ -55,18 +55,23 @@ const getAccessProvider = async () => {
     homeDir: os.homedir(),
   });
 
-  const ssoAuthoriser = makeSsoAuthoriser({
-    browser: {
-      open: async (path) => {
-        await shell.openExternal(path);
-      },
+  const browser = {
+    open: async (path) => {
+      await shell.openExternal(path, {
+        app: { name: "google chrome", arguments: ["--incognito"] },
+      });
     },
+  };
+
+  const ssoAuthoriser = makeSsoAuthoriser({
+    browser: browser,
     configManager: authConfigManager,
   });
 
   const accessProvider = makeSsoAccessProvider({
     authoriser: ssoAuthoriser,
     configManager: accessConfigManager,
+    browser,
   });
 
   await accessProvider.init();
@@ -447,6 +452,18 @@ ipcMain.handle("app:aws-deleteOrganisation", async (_event, ssoStartUrl) => {
 
   return await accessProvider.deleteOrganisation(ssoStartUrl);
 });
+
+ipcMain.handle(
+  "app:aws-navigateTo",
+  async (_event, destUrl, accountId, permissionSet) => {
+    const accessProvider = await getAccessProvider();
+
+    return await accessProvider.navigateTo(destUrl, {
+      accountId,
+      permissionSet,
+    });
+  }
+);
 
 ipcMain.handle("app:aws-lightAuthorise", async (_event, accessPair) => {
   try {

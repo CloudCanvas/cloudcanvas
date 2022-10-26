@@ -45,37 +45,3 @@ await aws.account("Account2").role("DevAccess").dynamo.putItem({
   Item: item
 })
 ```
-
-# S3 Helper
-
-The SDK has been augmented to make interacting with S3 easy.
-
-```
-const buckets = await aws.s3Helper.listBuckets()
-
-const objectsUnderFolder = await aws
-  .account("Account1")
-  .role("Role")
-  .s3Helper
-  .listObjects({
-    Bucket: bucket,
-    Prefix: "/folder1/folder2"
-  })
-
-const details = await await aws
-  .account("123456789")
-  .region("ap-southeast-2")
-  .role("AWSPowerUseAccess")
-  .s3Helper.getObjectDetails({
-    Bucket: bucket,
-    Key: "folder1/folder2/file.txt"
-  })
-
-const download = await await aws
-  .account("Account1")
-  .role("Role")
-  .s3Helper.download({
-    Bucket: bucket,
-    Key: "folder1/folder2/file.txt",
-  })
-```

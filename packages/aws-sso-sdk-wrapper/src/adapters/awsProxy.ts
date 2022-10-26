@@ -1,11 +1,10 @@
-import { CloudTrailClient } from "@aws-sdk/client-cloudtrail";
 import { CloudWatchClient } from "@aws-sdk/client-cloudwatch";
 import { CloudWatchLogsClient } from "@aws-sdk/client-cloudwatch-logs";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBStreamsClient } from "@aws-sdk/client-dynamodb-streams";
 import { IoTSiteWiseClient } from "@aws-sdk/client-iotsitewise";
 import { LambdaClient } from "@aws-sdk/client-lambda";
-import { S3Client } from "@aws-sdk/client-s3";
+import { SQSClient } from "@aws-sdk/client-sqs";
 import { AccessPair, AccessProvider, AWS } from "cloudcanvas-types";
 
 type Execution = {
@@ -21,14 +20,13 @@ type Execution = {
 };
 
 const awsServiceCatalog = [
-  { service: "s3", client: S3Client },
   { service: "cloudwatch", client: CloudWatchClient },
   { service: "cloudwatchLogs", client: CloudWatchLogsClient },
   { service: "dynamodb", client: DynamoDBClient },
   { service: "dynamodbstreams", client: DynamoDBStreamsClient },
   { service: "lambda", client: LambdaClient },
+  { service: "sqs", client: SQSClient },
   { service: "iotsitewise", client: IoTSiteWiseClient },
-  { service: "cloudtrail", client: CloudTrailClient },
 ];
 const awsServiceList = awsServiceCatalog.map((a) => a.service);
 

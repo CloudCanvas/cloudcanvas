@@ -61,6 +61,7 @@ Lambda component needs to have a max limit with ellipsis - DONE
 Title on minimal component menu to show org - not part of the component options. - DONE
 Auto scroll is affecting parent window. Ahhhhhhh mother fucker. - Just use a scrollTo position - DONE
 Should be able to retry "authorise" - DONE
+Cloudwatch metric / alarm - DONE
 
 # Notes
 
@@ -75,7 +76,6 @@ over time and "pop" in.
 
 ## TODO
 
-Cloudwatch metric / alarm
 Dynamo show an error if no streams enabled.
 
 ## Next release

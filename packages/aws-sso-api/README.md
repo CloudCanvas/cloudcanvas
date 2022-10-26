@@ -30,7 +30,7 @@ const newSession = await authoriser.getFederatedAccessToken(
 );
 
 await authoriser.getAccountAccessToken(sessions[0], {
-  accountId: "532747402531",
+  accountId: "123456789012",
   permissionSet: "AdministratorAccess",
 });
 ```

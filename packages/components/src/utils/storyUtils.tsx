@@ -1,10 +1,10 @@
-import React from "react";
 import {
   BaseComponentProps,
   ComponentStatus,
 } from "../components/layout/BaseComponent/BaseComponent";
 import "bulma/css/bulma.css";
 import { AwsShape, Organisation } from "cloudcanvas-types";
+import React from "react";
 
 export const allGoodStatus: ComponentStatus = {
   authorisation: "authorized",
@@ -97,12 +97,12 @@ export const sampleOrgs: Organisation[] = [
     ssoRegion: "us-east-1",
     accounts: [
       {
-        accountId: "5321234567890",
+        accountId: "123456789012",
         defaultRegion: "us-east-1",
         roles: ["AdministratorAccess"],
       },
       {
-        accountId: "4311234567890",
+        accountId: "123456789012",
         defaultRegion: "us-east-1",
         roles: ["AdministratorAccess"],
       },
@@ -116,7 +116,7 @@ export const sampleOrgs: Organisation[] = [
     ssoRegion: "ap-southeast-2",
     accounts: [
       {
-        accountId: "331234567890",
+        accountId: "123456789012",
         defaultRegion: "ap-southeast-2",
         roles: ["AWSAdministratorAccess"],
       },

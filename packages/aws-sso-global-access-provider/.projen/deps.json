@@ -106,6 +106,10 @@
       "type": "runtime"
     },
     {
+      "name": "isomorphic-fetch",
+      "type": "runtime"
+    },
+    {
       "name": "yaml",
       "type": "runtime"
     }

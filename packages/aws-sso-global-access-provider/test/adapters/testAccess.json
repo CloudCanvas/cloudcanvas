@@ -5,12 +5,12 @@
       "ssoRegion": "us-east-1",
       "accounts": [
         {
-          "accountId": "532747402531",
+          "accountId": "123456789012",
           "defaultRegion": "us-east-1",
           "roles": ["AdministratorAccess"]
         },
         {
-          "accountId": "431781111075",
+          "accountId": "123456789012",
           "defaultRegion": "us-east-1",
           "roles": ["AdministratorAccess"]
         }
@@ -22,7 +22,7 @@
       "ssoRegion": "ap-southeast-2",
       "accounts": [
         {
-          "accountId": "337387902522",
+          "accountId": "123456789012",
           "defaultRegion": "ap-southeast-2",
           "roles": ["AWSAdministratorAccess"]
         }

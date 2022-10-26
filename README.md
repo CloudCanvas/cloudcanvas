@@ -2,6 +2,14 @@
 
 An interactive canvas to help you manage your cloud resources.
 
+This was a fun project and I'm keen to get peoples feedback. I find it really useful in my work.
+
+This was a spike of development on the side for a few months and looking back I'll probably do things differently moving forwards.
+
+Rather than each component having a controller I'll probably have a separate package manage all that and operate like a local graphql service with separate resolvers. That way the components can be simply taking in props.
+
+I'll also explore a web version as Electrons a bit of a pain in the ass.
+
 ## What's inside?
 
 This monorepo uses [Yarn](https://classic.yarnpkg.com/lang/en/) as a package manager and turborepo to manage the mono.

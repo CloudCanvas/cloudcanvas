@@ -1,7 +1,7 @@
-import { SsoAuthoriser } from "cloudcanvas-aws-sso-api";
 import { makeAwsConfigManager } from "../../src/adapters/awsConfigManager";
 import { makeSsoAccessProvider } from "../../src/adapters/ssoAccessProvider";
 import { AccessProvider } from "../../src/ports/accessProvider";
+import { Browser, SsoAuthoriser } from "cloudcanvas-aws-sso-api";
 import os from "os";
 
 describe("ssoAccessProvider", () => {
@@ -16,6 +16,9 @@ describe("ssoAccessProvider", () => {
     getFederatedAccessTokenIfExists: federatedAccessMock,
     getAccountAccessToken: accountAccessMock,
   };
+  let browser: Browser = {
+    open: jest.fn(),
+  };
 
   beforeAll(async () => {
     jest.clearAllMocks();
@@ -26,6 +29,7 @@ describe("ssoAccessProvider", () => {
       ssoSessionFolder: `${process.cwd()}/test/adapters/testSessionJson.json`,
       authoriser,
       configManager: makeAwsConfigManager({ homeDir: os.homedir() }),
+      browser,
     });
   });
 
@@ -43,7 +47,7 @@ describe("ssoAccessProvider", () => {
 
   test("on authorise, it uses the supplied account if supplied", async () => {
     await ssoAccessProvider.authorise({
-      accountId: "532747402531",
+      accountId: "123456789012",
       permissionSet: "AdministratorAccess",
     });
 
@@ -52,7 +56,7 @@ describe("ssoAccessProvider", () => {
     expect(accountAccessMock).toHaveBeenCalledTimes(1);
     expect(accountAccessMock.mock.calls[0][0]).toEqual(federatedAccess);
     expect(accountAccessMock.mock.calls[0][1].accountId).toEqual(
-      "532747402531"
+      "123456789012"
     );
   });
 });

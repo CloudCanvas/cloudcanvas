@@ -62,4 +62,8 @@ export type AccessProvider = {
    * Return the full access scope we have for the customer
    */
   access: () => Promise<Access>;
+  /**
+   * Navigate to URL
+   */
+  navigateTo: (url: string, access: AccessPair) => Promise<void>;
 };

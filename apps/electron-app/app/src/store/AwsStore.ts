@@ -1,7 +1,7 @@
-import { Access, AccessPair, Account, Organisation } from "cloudcanvas-types";
-import { makeAutoObservable, runInAction } from "mobx";
 import { LocalAwsBridge } from "../ports/aws";
 import Clipboard from "../ports/clipboard";
+import { Access, AccessPair, Account, Organisation } from "cloudcanvas-types";
+import { makeAutoObservable, runInAction } from "mobx";
 
 export class AwsStore {
   access?: Access = undefined;
@@ -47,9 +47,6 @@ export class AwsStore {
       org.nickname,
       org.ssoStartUrl
     );
-
-    console.log("access");
-    console.log(access);
 
     this.setAccess(access);
   };

@@ -1,6 +1,7 @@
-import os from "os";
+import { createAWSClient } from "../src/adapters/awsManager";
 import { ListTimeSeriesCommand } from "@aws-sdk/client-iotsitewise";
 import {
+  Browser,
   makeAwsConfigManager as makeAuthoriserConfigManager,
   makeSsoAuthoriser,
 } from "cloudcanvas-aws-sso-api";
@@ -9,7 +10,7 @@ import {
   makeSsoAccessProvider,
 } from "cloudcanvas-aws-sso-global-access-provider";
 import open from "open";
-import { createAWSClient } from "../src/adapters/awsManager";
+import os from "os";
 
 // This will all happen on ipcMain in an electron app and will be
 // bridged through preload.js to this library in ipcRenderer so as
@@ -22,18 +23,20 @@ const getAccessProvider = async () => {
     homeDir: os.homedir(),
   });
 
-  const ssoAuthoriser = makeSsoAuthoriser({
-    browser: {
-      open: async (path) => {
-        await open(path);
-      },
+  const browser: Browser = {
+    open: async (path) => {
+      await open(path);
     },
+  };
+  const ssoAuthoriser = makeSsoAuthoriser({
+    browser: browser,
     configManager: authConfigManager,
   });
 
   return makeSsoAccessProvider({
     authoriser: ssoAuthoriser,
     configManager: accessConfigManager,
+    browser,
   });
 };
 
@@ -51,7 +54,7 @@ export const exec = async () => {
   await aws.accessProvider.authoriseOrg(access.organisations[2].ssoStartUrl);
 
   const response = await aws
-    .account("356937276118")
+    .account("abc")
     .role("AWSAdministratorAccess")
     .region("ap-southeast-2")
     .iotsitewise.send(

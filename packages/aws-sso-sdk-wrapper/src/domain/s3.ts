@@ -1,5 +1,3 @@
-import { ObjectStorageClass } from "@aws-sdk/client-s3";
-
 export type S3BucketTree = {
   [key: string]: any | string[];
 };
@@ -9,7 +7,7 @@ export type S3Entry = {
   LastModified: Date;
   ETag: string;
   Size: number;
-  StorageClass: ObjectStorageClass;
+  StorageClass: any;
   Owner: {
     DisplayName?: string;
     ID?: string;

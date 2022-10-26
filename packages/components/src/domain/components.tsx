@@ -1,7 +1,8 @@
-import { CloudTrailCatalogComponent } from "../components/aws/CloudTrail/catalog";
+import { CloudwatchAlarmCatalogComponent } from "../components/aws/CloudwatchAlarm/catalog";
 import { DynamoWatcherCatalogComponent } from "../components/aws/DynamoWatcher/catalog";
 import { LambdaWatcherCatalogComponent } from "../components/aws/LambdaWatcher/catalog";
 import { SitewiseMetricCatalogComponent } from "../components/aws/SitewiseMetric/catalog";
+import { SqWatcherCatalogComponent } from "../components/aws/Sqs/catalog";
 import { CustomData } from "../components/form/v1";
 import { DataFetcher } from "../ports/DataFetcher";
 import { AwsComponent, AccessCard, AWS } from "cloudcanvas-types";
@@ -13,10 +14,12 @@ export interface AwsComponentProps<P> {
   playing: boolean;
   authorised: boolean;
   awsClient: AWS;
+  access: AccessCard;
   customProps: P;
   // allow a custom data fetcher for testing or overriding in general
   dataFetcher?: DataFetcher<any, any>;
   delay?: number;
+  navigateTo: (path: string) => void;
 }
 
 export type ComponentCatalogEntry<T> = {
@@ -65,7 +68,9 @@ export const generateComponenEntry = ({
 
 export const componentCatalog = [
   // CloudTrailCatalogComponent,
-  DynamoWatcherCatalogComponent,
   LambdaWatcherCatalogComponent,
+  DynamoWatcherCatalogComponent,
+  SqWatcherCatalogComponent,
+  CloudwatchAlarmCatalogComponent,
   SitewiseMetricCatalogComponent,
 ] as const;

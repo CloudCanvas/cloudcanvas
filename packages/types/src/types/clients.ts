@@ -1,12 +1,11 @@
 import { AccessProvider, AwsRegion } from "./aws";
-import { CloudTrailClient } from "@aws-sdk/client-cloudtrail";
 import { CloudWatchClient } from "@aws-sdk/client-cloudwatch";
 import { CloudWatchLogsClient } from "@aws-sdk/client-cloudwatch-logs";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBStreamsClient } from "@aws-sdk/client-dynamodb-streams";
 import { IoTSiteWiseClient } from "@aws-sdk/client-iotsitewise";
 import { LambdaClient } from "@aws-sdk/client-lambda";
-import { S3Client } from "@aws-sdk/client-s3";
+import { SQSClient } from "@aws-sdk/client-sqs";
 
 // Interface for accessing AWS across organisations, accounts and regions dynamically
 export type AWS = {
@@ -14,14 +13,13 @@ export type AWS = {
   role: (account: string) => AWS;
   region: (region: AwsRegion) => AWS;
   accessProvider: AccessProvider;
-  s3: S3Client;
+  sqs: SQSClient;
   cloudwatch: CloudWatchClient;
   cloudwatchLogs: CloudWatchLogsClient;
   dynamodb: DynamoDBClient;
   dynamodbstreams: DynamoDBStreamsClient;
   lambda: LambdaClient;
   iotsitewise: IoTSiteWiseClient;
-  cloudtrail: CloudTrailClient;
 };
 
 export class UnauthorisedError extends Error {

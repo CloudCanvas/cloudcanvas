@@ -33,6 +33,7 @@ const project = new typescript.TypeScriptProject({
     "cloudcanvas-aws-sso-api@*",
     "cloudcanvas-types@*",
     "yaml",
+    "isomorphic-fetch",
   ],
 });
 

@@ -1,10 +1,10 @@
-import { makeAutoObservable, toJS } from "mobx";
-import * as Component from "cloudcanvas-components";
-import { AwsComponent } from "cloudcanvas-types";
-import { BaseComponentProps } from "cloudcanvas-components/lib/components/layout/BaseComponent";
 import { AwsStore } from "./AwsStore";
 import { ComponentStore } from "./ComponentStore";
 import { LayoutStore } from "./LayoutStore";
+import * as Component from "cloudcanvas-components";
+import { BaseComponentProps } from "cloudcanvas-components/lib/components/layout/BaseComponent";
+import { AwsComponent } from "cloudcanvas-types";
+import { makeAutoObservable, toJS } from "mobx";
 
 // Blends together AWS informaton and components into a unified view.
 export class ComponentRendererStore {

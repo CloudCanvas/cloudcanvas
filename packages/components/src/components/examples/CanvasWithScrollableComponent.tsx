@@ -6,6 +6,7 @@ import { DynamoRecord, Model } from "../aws/DynamoWatcher/model";
 import { BaseComponentProps } from "../layout/BaseComponent";
 import BaseComponent from "../layout/BaseComponent/BaseComponent";
 import MainCanvas, { CANVAS_CENTER } from "../spatial/MainCanvas/MainCanvas";
+import { AwsRegion } from "cloudcanvas-types";
 import React from "react";
 import { v4 } from "uuid";
 
@@ -81,6 +82,7 @@ export default () => {
         <DynamoWatcher
           playing={state.component.state.playing}
           selected={state.component.state.selected}
+          navigateTo={() => {}}
           setSelected={(isSelected) => {
             setState({
               ...state,
@@ -95,11 +97,16 @@ export default () => {
           }}
           authorised={state.authorisation === "authorized"}
           awsClient={{} as any}
+          access={{
+            accountId: "",
+            permissionSet: "",
+            region: "ap-southeast-2" as AwsRegion,
+          }}
           customProps={{ label: "TestTableName", value: "TestTableName" }}
           dataFetcher={
             {
               reduce: (data, update) => {
-                const updatedModel = [...data, ...update];
+                const updatedModel = [...data, ...update!];
                 return updatedModel;
               },
               initialData: [],

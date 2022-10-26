@@ -1,10 +1,10 @@
+import { CANVAS_CENTER } from "../components/spatial/MainCanvasWrapper";
+import { Config } from "../domain/config";
+import { ConfigManager } from "cloudcanvas-configuration-manager";
+import { AwsComponent } from "cloudcanvas-types";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 // @ts-ignore
 import { v4 } from "uuid";
-import { AwsComponent } from "cloudcanvas-types";
-import { CANVAS_CENTER } from "../components/spatial/MainCanvasWrapper";
-import { ConfigManager } from "cloudcanvas-configuration-manager";
-import { Config } from "../domain/config";
 
 type Update = {
   state: Partial<AwsComponent<any, any>["state"]>;

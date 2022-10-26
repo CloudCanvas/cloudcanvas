@@ -1,11 +1,12 @@
-import React from "react";
-import { BaseComponentProps } from "../layout/BaseComponent";
-import { DynamoRecord, Model } from "../aws/DynamoWatcher/model";
-import BaseComponent from "../layout/BaseComponent/BaseComponent";
-import DynamoWatcher from "../aws/DynamoWatcher/View";
-import { DataFetcher } from "../../ports/DataFetcher";
 import { generateComponenEntry } from "../../domain";
+import { DataFetcher } from "../../ports/DataFetcher";
+import DynamoWatcher from "../aws/DynamoWatcher/View";
 import { DynamoWatcherCatalogComponent } from "../aws/DynamoWatcher/catalog";
+import { DynamoRecord, Model } from "../aws/DynamoWatcher/model";
+import { BaseComponentProps } from "../layout/BaseComponent";
+import BaseComponent from "../layout/BaseComponent/BaseComponent";
+import { AwsRegion } from "cloudcanvas-types";
+import React from "react";
 
 export default () => {
   const [state, setState] = React.useState<BaseComponentProps["state"]>({
@@ -59,6 +60,7 @@ export default () => {
     >
       <DynamoWatcher
         playing={state.component.state.playing}
+        navigateTo={() => {}}
         setSelected={(isSelected) => {
           setState({
             ...state,
@@ -74,12 +76,17 @@ export default () => {
         selected={state.component.state.selected}
         authorised={state.authorisation === "authorized"}
         awsClient={{} as any}
+        access={{
+          accountId: "",
+          permissionSet: "",
+          region: "ap-southeast-2" as AwsRegion,
+        }}
         customProps={{ label: "TestTableName", value: "TestTableName" }}
         dataFetcher={
           {
             delay: 1000,
             reduce: (data, update) => {
-              const updatedModel = [...data, ...update];
+              const updatedModel = [...data, ...update!];
               return updatedModel;
             },
             initialData: [],

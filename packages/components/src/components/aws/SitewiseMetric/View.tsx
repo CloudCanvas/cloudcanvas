@@ -88,7 +88,8 @@ export const View = React.memo(({ data }: ViewProps) => {
 
   useEffect(() => {
     if (divRef.current) {
-      setHeight(divRef.current.getBoundingClientRect().height - 40);
+      console.log(divRef.current.getBoundingClientRect());
+      setHeight(divRef.current.getBoundingClientRect().height);
     }
   }, []);
 
@@ -97,7 +98,6 @@ export const View = React.memo(({ data }: ViewProps) => {
       style={{
         padding: 8,
         paddingTop: 16,
-        flex: 1,
         width: "100%",
         height: "100%",
       }}
@@ -143,7 +143,7 @@ export const View = React.memo(({ data }: ViewProps) => {
         }}
         ariaLabel="Single data series line chart"
         errorText="Error loading data."
-        height={height}
+        height={height - 100}
         hideFilter
         hideLegend
         loadingText="Loading chart"
