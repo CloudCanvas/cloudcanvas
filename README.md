@@ -4,17 +4,27 @@ An interactive canvas to help you manage your cloud resources.
 
 This was a fun project and I'm keen to get peoples feedback. I find it really useful in my work.
 
-This was a spike of development on the side for a few months and looking back I'll probably do things differently moving forwards.
+I created CloudCanvas to make working with the cloud a little more fun.
 
-Rather than each component having a controller I'll probably have a separate package manage all that and operate like a local graphql service with separate resolvers. That way the components can be simply taking in props.
+Rather than jumping around consoles I hope to bring your favourite services to you, across accounts, regions and organisations. And hopefully make your day a little more enjoyable.
 
-I'll also explore a web version as Electrons a bit of a pain in the ass.
+It is a Mac App that runs with your local credentials and only works with AWS IAM Identity Center (SSO) for security and peace of mind. No credentials ever leave your local machine. I've open sourced the code as my guarantee to you.
+
+Download, run and it should pick up your SSO credentials from your ~/.aws/config file. It will not look in your credentials file.
+
+I've released five components for five services as part of this beta. Mostly because I was working with them while developing this!
 
 ## What's inside?
 
 This monorepo uses [Yarn](https://classic.yarnpkg.com/lang/en/) as a package manager and turborepo to manage the mono.
 
 It includes the following packages/apps:
+
+## Some things I'd change
+
+Rather than each component having a controller I'll probably have a separate package manage all that and operate like a local graphql service with separate resolvers. That way the components can be simply taking in props.
+
+I'll also explore a web version as Electron's a bit of a pain to work with.
 
 ### Apps and Packages
 
