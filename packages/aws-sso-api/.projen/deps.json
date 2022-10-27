@@ -14,7 +14,7 @@
     },
     {
       "name": "@types/node",
-      "version": "^14.17.0",
+      "version": "^14",
       "type": "build"
     },
     {
@@ -67,7 +67,7 @@
     },
     {
       "name": "npm-check-updates",
-      "version": "^11",
+      "version": "^16",
       "type": "build"
     },
     {
@@ -94,6 +94,16 @@
     {
       "name": "typescript",
       "type": "build"
+    },
+    {
+      "name": "@types/responselike",
+      "version": "1.0.0",
+      "type": "override"
+    },
+    {
+      "name": "got",
+      "version": "12.3.1",
+      "type": "override"
     },
     {
       "name": "@aws-sdk/client-sso",
