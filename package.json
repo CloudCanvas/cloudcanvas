@@ -6,6 +6,7 @@
     "apps/*",
     "packages/*"
   ],
+  "license": "MIT",
   "scripts": {
     "build": "turbo run build",
     "clean": "turbo run clean",
