@@ -1,5 +1,4 @@
 import { TitleLinks } from "./components/TitleLinks";
-import { Toolbar } from "./components/Toolbar";
 import { shapeUtils } from "./shapes";
 import { machine } from "./state/machine";
 import "./styles.css";
@@ -12,10 +11,9 @@ import {
   TLPointerEventHandler,
   TLWheelEventHandler,
 } from "@tldraw/core";
-import { AwsApi } from "awsApi";
 import "cloudcanvas-components/lib/index.css";
 import { AwsRegion } from "cloudcanvas-types";
-import { TopPanel } from "components/TopPanel";
+import { Toolbar } from "components/Toolbar";
 import * as React from "react";
 import { Api } from "state/api";
 import { Account } from "state/constants";
@@ -219,12 +217,6 @@ export default function App({ onMount }: AppProps) {
   const rWrapper = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
-    const api = new Api(appState, new AwsApi());
-    onMount?.(api);
-    window["api"] = api;
-  }, []);
-
-  React.useEffect(() => {
     // Get the query params
     const params = new URLSearchParams(window.location.search);
     const accessKeyId = params.get("accessKeyId");
@@ -311,7 +303,6 @@ export default function App({ onMount }: AppProps) {
       />
       <ContainerContext.Provider value={rWrapper}>
         <div ref={rWrapper}>
-          <TopPanel readOnly={false} showPages={true} />
           <Toolbar activeStates={appState.active} lastEvent={appState.log[0]} />
           <TitleLinks />
         </div>
